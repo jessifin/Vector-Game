@@ -58,7 +58,7 @@ public class Audio {
 				source.update(timePassed);
 				if(source.currentBuffer.isMusic) {
 					source.currentBuffer.gain = (float) (1+0.2f*Math.sin(System.currentTimeMillis()/900));
-					source.currentBuffer.pitch = 1.8f; System.out.println(alGetDouble(AL_POSITION));
+					source.currentBuffer.pitch = 1.8f;
 				}
 				bindSource(source, source.currentBuffer);
 			}
