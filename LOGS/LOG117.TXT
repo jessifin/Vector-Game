@@ -1,0 +1,329 @@
+9/11/2013 - 15:41:11.838
+System OS: MAC
+User Name: jessifin
+Screen Name: King Prince Chambermaid
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.16.74 310.40.00.10f02
+Creating audio source 1
+Creating audio source 2
+Creating audio source 3
+Creating audio source 4
+Creating audio source 5
+Creating audio source 6
+Creating audio source 7
+Creating audio source 8
+Creating audio source 9
+Creating audio source 10
+Creating audio source 11
+Creating audio source 12
+Creating audio source 13
+Creating audio source 14
+Creating audio source 15
+Creating audio source 16
+Creating audio source 17
+Creating audio source 18
+Creating audio source 19
+Creating audio source 20
+Creating audio source 21
+Creating audio source 22
+Creating audio source 23
+Creating audio source 24
+Creating audio source 25
+Creating audio source 26
+Creating audio source 27
+Creating audio source 28
+Creating audio source 29
+Creating audio source 30
+Creating audio source 31
+Creating audio source 32
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+Loading audio buffer "elephante_mono.wav"
+Removing audio source 1
+Removing audio source 2
+Removing audio source 3
+Removing audio source 4
+Removing audio source 5
+Removing audio source 6
+Removing audio source 7
+Removing audio source 8
+Removing audio source 9
+Removing audio source 10
+Removing audio source 11
+Removing audio source 12
+Removing audio source 13
+Removing audio source 14
+Removing audio source 15
+Removing audio source 16
+Removing audio source 17
+Removing audio source 18
+Removing audio source 19
+Removing audio source 20
+Removing audio source 21
+Removing audio source 22
+Removing audio source 23
+Removing audio source 24
+Removing audio source 25
+Removing audio source 26
+Removing audio source 27
+Removing audio source 28
+Removing audio source 29
+Removing audio source 30
+Removing audio source 31
+Removing audio source 32
+Removing audio buffer "elephante_mono.wav"

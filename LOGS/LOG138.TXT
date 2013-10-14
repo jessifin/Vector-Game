@@ -1,0 +1,18 @@
+9/12/2013 - 14:41:54.5
+System OS: MAC
+User Name: jessifin
+Screen Name: King Prince Chambermaid
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.16.74 310.40.00.10f02
+Creating audio source 1
+Creating audio source 2
+Creating audio source 3
+Creating audio source 4
+Creating audio source 5
+Creating audio source 6
+Creating audio source 7
+Creating audio source 8
+Creating audio source 9
+Creating audio source 10
+Creating audio source 11

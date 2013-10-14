@@ -1,0 +1,8 @@
+9/4/2013 - 18:57:42.126
+System OS: MAC
+User Name: jessifin
+Screen Name: King Prince Chambermaid
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.16.74 310.40.00.10f02
+ADAPTER: null
