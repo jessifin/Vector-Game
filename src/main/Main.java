@@ -81,7 +81,7 @@ public class Main {
 	}
 	
 	public static void main(String... args) {
-		System.setProperty("org.lwjgl.librarypath", new File("lwjgl-2.9.0/native/" + SYSTEM_OS.nativePath).getAbsolutePath());
+		System.setProperty("org.lwjgl.librarypath", new File("lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
 		System.setOut(log);
 		System.setErr(log);
 				

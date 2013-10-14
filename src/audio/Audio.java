@@ -20,6 +20,7 @@ import main.Util;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.util.WaveData;
 
 public class Audio {
