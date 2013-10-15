@@ -10,7 +10,7 @@ import audio.Audio;
 
 public class Input {
 	
-	public static float x = .01f, y = 3.14f;
+	public static float relX = 0, relY = 0;
 	public static float absX = 0, absY = 0;
 	
 	static final float mouseSensitivity = 100;
@@ -28,8 +28,8 @@ public class Input {
 	}
 	
 	public static void mouseUpdate() {
-		x += (Mouse.getDX())/mouseSensitivity;
-		y += (Mouse.getDY())/mouseSensitivity;
+		relX = (Mouse.getDX())/mouseSensitivity;
+		relY = (Mouse.getDY())/mouseSensitivity;
 		absX = Mouse.getX()/Graphics.WIDTH;
 		absY = Mouse.getY()/Graphics.HEIGHT;
 		

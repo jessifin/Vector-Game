@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.vecmath.Vector3f;
 
+import main.Input;
 import main.Main;
 import main.Util;
 
@@ -58,8 +59,8 @@ public class Audio {
 			if(source.isPlaying()) {
 				source.update(timePassed);
 				if(source.currentBuffer.isMusic) {
-					source.currentBuffer.gain = (float) (1+0.2f*Math.sin(System.currentTimeMillis()/900));
-					source.currentBuffer.pitch = 1.8f;
+					source.currentBuffer.gain = GameInfo.musicVolume;
+					source.currentBuffer.pitch = 1;
 				}
 				bindSource(source, source.currentBuffer);
 			}
