@@ -22,7 +22,7 @@ public class Input {
 		enableRepeatEvents(true);
 		for(int i = 0; i < keyboardInfo.length; i++) {
 			if(Keyboard.getKeyName(i) != null) {
-				keyboardInfo[i] = KeyInfo.getKeyInfo(); System.out.println(Keyboard.getKeyName(i));
+				keyboardInfo[i] = KeyInfo.getKeyInfo();
 			}
 		}
 	}

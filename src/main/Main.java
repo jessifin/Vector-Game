@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Calendar;
 
-import javax.vecmath.Vector3f;
+import model.ModelParser;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 
 import audio.Audio;
@@ -45,6 +44,7 @@ public class Main {
 		Audio.init();
 		Input.init();
 		
+		ModelParser.getModel("pizzard.dae");
 		Audio.playMusic("le_elephante.wav");
 						
 		while(RUNNING && !Display.isCloseRequested()) {
