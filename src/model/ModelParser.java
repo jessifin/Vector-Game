@@ -45,16 +45,23 @@ public class ModelParser {
 		
 		NodeList nodes = document.getElementsByTagName("geometry");
 		ModelData[] modelData = new ModelData[nodes.getLength()];
+	
 		for(int i = 0; i < nodes.getLength(); i++) {
-			Node node = nodes.item(i);
+			//Why aren't these enumerations? It's just annoying this way.
+			Node meshNode = nodes.item(i);
 			
-			ModelData currentData = new ModelData();
-			NamedNodeMap map = node.getAttributes();
-			currentData.name = map.item(0).getNodeValue();
+			for(int j = 0; j < meshNode.getChildNodes().getLength(); j++) {
+				System.out.println(meshNode.getChildNodes().item(j).getNodeName());
+				System.out.println("\t" + meshNode.getChildNodes().item(j).getTextContent());
+			}
 			
-			Node meshNode = node.getChildNodes().item(0);
-			NodeList 
+			//currentData.vertices = elements.item(0).getFirstChild().getTextContent();
+			//currentData.indicies = elements.item(2).getFirstChild().getNodeValue();
 			
+			//System.out.println(currentData.vertices);
+			//System.out.println(currentData.indicies);
+			
+			//modelData[i] = currentData;
 		}
 		
 		return null;

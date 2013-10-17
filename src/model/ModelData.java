@@ -1,5 +1,7 @@
 package model;
 
 public class ModelData {
-	String name;
+	public String name;
+	public String vertices;
+	public String indicies;
 }
