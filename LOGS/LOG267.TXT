@@ -1,5 +1,0 @@
-Exception in thread "main" java.lang.NullPointerException
-	at model.ModelParser.parseModel(ModelParser.java:57)
-	at model.ModelParser.getModel(ModelParser.java:22)
-	at main.Main.run(Main.java:47)
-	at main.Main.main(Main.java:95)

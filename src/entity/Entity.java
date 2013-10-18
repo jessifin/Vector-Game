@@ -1,12 +1,17 @@
 package entity;
 
-import model.Model;
+import javax.vecmath.Vector3f;
 
-public class Entity {
+import model.Model;
+import model.ModelParser;
+
+public abstract class Entity {
+	
+	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
 
 	public Model[] model;
 	
-	public Entity(Model[] model) {
-		this.model = model;
+	public Entity(String model) {
+		this.model = ModelParser.getModel(model);
 	}
 }

@@ -66,8 +66,8 @@ public class Audio {
 			}
 		}
 		
-		alListener(AL_POSITION, Util.convertToBuffer(GameInfo.playerPos));
-		alListener(AL_VELOCITY, Util.convertToBuffer(GameInfo.playerPos));
+		alListener(AL_POSITION, Util.convertToBuffer(GameInfo.player.pos));
+		alListener(AL_VELOCITY, Util.convertToBuffer(GameInfo.player.pos));
 		
 		lastUpdate = System.currentTimeMillis();
 	}
@@ -90,7 +90,7 @@ public class Audio {
 	}
 	
 	public static void playAtPlayer(String loc) {
-		play(loc, GameInfo.playerPos, new Vector3f(0,0,0));
+		play(loc, GameInfo.player.pos, new Vector3f(0,0,0));
 	}
 	
 	public static void playMusic(String loc) {

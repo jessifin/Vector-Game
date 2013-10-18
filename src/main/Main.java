@@ -45,6 +45,7 @@ public class Main {
 		Input.init();
 		
 		ModelParser.getModel("pizzard.dae");
+		ModelParser.getModel("scorpiant.dae");
 		//Audio.playMusic("le_elephante.wav");
 						
 		while(RUNNING && !Display.isCloseRequested()) {

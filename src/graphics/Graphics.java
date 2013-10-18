@@ -2,6 +2,7 @@ package graphics;
 
 
 import static org.lwjgl.opengl.GL11.*;
+import game.GameInfo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -30,6 +31,7 @@ import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GL42;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.glu.GLU;
 
 public class Graphics {
 	
@@ -37,12 +39,13 @@ public class Graphics {
 	public static String VERSION, VENDOR;
 	public static DisplayMode[] availableDisplayModes;
 	
-	public static int WIDTH, HEIGHT;
+	public static float WIDTH, HEIGHT;
 	
 	public static void update() {
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		glColor3f(1,1,1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		setup3D();
+
+		/*glColor3f(1,1,1);
 		glBegin(GL_TRIANGLES);
 		glVertex2f(0,0);
 		glVertex2f(0,1);
@@ -57,11 +60,26 @@ public class Graphics {
 		glVertex2f(0,0);
 		glVertex2f(1,-1);
 		glEnd();
-
+		 */
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
 	}
-
+	
+	private static void setup3D() {
+		glLoadIdentity();
+		GLU.gluPerspective(GameInfo.FoV, WIDTH / HEIGHT, GameInfo.Z_NEAR, GameInfo.Z_FAR);
+		glMatrixMode(GL_MODELVIEW);
+		glEnable(GL_DEPTH_TEST);
+    }
+    
+    private static void setup2D() {
+		glLoadIdentity();
+    	glMatrixMode(GL_PROJECTION);
+    	glDisable(GL_DEPTH_TEST);
+    	glLoadIdentity();
+    	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
+    }
+    
 	public static void init() {
 		try {
 			//Creating a "dummy" context to query the max # of samples (for antialiasing)
