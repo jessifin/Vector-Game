@@ -1,12 +1,18 @@
 package model;
 
+import static org.lwjgl.opengl.GL15.*;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import main.Util;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -62,7 +68,7 @@ public class ModelParser {
 			
 			String rawIndices = indexNode.getTextContent();
 			String[] halfBakedIndices = rawIndices.split(" ");
-			short[] cookedIndices = new short[halfBakedIndices.length/2];
+			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are included with the indices
 			for(int j = 0; j < cookedIndices.length; j+=2) {
 				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
 			}
@@ -75,6 +81,24 @@ public class ModelParser {
 	}
 	
 	public static Model[] buildModel(ModelData[] modelData) {
+		Model[] models = new Model[modelData.length];
 		
+		for(int i = 0; i < models.length; i++) {
+			FloatBuffer vertexData = Util.toBuffer(modelData[i].vertices);
+			ShortBuffer indexData = Util.toBuffer(modelData[i].indices);
+			
+			int vertexID = glGenBuffers();
+			glBindBuffer(GL_ARRAY_BUFFER, vertexID);
+			glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+			
+			int indexID = glGenBuffers();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);
+			
+			Model model = new Model(vertexID, indexID, modelData[i].indices.length);
+			models[i] = model;
+		}
+		
+		return models;
 	}
 }
