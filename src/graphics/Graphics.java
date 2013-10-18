@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import main.Input;
+import model.ModelParser;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -129,6 +130,7 @@ public class Graphics {
 	}
 	
 	public static void destroy() {
+		ModelParser.clearModelMap();
 		Display.destroy();
 	}
 }

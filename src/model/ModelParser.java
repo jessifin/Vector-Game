@@ -6,19 +6,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import main.Util;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import main.Util;
 
 public class ModelParser {
 	
@@ -29,6 +29,8 @@ public class ModelParser {
 	}
 	
 	private static Model[] parseModel(String loc) {
+		System.out.println("Loading model: " + loc);
+		
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		
 		DocumentBuilder builder = null;
@@ -54,7 +56,10 @@ public class ModelParser {
 	
 		for(int i = 0; i < nodes.getLength(); i++) {
 			//Why aren't these enumerations? It's just annoying this way.
-			Node meshNode = nodes.item(i).getFirstChild().getNextSibling();
+			Node geometryNode = nodes.item(i);
+			String name = geometryNode.getAttributes().item(0).getNodeValue();
+			
+			Node meshNode = geometryNode.getFirstChild().getNextSibling();
 
 			Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
 			Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
@@ -73,14 +78,14 @@ public class ModelParser {
 				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
 			}
 
-			ModelData currentData = new ModelData(cookedVertices, cookedIndices);
+			ModelData currentData = new ModelData(name, cookedVertices, cookedIndices);
 			modelData[i] = currentData;
 		}
 		
-		return buildModel(modelData);
+		return buildModel(loc, modelData);
 	}
 	
-	public static Model[] buildModel(ModelData[] modelData) {
+	public static Model[] buildModel(String id, ModelData[] modelData) {
 		Model[] models = new Model[modelData.length];
 		
 		for(int i = 0; i < models.length; i++) {
@@ -95,10 +100,24 @@ public class ModelParser {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);
 			
-			Model model = new Model(vertexID, indexID, modelData[i].indices.length);
+			Model model = new Model(modelData[i].name, vertexID, indexID, modelData[i].indices.length);
 			models[i] = model;
 		}
 		
+		loadedModels.put(id, models);
 		return models;
+	}
+	
+	public static void clearModelMap() {
+		Enumeration<String> k = loadedModels.keys();
+		Enumeration<Model[]> e = loadedModels.elements();
+		while(k.hasMoreElements()) {
+			System.out.println("Deleting model " + k.nextElement());
+			for(Model m: e.nextElement()) {
+				System.out.println('\t' + m.name);
+				glDeleteBuffers(m.vertexID);
+				glDeleteBuffers(m.indexID);
+			}
+		}
 	}
 }

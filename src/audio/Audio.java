@@ -43,8 +43,8 @@ public class Audio {
 	        exception.printStackTrace();
 		}
 		
+		System.out.println("Creating " + sources.length + " audio sources");
 		for(int i = 0; i < sources.length; i++) {
-			System.out.println("Creating audio source " + (i+1));
 			int sourceID = alGenSources();
 			sources[i] = new Source(sourceID);
 		}
@@ -171,8 +171,8 @@ public class Audio {
 	}
 	
 	public static void destroy() {
+		System.out.println("Removing " + sources.length + " audio sources ");
 		for(int i = 0; i < sources.length; i++) { 
-			System.out.println("Removing audio source " + (i+1));
 			alDeleteSources(sources[i].id);
 		}
 		
