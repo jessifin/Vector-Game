@@ -43,6 +43,7 @@ public class Main {
 		Graphics.init();
 		Audio.init();
 		Input.init();
+		GameInfo.init();
 		
 		ModelParser.getModel("pizzard.dae");
 		ModelParser.getModel("scorpiant.dae");

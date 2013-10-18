@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,7 +25,7 @@ import main.Util;
 
 public class ModelParser {
 	
-	private static Hashtable<String,Model[]> loadedModels = new Hashtable<String,Model[]>();
+	private static HashMap<String,Model[]> loadedModels = new HashMap<String,Model[]>();
 
 	public static Model[] getModel(String loc) {
 		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : parseModel(loc);
@@ -109,11 +112,12 @@ public class ModelParser {
 	}
 	
 	public static void clearModelMap() {
-		Enumeration<String> k = loadedModels.keys();
-		Enumeration<Model[]> e = loadedModels.elements();
-		while(k.hasMoreElements()) {
-			System.out.println("Deleting model " + k.nextElement());
-			for(Model m: e.nextElement()) {
+		//Why you gotta use set and collection? Make up your mind, Oracle.
+		Iterator<String> keys = loadedModels.keySet().iterator();
+		Iterator<Model[]> values = loadedModels.values().iterator();
+		while(keys.hasNext()) {
+			System.out.println("Deleting model " + keys.next());
+			for(Model m: values.next()) {
 				System.out.println('\t' + m.name);
 				glDeleteBuffers(m.vertexID);
 				glDeleteBuffers(m.indexID);

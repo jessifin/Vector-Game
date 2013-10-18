@@ -2,6 +2,7 @@ package graphics;
 
 
 import static org.lwjgl.opengl.GL11.*;
+import entity.Entity;
 import game.GameInfo;
 
 import java.lang.reflect.Field;
@@ -43,24 +44,10 @@ public class Graphics {
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		setup3D();
+		setup2D();
 
-		/*glColor3f(1,1,1);
-		glBegin(GL_TRIANGLES);
-		glVertex2f(0,0);
-		glVertex2f(0,1);
-		glVertex2f(1,0);
-		glVertex2f(-1,0);
-		glVertex2f(-1,1);
-		glVertex2f(0,0);
-		glVertex2f(-1,-1);
-		glVertex2f(-1,0);
-		glVertex2f(0,-1);
-		glVertex2f(0,-1);
-		glVertex2f(0,0);
-		glVertex2f(1,-1);
-		glEnd();
-		 */
+		render(GameInfo.entities);
+		
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
 	}
@@ -78,6 +65,29 @@ public class Graphics {
     	glDisable(GL_DEPTH_TEST);
     	glLoadIdentity();
     	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
+    }
+    
+    private static void render(ArrayList<Entity> entities) {
+    	//glPushMatrix();
+    	glColor3f(1,1,1);
+    	
+		glBegin(GL_TRIANGLES);
+		glVertex2f(0,0);
+		glVertex2f(0,1);
+		glVertex2f(1,0);
+		glVertex2f(-1,0);
+		glVertex2f(-1,1);
+		glVertex2f(0,0);
+		glVertex2f(-1,-1);
+		glVertex2f(-1,0);
+		glVertex2f(0,-1);
+		glVertex2f(0,-1);
+		glVertex2f(0,0);
+		glVertex2f(1,-1);
+		glEnd();
+		 
+    	
+    	//glPopMatrix();
     }
     
 	public static void init() {
