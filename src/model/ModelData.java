@@ -1,7 +1,12 @@
 package model;
 
 public class ModelData {
-	public String name;
-	public String vertices;
-	public String indicies;
+	
+	public final float[] vertices;
+	public final short[] indices;
+	
+	public ModelData(float[] vertices, short[] indices) {
+		this.vertices = vertices;
+		this.indices = indices;
+	}
 }

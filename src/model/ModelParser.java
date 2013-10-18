@@ -48,22 +48,33 @@ public class ModelParser {
 	
 		for(int i = 0; i < nodes.getLength(); i++) {
 			//Why aren't these enumerations? It's just annoying this way.
-			Node meshNode = nodes.item(i);
+			Node meshNode = nodes.item(i).getFirstChild().getNextSibling();
+
+			Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
+			Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
 			
-			for(int j = 0; j < meshNode.getChildNodes().getLength(); j++) {
-				System.out.println(meshNode.getChildNodes().item(j).getNodeName());
-				System.out.println("\t" + meshNode.getChildNodes().item(j).getTextContent());
+			String rawVertices = vertexNode.getTextContent();
+			String[] mediumRareVertices = rawVertices.split(" ");
+			float[] cookedVertices = new float[mediumRareVertices.length];
+			for(int j = 0; j < cookedVertices.length; j++) {
+				cookedVertices[j] = Float.valueOf(mediumRareVertices[j]);
 			}
 			
-			//currentData.vertices = elements.item(0).getFirstChild().getTextContent();
-			//currentData.indicies = elements.item(2).getFirstChild().getNodeValue();
-			
-			//System.out.println(currentData.vertices);
-			//System.out.println(currentData.indicies);
-			
-			//modelData[i] = currentData;
+			String rawIndices = indexNode.getTextContent();
+			String[] halfBakedIndices = rawIndices.split(" ");
+			short[] cookedIndices = new short[halfBakedIndices.length/2];
+			for(int j = 0; j < cookedIndices.length; j+=2) {
+				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
+			}
+
+			ModelData currentData = new ModelData(cookedVertices, cookedIndices);
+			modelData[i] = currentData;
 		}
 		
-		return null;
+		return buildModel(modelData);
+	}
+	
+	public static Model[] buildModel(ModelData[] modelData) {
+		
 	}
 }

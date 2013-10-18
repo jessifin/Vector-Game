@@ -45,7 +45,7 @@ public class Main {
 		Input.init();
 		
 		ModelParser.getModel("pizzard.dae");
-		Audio.playMusic("le_elephante.wav");
+		//Audio.playMusic("le_elephante.wav");
 						
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;
@@ -82,7 +82,7 @@ public class Main {
 	
 	public static void main(String... args) {
 		System.setProperty("org.lwjgl.librarypath", new File("lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
-		System.setOut(log);
+		//System.setOut(log);
 		System.setErr(log);
 				
 		System.out.println(getTime());
