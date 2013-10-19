@@ -34,6 +34,8 @@ import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
+import shader.ShaderParser;
+
 public class Graphics {
 	
 	private static int OPTIMAL_FPS = 60;
@@ -159,6 +161,7 @@ public class Graphics {
 	
 	public static void destroy() {
 		ModelParser.clearModelMap();
+		ShaderParser.clearShaderMap();
 		Display.destroy();
 	}
 }

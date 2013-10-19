@@ -19,7 +19,7 @@ public class Shader {
 		if(uniforms.containsKey(id)) {
 			return uniforms.get(id);
 		} else {
-			int uniform = ShaderLoader.getUniform(programID,id);
+			int uniform = ShaderParser.getUniform(programID,id);
 			uniforms.put(id, uniform);
 			return getUniform(id);
 		}
