@@ -3,6 +3,7 @@ package entity;
 import javax.vecmath.Vector3f;
 
 import model.Model;
+import model.ModelData;
 import model.ModelParser;
 
 public abstract class Entity {
@@ -13,5 +14,9 @@ public abstract class Entity {
 	
 	public Entity(String model) {
 		this.model = ModelParser.getModel(model);
+	}
+	
+	public Entity(ModelData[] modelData) {
+		this.model = ModelParser.buildModel("player", modelData);
 	}
 }

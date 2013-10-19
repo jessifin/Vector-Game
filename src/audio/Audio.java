@@ -14,14 +14,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.vecmath.Vector3f;
 
-import main.Input;
 import main.Main;
 import main.Util;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 import org.lwjgl.util.WaveData;
 
 public class Audio {

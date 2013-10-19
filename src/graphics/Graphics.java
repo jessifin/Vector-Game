@@ -1,7 +1,7 @@
 package graphics;
 
-
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
 import entity.Entity;
 import game.GameInfo;
 
@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import main.Input;
 import model.ModelParser;
 
 import org.lwjgl.LWJGLException;
@@ -73,22 +72,18 @@ public class Graphics {
     	//glPushMatrix();
     	glColor3f(1,1,1);
     	
-		glBegin(GL_TRIANGLES);
-		glVertex2f(0,0);
-		glVertex2f(0,1);
-		glVertex2f(1,0);
-		glVertex2f(-1,0);
-		glVertex2f(-1,1);
-		glVertex2f(0,0);
-		glVertex2f(-1,-1);
-		glVertex2f(-1,0);
-		glVertex2f(0,-1);
-		glVertex2f(0,-1);
-		glVertex2f(0,0);
-		glVertex2f(1,-1);
-		glEnd();
-		 
-    	
+    	for(int e = 0; e < entities.size(); e++) {
+    		for(int m = 0; m < entities.get(e).model.length; m++) {
+	        	glEnableClientState(GL_VERTEX_ARRAY);
+	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
+	        	glVertexPointer(3, GL_FLOAT, 0, 0);
+	        	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entities.get(e).model[m].indexID);
+	        	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	        	glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indicesToRender, GL_UNSIGNED_SHORT, 0);
+	        	glDisableClientState(GL_VERTEX_ARRAY);
+    		}
+    	}
+
     	//glPopMatrix();
     }
     
