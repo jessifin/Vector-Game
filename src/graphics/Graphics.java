@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.vecmath.Matrix4f;
 
+import main.Util;
 import model.ModelParser;
 
 import org.lwjgl.LWJGLException;
@@ -90,7 +91,7 @@ public class Graphics {
     
     private static void render(ArrayList<Entity> entities) {
     	//glPushMatrix();
-    	//GL20.glUseProgram(defaultShader.programID);
+    	GL20.glUseProgram(defaultShader.programID);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			modelMatrix.setIdentity();
@@ -99,6 +100,9 @@ public class Graphics {
     			modelMatrix.rotZ(entities.get(e).rot.z);
     			modelMatrix.rotY(entities.get(e).rot.y);
     			modelMatrix.rotX(entities.get(e).rot.x);
+    			GL20.glUniformMatrix4(defaultShader.getUniform("modelMatrix"), false, Util.toBuffer(modelMatrix));
+    			GL20.glUniformMatrix4(defaultShader.getUniform("projectionMatrix"), false, Util.toBuffer(projectionMatrix));
+    			GL20.glUniformMatrix4(defaultShader.getUniform("viewMatrix"), false, Util.toBuffer(viewMatrix));
 	        	glEnableClientState(GL_VERTEX_ARRAY);
 	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
 	        	glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -158,6 +162,7 @@ public class Graphics {
 			//Creating the actual context that will be used by the game.
 			Display.setVSyncEnabled(true);
 			Display.setResizable(true);
+			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
 			//Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples));

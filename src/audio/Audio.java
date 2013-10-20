@@ -63,8 +63,8 @@ public class Audio {
 			}
 		}
 		
-		alListener(AL_POSITION, Util.convertToBuffer(GameInfo.player.pos));
-		alListener(AL_VELOCITY, Util.convertToBuffer(GameInfo.player.pos));
+		alListener(AL_POSITION, Util.toBuffer(GameInfo.player.pos));
+		alListener(AL_VELOCITY, Util.toBuffer(GameInfo.player.pos));
 		
 		lastUpdate = System.currentTimeMillis();
 	}
@@ -76,8 +76,8 @@ public class Audio {
 			buffer.looping = false;
 			buffer.gain = GameInfo.fxVolume;
 			buffer.isMusic = false;
-			alSource(sources[i].id, AL_POSITION, Util.convertToBuffer(pos));
-			alSource(sources[i].id, AL_VELOCITY, Util.convertToBuffer(vel));
+			alSource(sources[i].id, AL_POSITION, Util.toBuffer(pos));
+			alSource(sources[i].id, AL_VELOCITY, Util.toBuffer(vel));
 			bindSource(sources[i], buffer);
 			alSourcePlay(sources[i].id);
 		} else {

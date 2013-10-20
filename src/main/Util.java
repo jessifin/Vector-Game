@@ -10,11 +10,10 @@ import org.lwjgl.BufferUtils;
 
 public class Util {
 	
-	public static FloatBuffer convertToBuffer(Vector3f vec) {
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(3);
-		buffer.put(new float[] {vec.x, vec.y, vec.z});
-		buffer.flip();
-		return buffer;
+	public static FloatBuffer toBuffer(Vector3f vec) {
+		float[] data = new float[3];
+		vec.get(data);
+		return toBuffer(data);
 	}
 	
 	public static FloatBuffer toBuffer(Matrix4f mat) {
