@@ -12,17 +12,17 @@ import main.Main;
 
 public class ShaderParser {
 	
-	public static HashMap<String,Shader> shaders = new HashMap<String,Shader>();
+	private static HashMap<String,Shader> shaders = new HashMap<String,Shader>();
 	
 	public static Shader getShader(String loc) {
 		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc);
 	}
 	
 	private static Shader loadShader(String loc) {
-		System.out.println("Loading shader:" + loc);
+		System.out.println("Loading shader: " + loc);
 		
 		//Vertex Shader
-		String vertexText = readRawText(loc + ".vertex");
+		String vertexText = readRawText(loc + ".vs");
 		int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShaderID, vertexText);
 		glCompileShader(vertexShaderID);
@@ -34,7 +34,7 @@ public class ShaderParser {
 		}
 		
 		//Fragment Shader
-		String fragmentText = readRawText(loc + ".fragment");
+		String fragmentText = readRawText(loc + ".fs");
 		int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragmentShaderID, fragmentText);
 		glCompileShader(fragmentShaderID);
@@ -63,7 +63,7 @@ public class ShaderParser {
 	private static String readRawText(String loc) {
 		Scanner scan = null;
 		try {
-			scan = new Scanner(new File("res/shaders/"+loc));
+			scan = new Scanner(new File("res/shader/"+loc));
 		} catch (FileNotFoundException exception) {
 			System.err.println("UNABLE TO LOCATE TARGET FILE");
 			exception.printStackTrace();

@@ -1,0 +1,4 @@
+ERROR OCCURED IN COMPILING FRAGMENT SHADER.
+ERROR: 0:2: Left-hand-side of assignment must not be read-only
+
+ERROR OCCURED IN COMPILING SHADER PROGRAM.

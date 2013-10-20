@@ -9,10 +9,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javax.vecmath.Matrix4f;
+
 import model.ModelParser;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -33,6 +36,7 @@ import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
+import shader.Shader;
 import shader.ShaderParser;
 
 public class Graphics {
@@ -42,6 +46,10 @@ public class Graphics {
 	public static DisplayMode[] availableDisplayModes;
 	
 	public static float WIDTH, HEIGHT;
+	
+	private static Shader defaultShader;
+	
+	private static Matrix4f modelMatrix = new Matrix4f(), projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -61,19 +69,36 @@ public class Graphics {
     }
     
     private static void setup2D() {
+    	/*
 		glLoadIdentity();
     	glMatrixMode(GL_PROJECTION);
     	glDisable(GL_DEPTH_TEST);
     	glLoadIdentity();
     	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
+    	*/
+    }
+    
+    private static void rebuildProjectionMatrix() {
+    	float yScale = 1f / (float) Math.tan(GameInfo.FoV / 2f);
+    	projectionMatrix.setElement(0, 0, yScale / (WIDTH / HEIGHT));
+    	projectionMatrix.setElement(1, 1, yScale);
+    	projectionMatrix.setElement(2, 2, - (GameInfo.Z_FAR - GameInfo.Z_NEAR) / (GameInfo.Z_FAR + GameInfo.Z_NEAR));
+    	projectionMatrix.setElement(2, 3, -1);
+    	projectionMatrix.setElement(3, 2, -(2 * GameInfo.Z_FAR * GameInfo.Z_NEAR) / (GameInfo.Z_FAR + GameInfo.Z_NEAR));
+    	projectionMatrix.setElement(3, 3, 0);
     }
     
     private static void render(ArrayList<Entity> entities) {
     	//glPushMatrix();
-    	glColor3f(1,1,1);
-    	
+    	//GL20.glUseProgram(defaultShader.programID);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
+    			modelMatrix.setIdentity();
+    			modelMatrix.transform(entities.get(e).scale);
+    			modelMatrix.setTranslation(entities.get(e).pos);
+    			modelMatrix.rotZ(entities.get(e).rot.z);
+    			modelMatrix.rotY(entities.get(e).rot.y);
+    			modelMatrix.rotX(entities.get(e).rot.x);
 	        	glEnableClientState(GL_VERTEX_ARRAY);
 	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
 	        	glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -89,6 +114,9 @@ public class Graphics {
     
 	public static void init() {
 		try {
+			/*
+			 * 	Display Initialization
+			 */
 			//Creating a "dummy" context to query the max # of samples (for antialiasing)
 			Display.create();
 			int maxSamples = glGetInteger(GL30.GL_MAX_SAMPLES);
@@ -131,9 +159,15 @@ public class Graphics {
 			Display.setVSyncEnabled(true);
 			Display.setResizable(true);
 			Display.setTitle("Vector Game");
-			Display.setInitialBackground(.1f,.3f,.8f);
 			//Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples));
+			
+			/*
+			 * GL Initialization
+			 */
+			
+			defaultShader = ShaderParser.getShader("default");
+			glClearColor(.1f,.3f,.8f,1);
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
 			exception.printStackTrace();

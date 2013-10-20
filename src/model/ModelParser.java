@@ -13,6 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -98,7 +101,7 @@ public class ModelParser {
 			
 			int indexID = glGenBuffers();
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);			
 			
 			Model model = new Model(modelData[i].name, vertexID, indexID, modelData[i].indices.length);
 			models[i] = model;

@@ -1,0 +1,9 @@
+ERROR OCCURED IN COMPILING VERTEX SHADER.
+ERROR: 0:1: '' :  version '1' is not supported
+ERROR: 0:2: '' :  #version required and missing.
+
+ERROR OCCURED IN COMPILING FRAGMENT SHADER.
+ERROR: 0:1: '' :  version '1' is not supported
+ERROR: 0:2: '' :  #version required and missing.
+
+ERROR OCCURED IN COMPILING SHADER PROGRAM.

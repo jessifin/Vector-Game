@@ -1,0 +1,8 @@
+ERROR OCCURED IN COMPILING VERTEX SHADER.
+ERROR: 0:5: Invalid qualifiers 'in' in global variable context
+ERROR: 0:8: Use of undeclared identifier 'pos'
+
+ERROR OCCURED IN COMPILING FRAGMENT SHADER.
+ERROR: 0:2: Left-hand-side of assignment must not be read-only
+
+ERROR OCCURED IN COMPILING SHADER PROGRAM.

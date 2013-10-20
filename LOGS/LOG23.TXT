@@ -1,0 +1,5 @@
+Exception in thread "main" java.lang.IllegalArgumentException: Profiles are only supported on OpenGL version 3.2 or higher.
+	at org.lwjgl.opengl.ContextAttribs.withProfileCore(ContextAttribs.java:188)
+	at graphics.Graphics.init(Graphics.java:163)
+	at main.Main.run(Main.java:42)
+	at main.Main.main(Main.java:96)
