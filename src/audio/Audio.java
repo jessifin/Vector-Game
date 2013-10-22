@@ -7,7 +7,9 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -25,7 +27,7 @@ public class Audio {
 		
 	public static int numSources = 32;
 	
-	private static Hashtable<String,Buffer> loadedBuffers = new Hashtable<String,Buffer>();
+	private static HashMap<String,Buffer> loadedBuffers = new HashMap<String,Buffer>();
 	private static Source[] sources = new Source[numSources];
 				
 	private static long lastUpdate = System.currentTimeMillis();
@@ -175,9 +177,9 @@ public class Audio {
 			alDeleteSources(sources[i].id);
 		}
 		
-		Enumeration<Buffer> e = loadedBuffers.elements();
-		while(e.hasMoreElements()) {
-			Buffer buffer = e.nextElement();
+		Iterator<Entry<String,Buffer>> i = loadedBuffers.entrySet().iterator();
+		while(i.hasNext()) {
+			Buffer buffer = i.next().getValue();
 			System.out.println("Removing audio buffer \"" + buffer.name + "\"");
 			alDeleteBuffers(buffer.id);
 		}
