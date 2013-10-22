@@ -69,7 +69,7 @@ public class Audio {
 		lastUpdate = System.currentTimeMillis();
 	}
 	
-	public static void play(String loc, Vector3f pos, Vector3f vel) {
+	public static Buffer play(String loc, Vector3f pos, Vector3f vel) {
 		if(loadedBuffers.containsKey(loc)) {
 			int i = getAvailableSource();
 			Buffer buffer = loadedBuffers.get(loc);
@@ -80,17 +80,18 @@ public class Audio {
 			alSource(sources[i].id, AL_VELOCITY, Util.toBuffer(vel));
 			bindSource(sources[i], buffer);
 			alSourcePlay(sources[i].id);
+			return buffer;
 		} else {
 			loadBuffer(loc);
-			play(loc, pos, vel);
+			return play(loc, pos, vel);
 		}
 	}
 	
-	public static void playAtPlayer(String loc) {
-		play(loc, GameInfo.player.pos, new Vector3f(0,0,0));
+	public static Buffer playAtPlayer(String loc) {
+		return play(loc, GameInfo.player.pos, new Vector3f(0,0,0));
 	}
 	
-	public static void playMusic(String loc) {
+	public static Buffer playMusic(String loc) {
 		if(loadedBuffers.containsKey(loc)) {
 			int i = getAvailableSource();
 			Buffer buffer = loadedBuffers.get(loc);
@@ -99,9 +100,10 @@ public class Audio {
 			buffer.isMusic = true;
 			bindSource(sources[i], buffer);
 			alSourcePlay(sources[i].id);
+			return buffer;
 		} else {
 			loadBuffer(loc);
-			playMusic(loc);
+			return playMusic(loc);
 		}
 	}
 	

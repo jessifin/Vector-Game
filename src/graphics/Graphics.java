@@ -78,7 +78,7 @@ public class Graphics {
     	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
     	*/
     }
-    
+    /*
     private static void rebuildProjectionMatrix() {
     	float yScale = 1f / (float) Math.tan(GameInfo.FoV / 2f);
     	projectionMatrix.setElement(0, 0, yScale / (WIDTH / HEIGHT));
@@ -88,21 +88,12 @@ public class Graphics {
     	projectionMatrix.setElement(3, 2, -(2 * GameInfo.Z_FAR * GameInfo.Z_NEAR) / (GameInfo.Z_FAR + GameInfo.Z_NEAR));
     	projectionMatrix.setElement(3, 3, 0);
     }
-    
+    */
     private static void render(ArrayList<Entity> entities) {
-    	//glPushMatrix();
+    	glPushMatrix();
     	GL20.glUseProgram(defaultShader.programID);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
-    			modelMatrix.setIdentity();
-    			modelMatrix.transform(entities.get(e).scale);
-    			modelMatrix.setTranslation(entities.get(e).pos);
-    			modelMatrix.rotZ(entities.get(e).rot.z);
-    			modelMatrix.rotY(entities.get(e).rot.y);
-    			modelMatrix.rotX(entities.get(e).rot.x);
-    			GL20.glUniformMatrix4(defaultShader.getUniform("modelMatrix"), false, Util.toBuffer(modelMatrix));
-    			GL20.glUniformMatrix4(defaultShader.getUniform("projectionMatrix"), false, Util.toBuffer(projectionMatrix));
-    			GL20.glUniformMatrix4(defaultShader.getUniform("viewMatrix"), false, Util.toBuffer(viewMatrix));
 	        	glEnableClientState(GL_VERTEX_ARRAY);
 	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
 	        	glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -113,7 +104,7 @@ public class Graphics {
     		}
     	}
 
-    	//glPopMatrix();
+    	glPopMatrix();
     }
     
 	public static void init() {

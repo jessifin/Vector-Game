@@ -20,6 +20,7 @@ public class Source {
 			isPlaying = false;
 			justStopped = true;
 			millisPlayed = 0;
+			currentBuffer.isActive = false;
 		}
 	}
 	

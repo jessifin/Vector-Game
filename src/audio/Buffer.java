@@ -9,6 +9,7 @@ public class Buffer {
 	public float pitch = 1, gain = 1;
 	public boolean looping = false;
 	public boolean isMusic = false;
+	boolean isActive = true;
 	
 	public Buffer(int id, float duration, String name) {
 		this.id = id;
@@ -24,5 +25,9 @@ public class Buffer {
 		this.gain = new Float(buffer.pitch);
 		this.looping = new Boolean(buffer.looping);
 		this.isMusic = new Boolean(buffer.isMusic);
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 }
