@@ -84,7 +84,7 @@ public class Main {
 	public static void main(String... args) {
 		System.setProperty("org.lwjgl.librarypath", new File("lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
 		//System.setOut(log);
-		System.setErr(log);
+		//System.setErr(log);
 				
 		System.out.println(getTime());
 		System.out.println("System OS: " + SYSTEM_OS.toString());

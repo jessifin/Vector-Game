@@ -1,6 +1,7 @@
 package main;
 
 import static org.lwjgl.input.Keyboard.*;
+import game.GameInfo;
 import graphics.Graphics;
 
 import org.lwjgl.input.Keyboard;
@@ -10,15 +11,16 @@ import audio.Audio;
 
 public class Input {
 	
-	public static float relX = 0, relY = 0;
+	public static float dX = 0, dY = 0;
 	public static float absX = 0, absY = 0;
+	public static float x = 0, y = 0;
 	
 	static final float mouseSensitivity = 100;
 	
 	public static KeyInfo[] keyboardInfo = new KeyInfo[KEYBOARD_SIZE];
 	
 	public static void init() {
-		//Mouse.setGrabbed(true);
+		Mouse.setGrabbed(true);
 		enableRepeatEvents(true);
 		for(int i = 0; i < keyboardInfo.length; i++) {
 			if(Keyboard.getKeyName(i) != null) {
@@ -28,16 +30,15 @@ public class Input {
 	}
 	
 	public static void mouseUpdate() {
-		relX = (Mouse.getDX())/mouseSensitivity;
-		relY = (Mouse.getDY())/mouseSensitivity;
+		dX = (Mouse.getDX())/mouseSensitivity;
+		dY = (Mouse.getDY())/mouseSensitivity;
 		absX = Mouse.getX()/Graphics.WIDTH;
 		absY = Mouse.getY()/Graphics.HEIGHT;
+		x += dX; y += dY;
 		
-		//Graphics.camPos.x = (float) (Graphics.camDist * Math.cos(x) * Math.sin(y) + Main.playerEntity.pos.x);
-		//Graphics.camPos.y = (float) (Graphics.camDist * Math.cos(y) + Main.playerEntity.pos.y);
-		//Graphics.camPos.z = (float) (Graphics.camDist * Math.sin(x) * Math.sin(y) + Main.playerEntity.pos.z);
-
-		//Main.playerEntity.rot.y = (float) -(x*180f/Math.PI+90f);
+		GameInfo.camPos.x = (float) (Math.cos(x) * Math.sin(y) + GameInfo.player.pos.x);
+		GameInfo.camPos.y = (float) (Math.cos(y) + GameInfo.player.pos.y);
+		GameInfo.camPos.z = (float) (Math.sin(x) * Math.sin(y) + GameInfo.player.pos.z);
 		
 		if(Mouse.isButtonDown(0)) {
 			Audio.playAtPlayer("pootis.wav");

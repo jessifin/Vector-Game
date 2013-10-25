@@ -54,9 +54,13 @@ public class Graphics {
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		setup2D();
-
+		
+		setup3D();
+		GLU.gluLookAt(GameInfo.camPos.x, GameInfo.camPos.y, GameInfo.camPos.z, GameInfo.player.pos.x, GameInfo.player.pos.y, GameInfo.player.pos.z, 0, 1 ,0);
 		render(GameInfo.entities);
+		
+		setup2D();
+		//render(GameInfo.entities);
 		
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
@@ -69,14 +73,12 @@ public class Graphics {
 		glEnable(GL_DEPTH_TEST);
     }
     
-    private static void setup2D() {
-    	/*
+    private static void setup2D() {	
 		glLoadIdentity();
     	glMatrixMode(GL_PROJECTION);
     	glDisable(GL_DEPTH_TEST);
     	glLoadIdentity();
     	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
-    	*/
     }
     /*
     private static void rebuildProjectionMatrix() {
@@ -90,21 +92,32 @@ public class Graphics {
     }
     */
     private static void render(ArrayList<Entity> entities) {
-    	glPushMatrix();
-    	GL20.glUseProgram(defaultShader.programID);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
+    	    	glPushMatrix();
+    	    	glScalef(entities.get(e).scale.x * entities.get(e).model[m].scale.x,
+    	    			entities.get(e).scale.y * entities.get(e).model[m].scale.y,
+    	    			entities.get(e).scale.z * entities.get(e).model[m].scale.z);
+    	    	glTranslatef(entities.get(e).pos.x + entities.get(e).model[m].pos.x,
+    	    			entities.get(e).pos.y + entities.get(e).model[m].pos.y,
+    	    			entities.get(e).pos.z + entities.get(e).model[m].pos.z);
+    	    	glRotatef(entities.get(e).rot.z, 0, 0, 1);
+    	    	glRotatef(entities.get(e).rot.y, 0, 1, 0);
+    	    	glRotatef(entities.get(e).rot.x, 1, 0, 0);
 	        	glEnableClientState(GL_VERTEX_ARRAY);
 	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
 	        	glVertexPointer(3, GL_FLOAT, 0, 0);
 	        	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entities.get(e).model[m].indexID);
 	        	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    	    	glColor4f(1,1,1,1);
+	        	glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indicesToRender, GL_UNSIGNED_SHORT, 0);
+	        	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    	    	glColor4f(0,0,0,1);
 	        	glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indicesToRender, GL_UNSIGNED_SHORT, 0);
 	        	glDisableClientState(GL_VERTEX_ARRAY);
+	        	glPopMatrix();
     		}
     	}
-
-    	glPopMatrix();
     }
     
 	public static void init() {
@@ -155,7 +168,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-			//Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples));
 			
 			/*
@@ -164,11 +177,25 @@ public class Graphics {
 			
 			defaultShader = ShaderParser.getShader("default");
 			glClearColor(.1f,.3f,.8f,1);
+
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
 			exception.printStackTrace();
 		}
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
+		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		GLU.gluPerspective(GameInfo.FoV, WIDTH / HEIGHT, GameInfo.Z_NEAR, GameInfo.Z_FAR);
+		glMatrixMode(GL_MODELVIEW);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(1f,0.5f);
 	}
 	
 	private static DisplayMode getBestDisplayMode() {

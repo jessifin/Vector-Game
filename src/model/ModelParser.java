@@ -76,7 +76,7 @@ public class ModelParser {
 			
 			String rawIndices = indexNode.getTextContent();
 			String[] halfBakedIndices = rawIndices.split(" ");
-			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are included with the indices
+			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are paired with the indices
 			for(int j = 0; j < cookedIndices.length; j+=2) {
 				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
 			}
@@ -85,6 +85,13 @@ public class ModelParser {
 			modelData[i] = currentData;
 		}
 		
+		NodeList transforms = document.getElementsByTagName("visual_scene").item(0).getChildNodes();
+		
+		for(int i = 1; i < transforms.getLength(); i++) {
+			Node pos = transforms.item(i).getFirstChild();
+
+			System.out.println(pos.getNodeName());
+		}
 		return buildModel(loc, modelData);
 	}
 	
