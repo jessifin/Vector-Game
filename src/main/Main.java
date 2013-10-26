@@ -1,6 +1,6 @@
 package main;
 
-import game.GameInfo;
+import game.Game;
 import graphics.Graphics;
 
 import java.io.File;
@@ -42,10 +42,8 @@ public class Main {
 		Graphics.init();
 		Audio.init();
 		Input.init();
-		GameInfo.init();
+		Game.init();
 		
-		ModelParser.getModel("pizzard.dae");
-		ModelParser.getModel("scorpiant.dae");
 		//Audio.playMusic("le_elephante.wav");
 						
 		while(RUNNING && !Display.isCloseRequested()) {
@@ -57,6 +55,7 @@ public class Main {
 			Input.mouseUpdate();
 			Graphics.update();
 			Audio.update();
+			Game.update();
 
 			Timer.updateAll((int) (System.currentTimeMillis() - initialTime));
 			

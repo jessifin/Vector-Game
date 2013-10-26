@@ -2,6 +2,7 @@ package model;
 
 import static org.lwjgl.opengl.GL15.*;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -9,6 +10,8 @@ import java.nio.ShortBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
+import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,7 +31,28 @@ public class ModelParser {
 	private static HashMap<String,Model[]> loadedModels = new HashMap<String,Model[]>();
 
 	public static Model[] getModel(String loc) {
-		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : parseModel(loc);
+		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : (loc.endsWith(".dae") ? parseModel(loc) : parseHeightmap(loc));
+	}
+	
+	private static Model[] parseHeightmap(String loc) {
+		BufferedImage map = null;
+		try {
+			map = ImageIO.read(new File("res/model/" + loc));
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		/*
+		int width = map.getWidth(); int height = map.getHeight();
+		
+		float[] vertices = new float[width * height];
+		
+		for(int x = 0; x < width; x++) {
+			for(int y = 0; y < height; y++) {
+				vertices[width * y + x] = map.getRGB(x,y) / Integer.MAX_VALUE;
+			}
+		}
+		*/
+		return null;
 	}
 	
 	private static Model[] parseModel(String loc) {
@@ -67,19 +91,20 @@ public class ModelParser {
 			Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
 			Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
 			
+			String rawIndices = indexNode.getTextContent();
+			String[] halfBakedIndices = rawIndices.split(" ");
+			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are paired with the indices
+			for(int j = 0; j < halfBakedIndices.length; j+=2) {
+				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
+			}
+			
 			String rawVertices = vertexNode.getTextContent();
 			String[] mediumRareVertices = rawVertices.split(" ");
 			float[] cookedVertices = new float[mediumRareVertices.length];
 			for(int j = 0; j < cookedVertices.length; j++) {
 				cookedVertices[j] = Float.valueOf(mediumRareVertices[j]);
 			}
-			
-			String rawIndices = indexNode.getTextContent();
-			String[] halfBakedIndices = rawIndices.split(" ");
-			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are paired with the indices
-			for(int j = 0; j < cookedIndices.length; j+=2) {
-				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
-			}
+
 
 			ModelData currentData = new ModelData(name, cookedVertices, cookedIndices);
 			modelData[i] = currentData;
@@ -87,11 +112,37 @@ public class ModelParser {
 		
 		NodeList transforms = document.getElementsByTagName("visual_scene").item(0).getChildNodes();
 		
-		for(int i = 1; i < transforms.getLength(); i++) {
-			Node pos = transforms.item(i).getFirstChild();
-
-			System.out.println(pos.getNodeName());
+		for(int i = 1; i < transforms.getLength(); i+=2) {
+			NodeList children = transforms.item(i).getChildNodes();
+			for(int j = 1; j < children.getLength() - 2; j+=2) {
+				String scrap = children.item(j).getTextContent();
+				
+				if(j == 1 || j == 9) {
+					Vector3f data = new Vector3f();
+					String[] refined = scrap.split(" ");
+					float[] reclaimed = new float[refined.length];
+					for(int k = 0; k < reclaimed.length; k++) {
+						reclaimed[k] = Float.valueOf(refined[k]);
+					}
+					data = new Vector3f(reclaimed);
+					
+					if(j == 1) {
+						modelData[(i-1)/2].pos = data;
+					} else {
+						modelData[(i-1)/2].scale = data;
+					}
+				} else {
+					float data = Float.valueOf(scrap.split(" ")[3]);
+					switch(j) {
+					case 3: modelData[(i-1)/2].rot.z = data; break;
+					case 5: modelData[(i-1)/2].rot.y = data; break;
+					case 7: modelData[(i-1)/2].rot.x = data; break;
+					default: break;
+					}
+				}
+			}
 		}
+		
 		return buildModel(loc, modelData);
 	}
 	
@@ -111,6 +162,9 @@ public class ModelParser {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);			
 			
 			Model model = new Model(modelData[i].name, vertexID, indexID, modelData[i].indices.length);
+			model.pos = modelData[i].pos;
+			model.rot = modelData[i].rot;
+			model.scale = modelData[i].scale;
 			models[i] = model;
 		}
 		

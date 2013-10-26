@@ -3,7 +3,7 @@ package graphics;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import entity.Entity;
-import game.GameInfo;
+import game.Game;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -56,8 +56,8 @@ public class Graphics {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		setup3D();
-		GLU.gluLookAt(GameInfo.camPos.x, GameInfo.camPos.y, GameInfo.camPos.z, GameInfo.player.pos.x, GameInfo.player.pos.y, GameInfo.player.pos.z, 0, 1 ,0);
-		render(GameInfo.entities);
+		GLU.gluLookAt(Game.camPos.x, Game.camPos.y, Game.camPos.z, Game.player.pos.x, Game.player.pos.y, Game.player.pos.z, 0, 1 ,0);
+		render(Game.entities);
 		
 		setup2D();
 		//render(GameInfo.entities);
@@ -68,7 +68,7 @@ public class Graphics {
 	
 	private static void setup3D() {
 		glLoadIdentity();
-		GLU.gluPerspective(GameInfo.FoV, WIDTH / HEIGHT, GameInfo.Z_NEAR, GameInfo.Z_FAR);
+		GLU.gluPerspective(Game.FoV, WIDTH / HEIGHT, Game.Z_NEAR, Game.Z_FAR);
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
     }
@@ -170,24 +170,24 @@ public class Graphics {
 			Display.setTitle("Vector Game");
 			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples));
-			
-			/*
-			 * GL Initialization
-			 */
-			
-			defaultShader = ShaderParser.getShader("default");
-			glClearColor(.1f,.3f,.8f,1);
-
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
 			exception.printStackTrace();
 		}
+		
+		/*
+		 * GL Initialization
+		 */
+		
+		defaultShader = ShaderParser.getShader("default");
+		glClearColor(.1f,.3f,.8f,1);
+		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
 		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		GLU.gluPerspective(GameInfo.FoV, WIDTH / HEIGHT, GameInfo.Z_NEAR, GameInfo.Z_FAR);
+		GLU.gluPerspective(Game.FoV, WIDTH / HEIGHT, Game.Z_NEAR, Game.Z_FAR);
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);

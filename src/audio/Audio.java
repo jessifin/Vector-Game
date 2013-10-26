@@ -1,7 +1,7 @@
 package audio;
 
 import static org.lwjgl.openal.AL10.*;
-import game.GameInfo;
+import game.Game;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -58,15 +58,15 @@ public class Audio {
 			if(source.isPlaying()) {
 				source.update(timePassed);
 				if(source.currentBuffer.isMusic) {
-					source.currentBuffer.gain = GameInfo.musicVolume;
+					source.currentBuffer.gain = Game.musicVolume;
 					source.currentBuffer.pitch = 1;
 				}
 				bindSource(source, source.currentBuffer);
 			}
 		}
 		
-		alListener(AL_POSITION, Util.toBuffer(GameInfo.player.pos));
-		alListener(AL_VELOCITY, Util.toBuffer(GameInfo.player.pos));
+		alListener(AL_POSITION, Util.toBuffer(Game.player.pos));
+		alListener(AL_VELOCITY, Util.toBuffer(Game.player.pos));
 		
 		lastUpdate = System.currentTimeMillis();
 	}
@@ -76,7 +76,7 @@ public class Audio {
 			int i = getAvailableSource();
 			Buffer buffer = loadedBuffers.get(loc);
 			buffer.looping = false;
-			buffer.gain = GameInfo.fxVolume;
+			buffer.gain = Game.fxVolume;
 			buffer.isMusic = false;
 			alSource(sources[i].id, AL_POSITION, Util.toBuffer(pos));
 			alSource(sources[i].id, AL_VELOCITY, Util.toBuffer(vel));
@@ -90,7 +90,7 @@ public class Audio {
 	}
 	
 	public static Buffer playAtPlayer(String loc) {
-		return play(loc, GameInfo.player.pos, new Vector3f(0,0,0));
+		return play(loc, Game.player.pos, new Vector3f(0,0,0));
 	}
 	
 	public static Buffer playMusic(String loc) {
@@ -98,7 +98,7 @@ public class Audio {
 			int i = getAvailableSource();
 			Buffer buffer = loadedBuffers.get(loc);
 			buffer.looping = true;
-			buffer.gain = GameInfo.musicVolume;
+			buffer.gain = Game.musicVolume;
 			buffer.isMusic = true;
 			bindSource(sources[i], buffer);
 			alSourcePlay(sources[i].id);
