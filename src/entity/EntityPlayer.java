@@ -5,7 +5,7 @@ import model.ModelData;
 public class EntityPlayer extends Entity {
 
 	public EntityPlayer() {
-		super("scorpiant.dae");
+		super("poogeon2.dae");
 	}
 	
 	public EntityPlayer(ModelData[] modelData) {

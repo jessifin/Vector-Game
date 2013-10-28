@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.vecmath.Matrix4f;
 
+import main.Main;
 import main.Util;
 import model.ModelParser;
 
@@ -101,9 +102,9 @@ public class Graphics {
     	    	glTranslatef(entities.get(e).pos.x + entities.get(e).model[m].pos.x,
     	    			entities.get(e).pos.y + entities.get(e).model[m].pos.y,
     	    			entities.get(e).pos.z + entities.get(e).model[m].pos.z);
-    	    	glRotatef(entities.get(e).rot.z, 0, 0, 1);
-    	    	glRotatef(entities.get(e).rot.y, 0, 1, 0);
-    	    	glRotatef(entities.get(e).rot.x, 1, 0, 0);
+    	    	glRotatef(entities.get(e).rot.z + entities.get(e).model[m].rot.z, 0, 0, 1);
+    	    	glRotatef(entities.get(e).rot.y + entities.get(e).model[m].rot.y, 0, 1, 0);
+    	    	glRotatef(entities.get(e).rot.x + entities.get(e).model[m].rot.x, 1, 0, 0);
 	        	glEnableClientState(GL_VERTEX_ARRAY);
 	        	glBindBuffer(GL_ARRAY_BUFFER, entities.get(e).model[m].vertexID);
 	        	glVertexPointer(3, GL_FLOAT, 0, 0);

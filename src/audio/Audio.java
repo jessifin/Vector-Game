@@ -111,7 +111,7 @@ public class Audio {
 	
 	private static void loadBuffer(String loc) {
 		System.out.println("Loading audio buffer \"" + loc + "\"");
-		
+
 		AudioInputStream inputStream = null;
 		try {
 			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("res/audio/"+loc)));

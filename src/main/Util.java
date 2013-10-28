@@ -39,4 +39,22 @@ public class Util {
 		buffer.flip();
 		return buffer;
 	}
+	
+	public static float[] toArray(String s) {
+		String[] splitString = s.split(" ");
+		float[] array = new float[splitString.length];
+		for(int j = 0; j < array.length; j++) {
+			array[j] = Float.valueOf(splitString[j]);
+		}
+		return array;
+	}
+	
+	public static short[] toArray(String s, int begin, int stride) {
+		String[] splitString = s.split(" ");
+		short[] array = new short[splitString.length/stride];
+		for(int i = begin; i < splitString.length; i+=stride) {
+			array[i/stride] = Short.valueOf(splitString[i]);
+		}
+		return array;
+	}
 }

@@ -91,22 +91,10 @@ public class ModelParser {
 			Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
 			Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
 			
-			String rawIndices = indexNode.getTextContent();
-			String[] halfBakedIndices = rawIndices.split(" ");
-			short[] cookedIndices = new short[halfBakedIndices.length/2]; //Because normals are paired with the indices
-			for(int j = 0; j < halfBakedIndices.length; j+=2) {
-				cookedIndices[j/2] = Short.valueOf(halfBakedIndices[j]);
-			}
+			float[] vertices = Util.toArray(vertexNode.getTextContent());
+			short[] indices = Util.toArray(indexNode.getTextContent(), 0, 2);
 			
-			String rawVertices = vertexNode.getTextContent();
-			String[] mediumRareVertices = rawVertices.split(" ");
-			float[] cookedVertices = new float[mediumRareVertices.length];
-			for(int j = 0; j < cookedVertices.length; j++) {
-				cookedVertices[j] = Float.valueOf(mediumRareVertices[j]);
-			}
-
-
-			ModelData currentData = new ModelData(name, cookedVertices, cookedIndices);
+			ModelData currentData = new ModelData(name, vertices, indices);
 			modelData[i] = currentData;
 		}
 		
@@ -114,6 +102,21 @@ public class ModelParser {
 		
 		for(int i = 1; i < transforms.getLength(); i+=2) {
 			NodeList children = transforms.item(i).getChildNodes();
+			
+			float[] pos = Util.toArray(children.item(1).getTextContent());
+			modelData[(i-1)/2].pos = new Vector3f(pos);
+			
+			float[] scale = Util.toArray(children.item(9).getTextContent());
+			modelData[(i-1)/2].scale = new Vector3f(scale);
+			
+			float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]);
+			float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]);
+			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]);
+			modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
+			
+			System.out.println(xRot + " " + yRot + " " + zRot);
+			
+			/*
 			for(int j = 1; j < children.getLength() - 2; j+=2) {
 				String scrap = children.item(j).getTextContent();
 				
@@ -132,7 +135,7 @@ public class ModelParser {
 						modelData[(i-1)/2].scale = data;
 					}
 				} else {
-					float data = Float.valueOf(scrap.split(" ")[3]);
+					float data = Float.valueOf(scrap.split(" ")[3]) * 3.14159f / 180;
 					switch(j) {
 					case 3: modelData[(i-1)/2].rot.z = data; break;
 					case 5: modelData[(i-1)/2].rot.y = data; break;
@@ -141,6 +144,7 @@ public class ModelParser {
 					}
 				}
 			}
+			*/
 		}
 		
 		return buildModel(loc, modelData);

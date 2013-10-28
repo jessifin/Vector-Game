@@ -44,6 +44,7 @@ public class Input {
 			//Main.entities.add(new EntityProjectile(new Vector3f(GameInfo.player.pos.x, GameInfo.player.pos.y, GameInfo.player.pos.z)));
 		}
 		if(Mouse.isButtonDown(1)) {
+			Audio.playMusic("le_elephante.wav");
 		//	Graphics.takeScreenShot();
 		}
 	}
