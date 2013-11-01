@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Document;
@@ -31,28 +32,7 @@ public class ModelParser {
 	private static HashMap<String,Model[]> loadedModels = new HashMap<String,Model[]>();
 
 	public static Model[] getModel(String loc) {
-		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : (loc.endsWith(".dae") ? parseModel(loc) : parseHeightmap(loc));
-	}
-	
-	private static Model[] parseHeightmap(String loc) {
-		BufferedImage map = null;
-		try {
-			map = ImageIO.read(new File("res/model/" + loc));
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-		/*
-		int width = map.getWidth(); int height = map.getHeight();
-		
-		float[] vertices = new float[width * height];
-		
-		for(int x = 0; x < width; x++) {
-			for(int y = 0; y < height; y++) {
-				vertices[width * y + x] = map.getRGB(x,y) / Integer.MAX_VALUE;
-			}
-		}
-		*/
-		return null;
+		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : parseModel(loc);
 	}
 	
 	private static Model[] parseModel(String loc) {
@@ -113,38 +93,6 @@ public class ModelParser {
 			float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]);
 			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]);
 			modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
-			
-			System.out.println(xRot + " " + yRot + " " + zRot);
-			
-			/*
-			for(int j = 1; j < children.getLength() - 2; j+=2) {
-				String scrap = children.item(j).getTextContent();
-				
-				if(j == 1 || j == 9) {
-					Vector3f data = new Vector3f();
-					String[] refined = scrap.split(" ");
-					float[] reclaimed = new float[refined.length];
-					for(int k = 0; k < reclaimed.length; k++) {
-						reclaimed[k] = Float.valueOf(refined[k]);
-					}
-					data = new Vector3f(reclaimed);
-					
-					if(j == 1) {
-						modelData[(i-1)/2].pos = data;
-					} else {
-						modelData[(i-1)/2].scale = data;
-					}
-				} else {
-					float data = Float.valueOf(scrap.split(" ")[3]) * 3.14159f / 180;
-					switch(j) {
-					case 3: modelData[(i-1)/2].rot.z = data; break;
-					case 5: modelData[(i-1)/2].rot.y = data; break;
-					case 7: modelData[(i-1)/2].rot.x = data; break;
-					default: break;
-					}
-				}
-			}
-			*/
 		}
 		
 		return buildModel(loc, modelData);
@@ -157,9 +105,16 @@ public class ModelParser {
 			FloatBuffer vertexData = Util.toBuffer(modelData[i].vertices);
 			ShortBuffer indexData = Util.toBuffer(modelData[i].indices);
 			
+			int vaoID = GL30.glGenVertexArrays();
+			GL30.glBindVertexArray(vaoID);
+			
 			int vertexID = glGenBuffers();
 			glBindBuffer(GL_ARRAY_BUFFER, vertexID);
 			glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+			
+			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			GL30.glBindVertexArray(0);
 			
 			int indexID = glGenBuffers();
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);

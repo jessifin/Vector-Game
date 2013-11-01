@@ -31,9 +31,17 @@ public class Game {
 		short[] inds = {0,1,2,1,2,3};
 		ModelData modelData = new ModelData("triangle",verts,inds);
 		//player = new EntityPlayer(new ModelData[] {modelData});
-		player = new EntityPlayer();
+		player = new EntityPlayer("pizzard2.dae");
 		for(int i = 0; i < 20; i++) {
-		//	entities.add(new EntityPlayer(new ModelData[] {modelData}));
+			Entity e = new EntityPlayer("rollboscis2.dae");
+			e.pos.x = i;
+			entities.add(e);
+			Entity e1 = new EntityPlayer("rollboscis2.dae");
+			e1.pos.y = i;
+			entities.add(e1);
+			Entity e2 = new EntityPlayer("rollboscis2.dae");
+			e2.pos.z = i;
+			entities.add(e2);
 		}
 		entities.add(player);
 	}

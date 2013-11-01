@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import main.Main;
@@ -15,10 +16,14 @@ public class ShaderParser {
 	private static HashMap<String,Shader> shaders = new HashMap<String,Shader>();
 	
 	public static Shader getShader(String loc) {
-		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc);
+		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc, null);
 	}
 	
-	private static Shader loadShader(String loc) {
+	public static Shader getShader(String loc, String[] attributes) {
+		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc, attributes);
+	}
+	
+	private static Shader loadShader(String loc, String[] attributes) {
 		System.out.println("Loading shader: " + loc);
 		
 		//Vertex Shader
@@ -48,6 +53,13 @@ public class ShaderParser {
 		int shaderProgramID = glCreateProgram();
 		glAttachShader(shaderProgramID, vertexShaderID);
 		glAttachShader(shaderProgramID, fragmentShaderID);
+		
+		if(attributes != null) {
+			for(int i = 0; i < attributes.length; i++) {
+				glBindAttribLocation(shaderProgramID, i, attributes[i]);
+			}
+		}
+		
 		glLinkProgram(shaderProgramID);
 		
 		if(glGetProgrami(shaderProgramID, GL_COMPILE_STATUS) != 1) {

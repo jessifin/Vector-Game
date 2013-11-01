@@ -44,7 +44,7 @@ public class Main {
 		Input.init();
 		Game.init();
 		
-		//Audio.playMusic("le_elephante.wav");
+		//Audio.playMusic("thelittleships.wav");
 		
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;
@@ -57,7 +57,9 @@ public class Main {
 			Audio.update();
 			Game.update();
 
-			Timer.updateAll((int) (System.currentTimeMillis() - initialTime));
+			int timePassed = (int) (System.currentTimeMillis() - initialTime);
+			System.out.println(1000f/timePassed);
+			Timer.updateAll(timePassed);
 			
 			while(tickTimer.poll()) {
 				tick();

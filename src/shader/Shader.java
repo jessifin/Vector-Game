@@ -8,7 +8,7 @@ public class Shader {
 	public final int vertexID, fragmentID, programID;
 	private HashMap<String,Integer> uniforms = new HashMap<String,Integer>();
 
-	public Shader(String name, int vertexID, int fragmentID, int programID) {
+	Shader(String name, int vertexID, int fragmentID, int programID) {
 		this.name = name;
 		this.vertexID = vertexID;
 		this.fragmentID = fragmentID;

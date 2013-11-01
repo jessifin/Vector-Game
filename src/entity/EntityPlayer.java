@@ -4,8 +4,8 @@ import model.ModelData;
 
 public class EntityPlayer extends Entity {
 
-	public EntityPlayer() {
-		super("poogeon2.dae");
+	public EntityPlayer(String loc) {
+		super(loc);
 	}
 	
 	public EntityPlayer(ModelData[] modelData) {
