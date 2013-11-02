@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Scanner;
+
+import org.lwjgl.opengl.GL20;
 
 import main.Main;
 
@@ -61,6 +62,7 @@ public class ShaderParser {
 		}
 		
 		glLinkProgram(shaderProgramID);
+		glValidateProgram(shaderProgramID);
 		
 		if(glGetProgrami(shaderProgramID, GL_COMPILE_STATUS) != 1) {
 			System.err.println("ERROR OCCURED IN COMPILING SHADER PROGRAM.");
@@ -95,6 +97,8 @@ public class ShaderParser {
 		while(values.hasNext()) {
 			Shader s = values.next();
 			System.out.println("Deleting shader " + s.name);
+			glDeleteShader(s.vertexID);
+			glDeleteShader(s.fragmentID);
 			glDeleteProgram(s.programID);
 		}
 	}

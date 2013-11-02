@@ -27,14 +27,14 @@ public class Main {
 	
 	static {
 		SYSTEM_OS = OS.getOS();
-		
+		/*
 		new File("LOGS").mkdir();
 		try {
 			log = new PrintStream("LOGS/LOG" + getLogNumber() + ".TXT");
 		} catch (FileNotFoundException exception) {
 			exception.printStackTrace();
 		}
-		
+		*/
 		calendar = Calendar.getInstance();
 	}
 	

@@ -2,7 +2,6 @@ package model;
 
 import static org.lwjgl.opengl.GL15.*;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -10,14 +9,12 @@ import java.nio.ShortBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Document;
@@ -99,36 +96,43 @@ public class ModelParser {
 	}
 	
 	public static Model[] buildModel(String id, ModelData[] modelData) {
-		Model[] models = new Model[modelData.length];
-		
-		for(int i = 0; i < models.length; i++) {
-			FloatBuffer vertexData = Util.toBuffer(modelData[i].vertices);
-			ShortBuffer indexData = Util.toBuffer(modelData[i].indices);
+		if(loadedModels.containsKey(id)) {
+			return loadedModels.get(id);
+		} else {
+			System.out.println("Loading model: " + id);
 			
-			int vaoID = GL30.glGenVertexArrays();
-			GL30.glBindVertexArray(vaoID);
+			Model[] models = new Model[modelData.length];
 			
-			int vertexID = glGenBuffers();
-			glBindBuffer(GL_ARRAY_BUFFER, vertexID);
-			glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+			for(int i = 0; i < models.length; i++) {
+				FloatBuffer vertexData = Util.toBuffer(modelData[i].vertices);
+				ShortBuffer indexData = Util.toBuffer(modelData[i].indices);
+				
+				int vaoID = GL30.glGenVertexArrays();
+				GL30.glBindVertexArray(vaoID);
+				
+				int vertexID = glGenBuffers();
+				glBindBuffer(GL_ARRAY_BUFFER, vertexID);
+				glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+				//I set up attribute 0 to be for positions
+				GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				GL30.glBindVertexArray(0);
+				
+				int indexID = glGenBuffers();
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);	
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				
+				Model model = new Model(modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length);
+				model.pos = modelData[i].pos;
+				model.rot = modelData[i].rot;
+				model.scale = modelData[i].scale;
+				models[i] = model;
+			}
 			
-			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			GL30.glBindVertexArray(0);
-			
-			int indexID = glGenBuffers();
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);			
-			
-			Model model = new Model(modelData[i].name, vertexID, indexID, modelData[i].indices.length);
-			model.pos = modelData[i].pos;
-			model.rot = modelData[i].rot;
-			model.scale = modelData[i].scale;
-			models[i] = model;
+			loadedModels.put(id, models);
+			return models;
 		}
-		
-		loadedModels.put(id, models);
-		return models;
 	}
 	
 	public static void clearModelMap() {
@@ -141,6 +145,7 @@ public class ModelParser {
 				System.out.println('\t' + m.name);
 				glDeleteBuffers(m.vertexID);
 				glDeleteBuffers(m.indexID);
+				GL30.glDeleteVertexArrays(m.vaoID);
 			}
 		}
 	}

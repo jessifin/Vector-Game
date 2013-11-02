@@ -1,21 +1,20 @@
 package graphics;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 import entity.Entity;
 import game.Game;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.vecmath.Matrix4f;
 
-import main.Main;
 import main.Util;
 import model.ModelParser;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
@@ -37,7 +36,6 @@ import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GL42;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.util.glu.GLU;
 
 import shader.Shader;
 import shader.ShaderParser;
@@ -55,10 +53,9 @@ public class Graphics {
 	private static Matrix4f modelMatrix = new Matrix4f(), projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	
 	public static void update() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 		
-		//setup3D();
-		//GLU.gluLookAt(Game.camPos.x, Game.camPos.y, Game.camPos.z, Game.player.pos.x, Game.player.pos.y, Game.player.pos.z, 0, 1 ,0);
+		configMats();
 		render(Game.entities);
 		
 		//setup2D();
@@ -68,29 +65,36 @@ public class Graphics {
 		Display.sync(OPTIMAL_FPS);
 	}
 	
-	private static void setup3D() {
-		glLoadIdentity();
-		GLU.gluPerspective(Game.FoV, WIDTH / HEIGHT, Game.Z_NEAR, Game.Z_FAR);
-		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_DEPTH_TEST);
-    }
-    
-    private static void setup2D() {	
-		glLoadIdentity();
-    	glMatrixMode(GL_PROJECTION);
-    	glDisable(GL_DEPTH_TEST);
-    	glLoadIdentity();
-    	glOrtho(0,16*WIDTH/HEIGHT,0,16,0,1);
-    }
-    
+	private static void configMats() {
+		projectionMatrix = new Matrix4f();
+		viewMatrix = new Matrix4f();
+		modelMatrix = new Matrix4f();
+	}
+
     private static void render(ArrayList<Entity> entities) {
     	GL20.glUseProgram(defaultShader.programID);
     	
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
+    			GL30.glBindVertexArray(entities.get(e).model[m].vaoID);
+    			GL20.glEnableVertexAttribArray(0);
+    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, entities.get(e).model[m].indexID);
+
+    			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), 1, 1, 1, 1);
+    			glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indexCount, GL_UNSIGNED_SHORT, 0);
+
+    			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), 0, 0, 0, 1);
+    			glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indexCount, GL_UNSIGNED_SHORT, 0);
     			
+    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+    			GL20.glDisableVertexAttribArray(0);
+    			GL30.glBindVertexArray(0);
     		}
     	}
+    	
+    	GL20.glUseProgram(0);
     }
     
 	public static void init() {
@@ -152,19 +156,11 @@ public class Graphics {
 		 * GL Initialization
 		 */
 		
-		defaultShader = ShaderParser.getShader("default", new String[] {"in_Position"});
+		defaultShader = ShaderParser.getShader("default", new String[] {"pos"});
 		glClearColor(.1f,.3f,.8f,1);
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
 		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);
-		
-		glDepthFunc(GL_LEQUAL);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-		glEnable(GL_POLYGON_OFFSET_FILL);
-		glPolygonOffset(1f,0.5f);
-		glEnable(GL_CULL_FACE);
 	}
 	
 	private static DisplayMode getBestDisplayMode() {
