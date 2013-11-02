@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 import javax.vecmath.Matrix4f;
 
+import main.Main;
 import main.Util;
+import model.Model;
 import model.ModelParser;
 
 import org.lwjgl.BufferUtils;
@@ -55,7 +57,7 @@ public class Graphics {
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		configMats();
+		//configMats();
 		render(Game.entities);
 		
 		//setup2D();
@@ -76,17 +78,33 @@ public class Graphics {
     	
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
-    			GL30.glBindVertexArray(entities.get(e).model[m].vaoID);
+    			Model model = entities.get(e).model[m];
+    			GL30.glBindVertexArray(model.vaoID);
     			GL20.glEnableVertexAttribArray(0);
-    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, entities.get(e).model[m].indexID);
+    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);    			    			
 
+    			GL20.glUniform3f(defaultShader.getUniform("trans"),
+    					entities.get(e).pos.x + model.pos.x,
+    					entities.get(e).pos.y + model.pos.y,
+    					entities.get(e).pos.z + model.pos.z);
+    			
+    			GL20.glUniform3f(defaultShader.getUniform("scale"),
+    					entities.get(e).scale.x * model.scale.x,
+    					entities.get(e).scale.y * model.scale.y,
+    					entities.get(e).scale.z * model.scale.z);
+
+    			GL20.glUniform3f(defaultShader.getUniform("rot"),
+    					entities.get(e).rot.x + model.rot.x,
+    					entities.get(e).rot.y + model.rot.y,
+    					entities.get(e).rot.z + model.rot.z + (Main.numLoops / 20f));
+    			
     			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    			GL20.glUniform4f(defaultShader.getUniform("color"), 1, 1, 1, 1);
-    			glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indexCount, GL_UNSIGNED_SHORT, 0);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x, model.colorFill.y, model.colorFill.z, model.colorFill.w);
+    			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 
     			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    			GL20.glUniform4f(defaultShader.getUniform("color"), 0, 0, 0, 1);
-    			glDrawElements(GL_TRIANGLES, entities.get(e).model[m].indexCount, GL_UNSIGNED_SHORT, 0);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x, model.colorLine.y, model.colorLine.z, model.colorLine.w);
+    			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
     			
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
     			GL20.glDisableVertexAttribArray(0);
@@ -156,7 +174,7 @@ public class Graphics {
 		 * GL Initialization
 		 */
 		
-		defaultShader = ShaderParser.getShader("default", new String[] {"pos"});
+		defaultShader = ShaderParser.getShader("default");
 		glClearColor(.1f,.3f,.8f,1);
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();

@@ -23,7 +23,7 @@ public class Main {
 	
 	public static boolean RUNNING = true;
 	public static long numLoops, numTicks;
-	private static Timer tickTimer = new Timer(100);
+	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(10000);
 	
 	static {
 		SYSTEM_OS = OS.getOS();
@@ -63,6 +63,10 @@ public class Main {
 			
 			while(tickTimer.poll()) {
 				tick();
+			}
+			
+			while(performanceTimer.poll()) {
+				System.gc();
 			}
 		}
 

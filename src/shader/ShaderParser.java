@@ -17,14 +17,10 @@ public class ShaderParser {
 	private static HashMap<String,Shader> shaders = new HashMap<String,Shader>();
 	
 	public static Shader getShader(String loc) {
-		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc, null);
+		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc);
 	}
 	
-	public static Shader getShader(String loc, String[] attributes) {
-		return (shaders.containsKey(loc)) ? shaders.get(loc) : loadShader(loc, attributes);
-	}
-	
-	private static Shader loadShader(String loc, String[] attributes) {
+	private static Shader loadShader(String loc) {
 		System.out.println("Loading shader: " + loc);
 		
 		//Vertex Shader
@@ -54,12 +50,6 @@ public class ShaderParser {
 		int shaderProgramID = glCreateProgram();
 		glAttachShader(shaderProgramID, vertexShaderID);
 		glAttachShader(shaderProgramID, fragmentShaderID);
-		
-		if(attributes != null) {
-			for(int i = 0; i < attributes.length; i++) {
-				glBindAttribLocation(shaderProgramID, i, attributes[i]);
-			}
-		}
 		
 		glLinkProgram(shaderProgramID);
 		glValidateProgram(shaderProgramID);

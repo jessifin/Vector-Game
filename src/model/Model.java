@@ -10,7 +10,7 @@ public class Model {
 	public int indicesToRender;
 	
 	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
-	public Color4f colorFill = new Color4f(), colorLine = new Color4f();
+	public Color4f colorFill = new Color4f(1,1,1,1), colorLine = new Color4f(0,0,0,1);
 	
 	public Model(String name, int vaoID, int vertexID, int indexID, int indexCount) {
 		this.name = name;

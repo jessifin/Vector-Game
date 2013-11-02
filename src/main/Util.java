@@ -5,6 +5,7 @@ import java.nio.ShortBuffer;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Tuple3f;
+import javax.vecmath.Tuple4f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
@@ -13,6 +14,12 @@ public class Util {
 	
 	public static FloatBuffer toBuffer(Tuple3f vec) {
 		float[] data = new float[3];
+		vec.get(data);
+		return toBuffer(data);
+	}
+	
+	public static FloatBuffer toBuffer(Tuple4f vec) {
+		float[] data = new float[4];
 		vec.get(data);
 		return toBuffer(data);
 	}

@@ -31,7 +31,6 @@ public class Game {
 		short[] inds = {0,1,2,1,2,3};
 		ModelData modelData = new ModelData("triangle",verts,inds);
 		player = new EntityPlayer(new ModelData[] {modelData});
-		//player = new EntityPlayer("pizzard2.dae");
 		entities.add(player);
 		for(int i = 0; i < 50; i++) {
 			entities.add(new EntityPlayer(new ModelData[] {modelData}));
