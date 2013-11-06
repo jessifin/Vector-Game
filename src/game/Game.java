@@ -22,7 +22,7 @@ public class Game {
 	
 	//Graphics
 	public static float FoV = 60;
-	public static float camDist = 1;
+	public static float camDist = 2;
 	public static float Z_NEAR = 0.5f, Z_FAR = 1000;
 	public static Vector3f camPos = new Vector3f(10,10,10);
 	
@@ -31,13 +31,15 @@ public class Game {
 		short[] inds = {0,1,2,1,2,3};
 		ModelData modelData = new ModelData("triangle",verts,inds);
 		player = new EntityPlayer(new ModelData[] {modelData});
+		//player = new EntityPlayer("rollboscis.dae");
 		entities.add(player);
 		for(int i = 0; i < 50; i++) {
-			entities.add(new EntityPlayer(new ModelData[] {modelData}));
+			//entities.add(new EntityPlayer(new ModelData[] {modelData}));
 		}
 	}
 	
 	public static void update() {
+		player.pos.x = 5; player.pos.y = 5;
 		camPos.x = (float) (camDist * Math.cos(Input.x) * Math.sin(Input.y) + player.pos.x);
 		camPos.y = (float) (camDist * Math.cos(Input.y) + player.pos.y);
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);

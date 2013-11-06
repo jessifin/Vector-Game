@@ -3,7 +3,10 @@
 out vec4 fragColor;
 
 uniform vec4 color;
+uniform int stride = 10;
 
 void main() {
-    fragColor = color;
+    float faceColor = 0.5 + (gl_PrimitiveID % stride) / (2.0 * float(stride));
+    vec4 rep = vec4(faceColor, faceColor, faceColor, 1.0);
+    fragColor = color * rep;
 }
