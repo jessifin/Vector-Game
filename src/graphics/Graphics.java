@@ -6,7 +6,6 @@ import game.Game;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import javax.vecmath.Matrix4f;
@@ -17,7 +16,6 @@ import main.Util;
 import model.Model;
 import model.ModelParser;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
@@ -50,6 +48,7 @@ public class Graphics {
 	public static DisplayMode[] availableDisplayModes;
 	
 	public static float WIDTH, HEIGHT;
+	private static float LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR;
 	
 	private static Shader defaultShader;
 	
@@ -58,86 +57,101 @@ public class Graphics {
 	private static Matrix4f modelMatrix = new Matrix4f(), projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	
 	public static void update() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		loadMats();
+		setup3D();
 		render(Game.entities);
 		 
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
 	}
 	
-	private static void loadMats() {
-		/*
-		projectionMatrix.set(new float[] {(float) ((1 / Math.tan((Game.FoV * Math.PI / 180f)) / 2) / (WIDTH / HEIGHT)), 0, 0, 0,
-				0, (float) (1 / Math.tan((Game.FoV * Math.PI / 180f) / 2)), 0, 0,
-				0, 0, (Game.Z_FAR + Game.Z_NEAR) / (Game.Z_FAR - Game.Z_NEAR), -1,
-				0, 0, (2 * Game.Z_FAR * Game.Z_NEAR) / (Game.Z_FAR - Game.Z_NEAR), 0});
-		
-		viewMatrix.set(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, Game.camPos.x, Game.camPos.y, Game.camPos.z, 1});
-		*/
-		
-		float left = 0; float right = 16 * WIDTH/HEIGHT; float bottom = 16; float top = 0; float near = -1; float far = 1;
+	private static void setup2D() {
+		LEFT = 0;
+		RIGHT = 16 * WIDTH/HEIGHT;
+		BOTTOM = 16;
+		TOP = 0;
+		NEAR = -1;
+		FAR = 1;
 		
 		projectionMatrix.set(new float[] {
-				2f/(right - left), 0, 0, 0,
-				0, 2f/(top - bottom), 0, 0,
-				0, 0, -2f/(far - near), 0,
-				-(right + left) / (right - left), -(top + bottom) / (top - bottom), - (far + near) / (far - near), 1
+				2f/(RIGHT - LEFT), 0, 0, 0,
+				0, 2f/(TOP - BOTTOM), 0, 0,
+				0, 0, -2f/(FAR - NEAR), 0,
+				-(RIGHT + LEFT) / (RIGHT - LEFT), -(TOP + BOTTOM) / (TOP - BOTTOM), - (FAR + NEAR) / (FAR - NEAR), 1
 		});
+		
+		viewMatrix.setIdentity();
+		
 		GL20.glUseProgram(defaultShader.programID);
 		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), true, Util.toBuffer(projectionMatrix));
-	//	GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+		GL20.glUseProgram(0);
+	}
+	
+	private static void setup3D() {
+		projectionMatrix.set(new float[] {
+				(float)(((1f / Math.tan(Game.FoV)) / 2f) / (WIDTH / HEIGHT)), 0, 0, 0,
+				0, (float)((1f / Math.tan(Game.FoV)) / 2f), 0, 0,
+				0, 0, (Game.Z_NEAR + Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR), (2 * Game.Z_NEAR * Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR),
+				0, 0, -1, 0
+		});
+		
+		Vector3f forward = new Vector3f(
+				Game.player.pos.x - Game.camPos.x,
+				Game.player.pos.y - Game.camPos.y,
+				Game.player.pos.z - Game.camPos.z
+				);
+		
+		forward.normalize();
+		
+		Vector3f side = new Vector3f();
+		side.cross(forward, Game.camUp);
+		side.normalize();
+		
+		Vector3f up = new Vector3f();
+		up.cross(side, forward);
+		
+		viewMatrix.set(new float[] {
+				side.x, side.y, side.z, 0,
+				up.x, up.y, up.z, 0,
+				-forward.x, -forward.y, -forward.z, 0,
+				0, 0, 0, 1
+		});
+		
+		Matrix4f pootis = new Matrix4f(new float[] {
+				1, 0, 0, -Game.camPos.x,
+				0, 1, 0, -Game.camPos.y,
+				0, 0, 1, -Game.camPos.z,
+				0, 0, 0, 1
+		});
+		
+		viewMatrix.mul(pootis);
+		
+		GL20.glUseProgram(defaultShader.programID);
+		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
+		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
 		GL20.glUseProgram(0);
 	}
 
     private static void render(ArrayList<Entity> entities) {
     	GL20.glUseProgram(defaultShader.programID);
     	
-    	GL20.glUniform1i(defaultShader.getUniform("stride"), (int)Main.numTicks % 5);
+    	GL20.glUniform1i(defaultShader.getUniform("stride"), 20);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			Model model = entities.get(e).model[m];
     			
-    			Vector3f rot = new Vector3f(entities.get(e).rot.x + model.rot.x,
-    					entities.get(e).rot.y + model.rot.y,
-    					entities.get(e).rot.z + model.rot.z);
-    			
-    			/*
-    			modelPosMatrix.set(new float[] {
-    					1, 0, 0, 0,
-    					0, 1, 0, 0,
-    					0, 0, 1, 0,
-    					entities.get(e).pos.x + model.pos.x,entities.get(e).pos.y + model.pos.y, entities.get(e).pos.z + model.pos.z, 1
-    					});
-    
-    			
-    			Matrix4f xRot = new Matrix4f(new float[] {1, 0, 0, 0,
-    							0, (float) Math.cos(rot.x), (float) Math.sin(rot.x), 0,
-    							0, (float) -Math.sin(rot.x), (float) Math.cos(rot.x), 0,
-    							0, 0, 0, 1});
-    			
-    			Matrix4f yRot = new Matrix4f(new float[] {(float) Math.cos(rot.y), 0, (float) -Math.sin(rot.y), 0,
-    							0, 1, 0, 0,
-    							(float) Math.sin(rot.y), 0, (float) Math.cos(rot.y), 0,
-    							0, 0, 0, 1});
-    			
-    			Matrix4f zRot = new Matrix4f(new float[] {(float) Math.cos(rot.z), (float) Math.sin(rot.z), 0, 0,
-    							(float) -Math.sin(rot.z), (float) Math.cos(rot.z), 0, 0,
-    							0, 0, 1, 0,
-    							0, 0, 0, 1});
-    			
-    			modelScaleMatrix.set(new float[] {entities.get(e).scale.x * model.scale.x, 0, 0, 0,
-    							0, entities.get(e).scale.y * model.scale.y, 0, 0,
-    							0, 0, entities.get(e).scale.z * model.scale.z, 0,
-    							0, 0, 0, 1});
-    			*/
     			modelPosMatrix.set(new float[] {
     					1, 0, 0, entities.get(e).pos.x + model.pos.x,
     					0, 1, 0, entities.get(e).pos.y + model.pos.y,
     					0, 0, 1, entities.get(e).pos.z + model.pos.z,
     					0, 0, 0, 1
     			});
+
+    			Vector3f rot = new Vector3f(entities.get(e).rot.x + model.rot.x,
+    					entities.get(e).rot.y + model.rot.y,
+    					entities.get(e).rot.z + model.rot.z);
     			
     			Matrix4f xRot = new Matrix4f(new float[] {
     					1, 0, 0, 0,
@@ -170,7 +184,6 @@ public class Graphics {
     			modelMatrix.mul(modelPosMatrix);
     			modelMatrix.mul(xRot); modelMatrix.mul(yRot); modelMatrix.mul(zRot);
     			modelMatrix.mul(modelScaleMatrix);
-    			
     			
     			GL30.glBindVertexArray(model.vaoID);
     			GL20.glEnableVertexAttribArray(0);
@@ -259,6 +272,8 @@ public class Graphics {
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		glEnable(GL_DEPTH_TEST);
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
 		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);

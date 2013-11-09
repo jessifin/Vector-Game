@@ -58,7 +58,7 @@ public class Main {
 			Game.update();
 
 			int timePassed = (int) (System.currentTimeMillis() - initialTime);
-			System.out.println(1000f/timePassed);
+			//System.out.println(1000f/timePassed);
 			Timer.updateAll(timePassed);
 			
 			while(tickTimer.poll()) {
