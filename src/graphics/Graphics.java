@@ -52,7 +52,7 @@ public class Graphics {
 	
 	private static Shader defaultShader;
 	
-	private static Matrix4f modelPosMatrix = new Matrix4f(), modelRotMatrix = new Matrix4f(), modelScaleMatrix = new Matrix4f();
+	private static Matrix4f modelPosMatrix = new Matrix4f(), modelScaleMatrix = new Matrix4f();
 	
 	private static Matrix4f modelMatrix = new Matrix4f(), projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	
@@ -75,18 +75,16 @@ public class Graphics {
 		FAR = 1;
 		
 		projectionMatrix.set(new float[] {
-				2f/(RIGHT - LEFT), 0, 0, 0,
-				0, 2f/(TOP - BOTTOM), 0, 0,
-				0, 0, -2f/(FAR - NEAR), 0,
-				-(RIGHT + LEFT) / (RIGHT - LEFT), -(TOP + BOTTOM) / (TOP - BOTTOM), - (FAR + NEAR) / (FAR - NEAR), 1
+				2f/(RIGHT - LEFT), 0, 0, -(RIGHT + LEFT) / (RIGHT - LEFT),
+				0, 2f/(TOP - BOTTOM), 0, -(TOP + BOTTOM) / (TOP - BOTTOM),
+				0, 0, -2f/(FAR - NEAR), - (FAR + NEAR) / (FAR - NEAR),
+				0, 0, 0, 1
 		});
 		
 		viewMatrix.setIdentity();
 		
-		GL20.glUseProgram(defaultShader.programID);
-		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), true, Util.toBuffer(projectionMatrix));
+		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
 		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
-		GL20.glUseProgram(0);
 	}
 	
 	private static void setup3D() {
@@ -128,16 +126,12 @@ public class Graphics {
 		
 		viewMatrix.mul(pootis);
 		
-		GL20.glUseProgram(defaultShader.programID);
 		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
 		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
-		GL20.glUseProgram(0);
 	}
 
-    private static void render(ArrayList<Entity> entities) {
-    	GL20.glUseProgram(defaultShader.programID);
-    	
-    	GL20.glUniform1i(defaultShader.getUniform("stride"), 20);
+    private static void render(ArrayList<Entity> entities) {    	
+    	GL20.glUniform1i(defaultShader.getUniform("stride"), 10);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			Model model = entities.get(e).model[m];
@@ -200,12 +194,11 @@ public class Graphics {
     			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
     			
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-    			GL20.glDisableVertexAttribArray(0);
+    	    	GL20.glDisableVertexAttribArray(0);
     			GL30.glBindVertexArray(0);
     		}
     	}
     	
-    	GL20.glUseProgram(0);
     }
     
 	public static void init() {
@@ -277,6 +270,9 @@ public class Graphics {
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
 		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);
+		
+    	GL20.glUseProgram(defaultShader.programID);
+
 	}
 	
 	private static DisplayMode getBestDisplayMode() {

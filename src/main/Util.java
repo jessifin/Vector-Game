@@ -1,5 +1,6 @@
 package main;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -32,6 +33,13 @@ public class Util {
 			}
 		}
 		return toBuffer(data);
+	}
+	
+	public static ByteBuffer toBuffer(byte[] data) {
+		ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
 	}
 	
 	public static FloatBuffer toBuffer(float[] data) {

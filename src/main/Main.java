@@ -22,7 +22,7 @@ public class Main {
 	private static Calendar calendar;
 	
 	public static boolean RUNNING = true;
-	public static long numLoops, numTicks;
+	public static long numLoops, numTicks, lag;
 	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(10000);
 	
 	static {
@@ -59,6 +59,7 @@ public class Main {
 
 			int timePassed = (int) (System.currentTimeMillis() - initialTime);
 			//System.out.println(1000f/timePassed);
+			lag += timePassed;
 			Timer.updateAll(timePassed);
 			
 			while(tickTimer.poll()) {
@@ -73,6 +74,7 @@ public class Main {
 		Audio.destroy();
 		Graphics.destroy();
 		
+		System.out.println(1000f/(lag/numLoops));
 		System.exit(0);
 	}
 	

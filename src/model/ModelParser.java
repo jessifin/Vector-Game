@@ -32,9 +32,7 @@ public class ModelParser {
 		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : parseModel(loc);
 	}
 	
-	private static Model[] parseModel(String loc) {
-		System.out.println("Loading model: " + loc);
-		
+	private static Model[] parseModel(String loc) {		
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		
 		DocumentBuilder builder = null;
@@ -113,7 +111,7 @@ public class ModelParser {
 				int vertexID = glGenBuffers();
 				glBindBuffer(GL_ARRAY_BUFFER, vertexID);
 				glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-				//I set up attribute 0 to be for positions
+				//Attribute 0 is for the position input to the shader
 				GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				GL30.glBindVertexArray(0);

@@ -2,9 +2,11 @@ package game;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
 import main.Input;
+import model.Model;
 import model.ModelData;
 import entity.Entity;
 import entity.EntityPlayer;
@@ -31,7 +33,10 @@ public class Game {
 		short[] inds = {0,1,2,1,2,3};
 		ModelData modelData = new ModelData("triangle",verts,inds);
 		//player = new EntityPlayer(new ModelData[] {modelData});
-		player = new EntityPlayer("rollboscis.dae");
+		player = new EntityPlayer("pizzard2.dae");
+		for(Model m: player.model) {
+			m.colorFill = new Color4f(.5f,1,.5f,1);
+		}
 		entities.add(player);
 		for(int x = 0; x < 10; x++) {
 			for(int y = 0; y < 10; y++) {
@@ -51,8 +56,7 @@ public class Game {
 		camPos.y = (float) (camDist * Math.cos(Input.y) + player.pos.y);
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);
 		for(Entity e: entities) {
-			e.rot.z += Input.dX;
-			e.scale.x += Input.dY;
+			//e.rot.z += Input.dX;
 		}
 	}
 }
