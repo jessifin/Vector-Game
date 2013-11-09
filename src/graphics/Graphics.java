@@ -58,10 +58,13 @@ public class Graphics {
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		GL20.glEnableVertexAttribArray(0);
 		
 		setup3D();
 		render(Game.entities);
 		 
+		GL20.glDisableVertexAttribArray(0);
+
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
 	}
@@ -185,13 +188,11 @@ public class Graphics {
 
     			GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 
-    			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x, model.colorFill.y, model.colorFill.z, model.colorFill.w);
-    			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
+    			glDrawElements(GL_LINE_STRIP, model.indexCount, GL_UNSIGNED_SHORT, 0);
 
-    			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x, model.colorLine.y, model.colorLine.z, model.colorLine.w);
-    			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
+    			//glDrawElements(GL_TRIANGLE_FAN, model.indexCount, GL_UNSIGNED_SHORT, 0);
     			
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
     	    	GL20.glDisableVertexAttribArray(0);

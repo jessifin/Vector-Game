@@ -29,10 +29,10 @@ public class ModelParser {
 	private static HashMap<String,Model[]> loadedModels = new HashMap<String,Model[]>();
 
 	public static Model[] getModel(String loc) {
-		return (loadedModels.containsKey(loc)) ? (loadedModels.get(loc)) : parseModel(loc);
+		return (loadedModels.containsKey(loc)) ? loadedModels.get(loc) : parseModel(loc);
 	}
 	
-	private static Model[] parseModel(String loc) {		
+	private static Model[] parseModel(String loc) {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		
 		DocumentBuilder builder = null;
