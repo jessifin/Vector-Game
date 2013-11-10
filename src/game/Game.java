@@ -11,6 +11,7 @@ import model.Model;
 import model.ModelData;
 import entity.Entity;
 import entity.EntityPlayer;
+import entity.EntityVirus;
 
 public class Game {
 
@@ -39,17 +40,10 @@ public class Game {
 			m.colorFill = new Color4f(.5f,1,.5f,1);
 		}
 		entities.add(player);
-		for(int x = 0; x < 10; x++) {
-			for(int y = 0; y < 10; y++) {
-				for(int z = 0; z < 10; z++) {
-					EntityPlayer e = new EntityPlayer(new ModelData[] {modelData});
-					e.pos.x = x + .5f;
-					e.pos.y = y + .5f;
-					e.pos.z = z + .5f;
-					entities.add(e);
-				}
-			}
-		}
+		EntityVirus virus = new EntityVirus(new Vector3f(10, 10, 10));
+		entities.add(virus);
+		Entity floor = new EntityPlayer("plane.dae");
+		entities.add(floor);
 	}
 	
 	public static void update() {

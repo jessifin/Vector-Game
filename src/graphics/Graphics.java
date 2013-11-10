@@ -91,8 +91,8 @@ public class Graphics {
 	
 	private static void setup3D() {
 		projectionMatrix.set(new float[] {
-				(float)(((1f / Math.tan(Game.FoV)) / 2f) / (WIDTH / HEIGHT)), 0, 0, 0,
-				0, (float)((1f / Math.tan(Game.FoV)) / 2f), 0, 0,
+				(float)(((1f / Math.tan(Math.toRadians(Game.FoV/2))) / 2f) / (WIDTH / HEIGHT)), 0, 0, 0,
+				0, (float)((1f / Math.tan(Math.toRadians(Game.FoV/2))) / 2f), 0, 0,
 				0, 0, (Game.Z_NEAR + Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR), (2 * Game.Z_NEAR * Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR),
 				0, 0, -1, 0
 		});
@@ -144,7 +144,7 @@ public class Graphics {
     					0, 0, 1, entities.get(e).pos.z + model.pos.z,
     					0, 0, 0, 1
     			});
-
+    			
     			Vector3f rot = new Vector3f(model.rot.x, model.rot.y, model.rot.z);
     			
     			Matrix4f xRot = new Matrix4f(new float[] {
@@ -198,7 +198,6 @@ public class Graphics {
 						0, 0, 0, 1});
     			
     			modelMatrix.setIdentity();
-    			modelMatrix.mul(exRot); modelMatrix.mul(eyRot); modelMatrix.mul(ezRot);
     			modelMatrix.mul(modelPosMatrix);
     			modelMatrix.mul(xRot); modelMatrix.mul(yRot); modelMatrix.mul(zRot);
     			modelMatrix.mul(modelScaleMatrix);

@@ -2,6 +2,9 @@ package main;
 
 import graphics.Graphics;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -81,16 +84,25 @@ public class Util {
 		return array;
 	}
 	
-	public static void saveScreenshot(ByteBuffer data) {
+	public static BufferedImage saveScreenshot(ByteBuffer data) {
 		BufferedImage image = new BufferedImage((int)Graphics.WIDTH, (int)Graphics.HEIGHT, BufferedImage.TYPE_INT_RGB);
-		IntBuffer intBuffer = data.asIntBuffer();
-		int[] array = new int[intBuffer.limit()];
-		intBuffer.get(array);
+		int[] array = new int[(int) (Graphics.WIDTH * Graphics.HEIGHT)];
+		for(int i = 0; i < array.length; i++) {
+			int pootis = i*3;
+			array[i] = (data.get(pootis) << 16) + (data.get(pootis+1) << 8) + (data.get(pootis+2) << 0);
+		}
 		image.setRGB(0, 0, (int)Graphics.WIDTH, (int)Graphics.HEIGHT, array, 0, (int)Graphics.WIDTH);
+		AffineTransform trans = AffineTransform.getScaleInstance(1, -1);
+		trans.translate(0, -image.getHeight());
+		AffineTransformOp op = new AffineTransformOp(trans, AffineTransformOp.TYPE_BILINEAR);
+		BufferedImage dst = op.filter(image, null);
+		
 		try {
-			ImageIO.write(image, "PNG", new File("screenshots/screenshot.png"));
+			System.out.println("Taking screenshot!");
+			ImageIO.write(dst, "PNG", new File("screenshots/" + System.currentTimeMillis() + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return dst;
 	}
 }
