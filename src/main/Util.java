@@ -1,9 +1,16 @@
 package main;
 
+import graphics.Graphics;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import javax.imageio.ImageIO;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Tuple3f;
 import javax.vecmath.Tuple4f;
@@ -72,5 +79,18 @@ public class Util {
 			array[i/stride] = Short.valueOf(splitString[i]);
 		}
 		return array;
+	}
+	
+	public static void saveScreenshot(ByteBuffer data) {
+		BufferedImage image = new BufferedImage((int)Graphics.WIDTH, (int)Graphics.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		IntBuffer intBuffer = data.asIntBuffer();
+		int[] array = new int[intBuffer.limit()];
+		intBuffer.get(array);
+		image.setRGB(0, 0, (int)Graphics.WIDTH, (int)Graphics.HEIGHT, array, 0, (int)Graphics.WIDTH);
+		try {
+			ImageIO.write(image, "PNG", new File("screenshots/screenshot.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

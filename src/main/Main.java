@@ -43,6 +43,7 @@ public class Main {
 		Audio.init();
 		Input.init();
 		Game.init();
+		Physics.init();
 		
 		//Audio.playMusic("thelittleships.wav");
 		

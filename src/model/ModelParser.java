@@ -78,15 +78,16 @@ public class ModelParser {
 		for(int i = 1; i < transforms.getLength(); i+=2) {
 			NodeList children = transforms.item(i).getChildNodes();
 			
-			float[] pos = Util.toArray(children.item(1).getTextContent());
+			float[] rawPos = Util.toArray(children.item(1).getTextContent());
+			float[] pos = {rawPos[0], rawPos[2], rawPos[1]};
 			modelData[(i-1)/2].pos = new Vector3f(pos);
 			
 			float[] scale = Util.toArray(children.item(9).getTextContent());
 			modelData[(i-1)/2].scale = new Vector3f(scale);
 			
-			float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]);
-			float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]);
-			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]);
+			float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
+			float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
+			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f - (3.1415f/2f);
 			modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
 		}
 		

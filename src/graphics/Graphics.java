@@ -6,6 +6,7 @@ import game.Game;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import javax.vecmath.Matrix4f;
@@ -16,6 +17,7 @@ import main.Util;
 import model.Model;
 import model.ModelParser;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
@@ -58,12 +60,9 @@ public class Graphics {
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		GL20.glEnableVertexAttribArray(0);
 		
 		setup3D();
 		render(Game.entities);
-		 
-		GL20.glDisableVertexAttribArray(0);
 
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
@@ -134,7 +133,7 @@ public class Graphics {
 	}
 
     private static void render(ArrayList<Entity> entities) {    	
-    	GL20.glUniform1i(defaultShader.getUniform("stride"), 10);
+    	GL20.glUniform1i(defaultShader.getUniform("stride"), 5);
     	for(int e = 0; e < entities.size(); e++) {
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			Model model = entities.get(e).model[m];
@@ -146,9 +145,7 @@ public class Graphics {
     					0, 0, 0, 1
     			});
 
-    			Vector3f rot = new Vector3f(entities.get(e).rot.x + model.rot.x,
-    					entities.get(e).rot.y + model.rot.y,
-    					entities.get(e).rot.z + model.rot.z);
+    			Vector3f rot = new Vector3f(model.rot.x, model.rot.y, model.rot.z);
     			
     			Matrix4f xRot = new Matrix4f(new float[] {
     					1, 0, 0, 0,
@@ -171,6 +168,29 @@ public class Graphics {
     					0, 0, 0, 1
     			});
     			
+    			Vector3f erot = new Vector3f(entities.get(e).rot.x, entities.get(e).rot.y, entities.get(e).rot.z);
+    			
+    			Matrix4f exRot = new Matrix4f(new float[] {
+    					1, 0, 0, 0,
+    					0, (float) Math.cos(erot.x), - (float) Math.sin(erot.x), 0,
+    					0, (float) Math.sin(erot.x), (float) Math.cos(erot.x), 0,
+    					0, 0, 0, 1
+    			});
+    			
+    			Matrix4f eyRot = new Matrix4f(new float[] {
+    					(float) Math.cos(erot.y), 0, (float) Math.sin(erot.y), 0,
+    					0, 1, 0, 0,
+    					- (float) Math.sin(erot.y), 0, (float) Math.cos(erot.y), 0,
+    					0, 0, 0, 1
+    			});
+    			
+    			Matrix4f ezRot = new Matrix4f(new float[] {
+    					(float) Math.cos(erot.z), - (float) Math.sin(erot.z), 0, 0,
+    					(float) Math.sin(erot.z), (float) Math.cos(erot.z), 0, 0,
+    					0, 0, 1, 0,
+    					0, 0, 0, 1
+    			});
+    			
     			modelScaleMatrix.set(new float[] {
     					entities.get(e).scale.x * model.scale.x, 0, 0, 0,
 						0, entities.get(e).scale.y * model.scale.y, 0, 0,
@@ -178,6 +198,7 @@ public class Graphics {
 						0, 0, 0, 1});
     			
     			modelMatrix.setIdentity();
+    			modelMatrix.mul(exRot); modelMatrix.mul(eyRot); modelMatrix.mul(ezRot);
     			modelMatrix.mul(modelPosMatrix);
     			modelMatrix.mul(xRot); modelMatrix.mul(yRot); modelMatrix.mul(zRot);
     			modelMatrix.mul(modelScaleMatrix);
@@ -189,10 +210,9 @@ public class Graphics {
     			GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x, model.colorFill.y, model.colorFill.z, model.colorFill.w);
-    			glDrawElements(GL_LINE_STRIP, model.indexCount, GL_UNSIGNED_SHORT, 0);
+    			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x, model.colorLine.y, model.colorLine.z, model.colorLine.w);
-    			//glDrawElements(GL_TRIANGLE_FAN, model.indexCount, GL_UNSIGNED_SHORT, 0);
     			
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
     	    	GL20.glDisableVertexAttribArray(0);
@@ -200,6 +220,12 @@ public class Graphics {
     		}
     	}
     	
+    }
+    
+    public static void takeScreenShot() {
+    	ByteBuffer data = BufferUtils.createByteBuffer((int)(WIDTH * HEIGHT * 3));
+    	glReadPixels(0, 0, (int) WIDTH, (int) HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, data);
+    	Util.saveScreenshot(data);
     }
     
 	public static void init() {

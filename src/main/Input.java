@@ -45,7 +45,7 @@ public class Input {
 		}
 		if(Mouse.isButtonDown(1)) {
 			Audio.playMusic("le_elephante.wav");
-		//	Graphics.takeScreenShot();
+			Graphics.takeScreenShot();
 		}
 	}
 	
