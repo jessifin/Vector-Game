@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="/Users/jesse/Documents/workspace/jbullet-20101010/lib/vecmath/vecmath.jar"/>
-	<classpathentry kind="lib" path="/Users/jesse/Documents/workspace/jbullet-20101010/dist/jbullet.jar">
+	<classpathentry kind="lib" path="/Users/jesse/Documents/workspace/jbullet-20101010/dist/jbullet.jar" sourcepath="/Users/jesse/Documents/workspace/jbullet-20101010/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Users/jesse/Documents/workspace/jbullet-20101010/dist/javadoc/"/>
 		</attributes>

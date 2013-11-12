@@ -14,5 +14,9 @@ public class EntityVirus extends Entity {
 			m.colorFill = new Color4f(0.1f,0.9f,0.05f,1);
 		}
 	}
+	
+	public void update() {
+		
+	}
 
 }

@@ -11,5 +11,9 @@ public class EntityPlayer extends Entity {
 	public EntityPlayer(ModelData[] modelData) {
 		super(modelData);
 	}
+	
+	public void update() {
+		
+	}
 
 }

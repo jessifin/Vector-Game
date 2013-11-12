@@ -42,8 +42,8 @@ public class Main {
 		Graphics.init();
 		Audio.init();
 		Input.init();
-		Game.init();
 		Physics.init();
+		Game.init();
 		
 		//Audio.playMusic("thelittleships.wav");
 		
@@ -59,6 +59,7 @@ public class Main {
 			Game.update();
 
 			int timePassed = (int) (System.currentTimeMillis() - initialTime);
+			Physics.update(timePassed);
 			//System.out.println(1000f/timePassed);
 			lag += timePassed;
 			Timer.updateAll(timePassed);
@@ -72,6 +73,7 @@ public class Main {
 			}
 		}
 
+		Physics.destroy();
 		Audio.destroy();
 		Graphics.destroy();
 		

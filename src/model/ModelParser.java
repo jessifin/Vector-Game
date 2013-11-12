@@ -99,7 +99,7 @@ public class ModelParser {
 			return loadedModels.get(id);
 		} else {
 			System.out.println("Loading model: " + id);
-			
+						
 			Model[] models = new Model[modelData.length];
 			
 			for(int i = 0; i < models.length; i++) {
@@ -122,7 +122,7 @@ public class ModelParser {
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);	
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				
-				Model model = new Model(modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length);
+				Model model = new Model(modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
 				model.pos = modelData[i].pos;
 				model.rot = modelData[i].rot;
 				model.scale = modelData[i].scale;
