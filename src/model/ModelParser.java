@@ -9,6 +9,7 @@ import java.nio.ShortBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,14 +64,21 @@ public class ModelParser {
 			
 			Node meshNode = geometryNode.getFirstChild().getNextSibling();
 
-			Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
-			Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
-			
-			float[] vertices = Util.toArray(vertexNode.getTextContent());
-			short[] indices = Util.toArray(indexNode.getTextContent(), 0, 2);
-			
-			ModelData currentData = new ModelData(name, vertices, indices);
-			modelData[i] = currentData;
+			if(meshNode != null) {
+				Node vertexNode = meshNode.getChildNodes().item(1).getChildNodes().item(1);
+				Node indexNode = meshNode.getChildNodes().item(7).getChildNodes().item(7);
+				
+				float[] vertices = Util.toArray(vertexNode.getTextContent());
+				short[] indices = Util.toArray(indexNode.getTextContent(), 0, 2);
+				
+				ModelData currentData = new ModelData(name, vertices, indices);
+				modelData[i] = currentData;
+			} else {
+				float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
+				short[] inds = {0,1,2,1,2,3};
+				ModelData currentData = new ModelData("triangle",verts,inds);
+				modelData[i] = currentData;
+			}
 		}
 		
 		NodeList transforms = document.getElementsByTagName("visual_scene").item(0).getChildNodes();
@@ -90,6 +98,15 @@ public class ModelParser {
 			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f - (3.1415f/2f);
 			modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
 		}
+		
+		Node grandpaNode = document.getElementById("Bone");
+		if(grandpaNode != null) {
+			Node grandpaMatrix = grandpaNode.getFirstChild();
+			String rawMatrix = grandpaMatrix.getTextContent();
+			Matrix4f matrix = new Matrix4f(Util.toArray(rawMatrix));
+			
+		}
+		
 		
 		return buildModel(loc, modelData);
 	}

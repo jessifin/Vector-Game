@@ -61,6 +61,9 @@ public class Graphics {
 		
 		setup3D();
 		render(Game.entities);
+		
+		//setup2D();
+		//render(Game.entities);
 
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
@@ -163,10 +166,18 @@ public class Graphics {
 					0, 0, 0, 1
 			});
 			
+			Matrix4f eScale = new Matrix4f(new float[] {
+				entities.get(e).scale.x, 0, 0, 0,
+				0, entities.get(e).scale.y, 0, 0,
+				0, 0, entities.get(e).scale.z, 0,
+				0, 0, 0, 1
+				
+			});
+			
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			Model model = entities.get(e).model[m];
     			
-    	    	GL20.glUniform1i(defaultShader.getUniform("stride"), (int)(Main.numLoops % (model.indexCount / 3)));
+    	    	GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
     			
     			Matrix4f trans = new Matrix4f(new float[] {
     					1, 0, 0, model.pos.x,
@@ -204,12 +215,13 @@ public class Graphics {
 						0, 0, entities.get(e).scale.z * model.scale.z, 0,
 						0, 0, 0, 1});
     			
+    			//Reset model matrix
     			modelMatrix.setIdentity();
     			modelMatrix.mul(eTrans);
     			modelMatrix.mul(exRot); modelMatrix.mul(eyRot); modelMatrix.mul(ezRot);
+    			modelMatrix.mul(eScale);
     			modelMatrix.mul(trans);
     			modelMatrix.mul(xRot); modelMatrix.mul(yRot); modelMatrix.mul(zRot);
-
     			modelMatrix.mul(scale);
     			
     			GL30.glBindVertexArray(model.vaoID);
@@ -218,7 +230,7 @@ public class Graphics {
 
     			GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 
-    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x + (entities.get(e).distanceFromCam - entities.get(e).lastDistanceFromCam)/2f, model.colorFill.y, model.colorFill.z, model.colorFill.w);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x, model.colorFill.y, model.colorFill.z, model.colorFill.w);
     			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x, model.colorLine.y, model.colorLine.z, model.colorLine.w);
@@ -297,7 +309,7 @@ public class Graphics {
 		 */
 		
 		defaultShader = ShaderParser.getShader("default");
-		glClearColor(.1f,.3f,.8f,1);
+		glClearColor(0, 0, 0, 1);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

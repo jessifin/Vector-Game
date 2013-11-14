@@ -12,7 +12,7 @@ import model.ModelParser;
 public abstract class Entity {
 	
 	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
-	public float distanceFromCam, lastDistanceFromCam;
+	public float distanceFromCam;
 
 	public RigidBody body;
 

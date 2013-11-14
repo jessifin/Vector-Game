@@ -43,6 +43,7 @@ public class Game {
 		EntityVirus virus = new EntityVirus(new Vector3f(10, 10, 10));
 		entities.add(virus);
 		Entity floor = new EntityPlayer("hoovy.dae");
+		floor.model[0].colorFill = new Color4f(0.2f,0.5f,1,1);
 		entities.add(floor);
 	}
 	
@@ -52,9 +53,7 @@ public class Game {
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);
 		for(Entity e: entities) {
 			e.update();
-				
-			//For some reason I want to apply an extreme doppler effect
-			e.lastDistanceFromCam = e.distanceFromCam;
+			
 			e.distanceFromCam = (float)Math.sqrt(Math.pow(e.pos.x - camPos.x, 2)
 					+ Math.pow(e.pos.y - camPos.y, 2)
 					+ Math.pow(e.pos.z - camPos.z, 2));
