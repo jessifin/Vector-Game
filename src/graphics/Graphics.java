@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
@@ -54,7 +55,9 @@ public class Graphics {
 	
 	private static Shader defaultShader;
 		
-	private static Matrix4f modelMatrix = new Matrix4f(), projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
+	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
+	private static Matrix4f modelMatrix = new Matrix4f();
+	private static Stack<Matrix4f> matrixStack = new Stack<Matrix4f>();
 	
 	public static void update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -85,7 +88,7 @@ public class Graphics {
 		});
 		
 		viewMatrix.setIdentity();
-		
+				
 		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
 		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
 	}
@@ -136,37 +139,37 @@ public class Graphics {
     private static void render(ArrayList<Entity> entities) {    	
     	for(int e = 0; e < entities.size(); e++) {
     		
-    		Vector3f erot = new Vector3f(entities.get(e).rot.x, entities.get(e).rot.y, entities.get(e).rot.z);
+    		Vector3f rot = new Vector3f(entities.get(e).rot.x, entities.get(e).rot.y, entities.get(e).rot.z);
 			
-			Matrix4f exRot = new Matrix4f(new float[] {
-					1, 0, 0, 0,
-					0, (float) Math.cos(erot.x), - (float) Math.sin(erot.x), 0,
-					0, (float) Math.sin(erot.x), (float) Math.cos(erot.x), 0,
-					0, 0, 0, 1
-			});
-			
-			Matrix4f eyRot = new Matrix4f(new float[] {
-					(float) Math.cos(erot.y), 0, (float) Math.sin(erot.y), 0,
-					0, 1, 0, 0,
-					- (float) Math.sin(erot.y), 0, (float) Math.cos(erot.y), 0,
-					0, 0, 0, 1
-			});
-			
-			Matrix4f ezRot = new Matrix4f(new float[] {
-					(float) Math.cos(erot.z), - (float) Math.sin(erot.z), 0, 0,
-					(float) Math.sin(erot.z), (float) Math.cos(erot.z), 0, 0,
-					0, 0, 1, 0,
-					0, 0, 0, 1
-			});
-			
-			Matrix4f eTrans = new Matrix4f(new float[] {
+			Matrix4f transMat = new Matrix4f(new float[] {
 					1, 0, 0, entities.get(e).pos.x,
 					0, 1, 0, entities.get(e).pos.y,
 					0, 0, 1, entities.get(e).pos.z,
 					0, 0, 0, 1
 			});
 			
-			Matrix4f eScale = new Matrix4f(new float[] {
+			Matrix4f xRotMat = new Matrix4f(new float[] {
+					1, 0, 0, 0,
+					0, (float) Math.cos(rot.x), - (float) Math.sin(rot.x), 0,
+					0, (float) Math.sin(rot.x), (float) Math.cos(rot.x), 0,
+					0, 0, 0, 1
+			});
+			
+			Matrix4f yRotMat = new Matrix4f(new float[] {
+					(float) Math.cos(rot.y), 0, (float) Math.sin(rot.y), 0,
+					0, 1, 0, 0,
+					- (float) Math.sin(rot.y), 0, (float) Math.cos(rot.y), 0,
+					0, 0, 0, 1
+			});
+			
+			Matrix4f zRotMat = new Matrix4f(new float[] {
+					(float) Math.cos(rot.z), - (float) Math.sin(rot.z), 0, 0,
+					(float) Math.sin(rot.z), (float) Math.cos(rot.z), 0, 0,
+					0, 0, 1, 0,
+					0, 0, 0, 1
+			});
+
+			Matrix4f scaleMat = new Matrix4f(new float[] {
 				entities.get(e).scale.x, 0, 0, 0,
 				0, entities.get(e).scale.y, 0, 0,
 				0, 0, entities.get(e).scale.z, 0,
@@ -174,24 +177,23 @@ public class Graphics {
 				
 			});
 			
+			modelMatrix.setIdentity();
+			
+			modelMatrix.mul(transMat);
+			modelMatrix.mul(xRotMat); modelMatrix.mul(yRotMat); modelMatrix.mul(zRotMat);
+			modelMatrix.mul(scaleMat);
+			
     		for(int m = 0; m < entities.get(e).model.length; m++) {
     			Model model = entities.get(e).model[m];
     			
     	    	GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
-    			
-    			//Reset model matrix
-    			modelMatrix.setIdentity();
-    			modelMatrix.mul(eTrans);
-    			modelMatrix.mul(exRot); modelMatrix.mul(eyRot); modelMatrix.mul(ezRot);
-    			modelMatrix.mul(eScale);
-    			modelMatrix.mul(model.matrix);
-    			
+    			    			
     			GL30.glBindVertexArray(model.vaoID);
     			GL20.glEnableVertexAttribArray(0);
-    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);    			    			
-
-    			GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
-
+    			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
+    				pushMatrix(model.matrix);
+    				GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
+    				popMatrix();
     			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entities.get(e).colorFill.x,
     					model.colorFill.y * entities.get(e).colorFill.y,
     					model.colorFill.z * entities.get(e).colorFill.z,
@@ -207,9 +209,19 @@ public class Graphics {
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
     	    	GL20.glDisableVertexAttribArray(0);
     			GL30.glBindVertexArray(0);
-    		}
+       		}
     	}
     	
+    }
+    
+    public static void pushMatrix(Matrix4f matrix) {
+    	Matrix4f m = new Matrix4f(modelMatrix);
+    	m.mul(matrix);
+    	matrixStack.push(m);
+    }
+    
+    public static void popMatrix() {
+    	matrixStack.pop();
     }
     
     public static void takeScreenShot() {

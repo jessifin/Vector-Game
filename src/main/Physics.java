@@ -89,7 +89,7 @@ public class Physics {
 		world.stepSimulation(timePassed);
 		
 		for(Entity e: Game.entities) {
-		//	e.pos = e.body.getWorldTransform(new Transform()).origin;
+			//e.pos = e.body.getWorldTransform(new Transform()).origin;
 		}
 	}
 	
