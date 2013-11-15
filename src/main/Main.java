@@ -44,9 +44,7 @@ public class Main {
 		Input.init();
 		Physics.init();
 		Game.init();
-		
-		//Audio.playMusic("thelittleships.wav");
-		
+				
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;
 			

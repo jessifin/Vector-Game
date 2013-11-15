@@ -102,9 +102,8 @@ public class ModelParser {
 		Node grandpaNode = document.getElementById("Bone");
 		if(grandpaNode != null) {
 			Node grandpaMatrix = grandpaNode.getFirstChild();
-			String rawMatrix = grandpaMatrix.getTextContent();
-			Matrix4f matrix = new Matrix4f(Util.toArray(rawMatrix));
-			
+			Matrix4f matrix = new Matrix4f(Util.toArray(grandpaMatrix.getTextContent()));
+			matrix.transpose();
 		}
 		
 		
@@ -143,6 +142,7 @@ public class ModelParser {
 				model.pos = modelData[i].pos;
 				model.rot = modelData[i].rot;
 				model.scale = modelData[i].scale;
+				model.calculateMatrix();
 				models[i] = model;
 			}
 			

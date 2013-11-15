@@ -179,50 +179,12 @@ public class Graphics {
     			
     	    	GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
     			
-    			Matrix4f trans = new Matrix4f(new float[] {
-    					1, 0, 0, model.pos.x,
-    					0, 1, 0, model.pos.y,
-    					0, 0, 1, model.pos.z,
-    					0, 0, 0, 1
-    			});
-    			
-    			Vector3f rot = new Vector3f(model.rot.x, model.rot.y, model.rot.z);
-    			
-    			Matrix4f xRot = new Matrix4f(new float[] {
-    					1, 0, 0, 0,
-    					0, (float) Math.cos(rot.x), - (float) Math.sin(rot.x), 0,
-    					0, (float) Math.sin(rot.x), (float) Math.cos(rot.x), 0,
-    					0, 0, 0, 1
-    			});
-    			
-    			Matrix4f yRot = new Matrix4f(new float[] {
-    					(float) Math.cos(rot.y), 0, (float) Math.sin(rot.y), 0,
-    					0, 1, 0, 0,
-    					- (float) Math.sin(rot.y), 0, (float) Math.cos(rot.y), 0,
-    					0, 0, 0, 1
-    			});
-    			
-    			Matrix4f zRot = new Matrix4f(new float[] {
-    					(float) Math.cos(rot.z), - (float) Math.sin(rot.z), 0, 0,
-    					(float) Math.sin(rot.z), (float) Math.cos(rot.z), 0, 0,
-    					0, 0, 1, 0,
-    					0, 0, 0, 1
-    			});			
-    			
-    			Matrix4f scale = new Matrix4f(new float[] {
-    					entities.get(e).scale.x * model.scale.x, 0, 0, 0,
-						0, entities.get(e).scale.y * model.scale.y, 0, 0,
-						0, 0, entities.get(e).scale.z * model.scale.z, 0,
-						0, 0, 0, 1});
-    			
     			//Reset model matrix
     			modelMatrix.setIdentity();
     			modelMatrix.mul(eTrans);
     			modelMatrix.mul(exRot); modelMatrix.mul(eyRot); modelMatrix.mul(ezRot);
     			modelMatrix.mul(eScale);
-    			modelMatrix.mul(trans);
-    			modelMatrix.mul(xRot); modelMatrix.mul(yRot); modelMatrix.mul(zRot);
-    			modelMatrix.mul(scale);
+    			modelMatrix.mul(model.matrix);
     			
     			GL30.glBindVertexArray(model.vaoID);
     			GL20.glEnableVertexAttribArray(0);
@@ -230,10 +192,17 @@ public class Graphics {
 
     			GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 
-    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x, model.colorFill.y, model.colorFill.z, model.colorFill.w);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entities.get(e).colorFill.x,
+    					model.colorFill.y * entities.get(e).colorFill.y,
+    					model.colorFill.z * entities.get(e).colorFill.z,
+    					model.colorFill.w * entities.get(e).colorFill.w);
+    			
     			glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 
-    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x, model.colorLine.y, model.colorLine.z, model.colorLine.w);
+    			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x * entities.get(e).colorLine.x,
+    					model.colorLine.y * entities.get(e).colorLine.y,
+    					model.colorLine.z * entities.get(e).colorLine.z,
+    					model.colorLine.w * entities.get(e).colorLine.w);
     			
     			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
     	    	GL20.glDisableVertexAttribArray(0);

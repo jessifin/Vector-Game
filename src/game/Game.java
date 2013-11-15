@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import audio.Audio;
 import main.Input;
 import main.Main;
+import main.Timer;
 import model.Model;
 import model.ModelData;
 import entity.Entity;
@@ -29,7 +31,7 @@ public class Game {
 	public static float camDist = 2;
 	public static float Z_NEAR = 0.5f, Z_FAR = 1000;
 	public static Vector3f camPos = new Vector3f(10,10,10), camUp = new Vector3f(0,1,0);
-	
+		
 	public static void init() {
 		float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
 		short[] inds = {0,1,2,1,2,3};
@@ -43,8 +45,12 @@ public class Game {
 		EntityVirus virus = new EntityVirus(new Vector3f(10, 10, 10));
 		entities.add(virus);
 		Entity floor = new EntityPlayer("hoovy.dae");
-		floor.model[0].colorFill = new Color4f(0.2f,0.5f,1,1);
+		floor.colorFill = new Color4f(1,0,0,1);
+		//I like this color: 0.2f,0.5f,1,1
 		entities.add(floor);
+		
+		Audio.play("elephante_mono.wav", new Vector3f(0,0,0), new Vector3f(0,0,0), 5);
+
 	}
 	
 	public static void update() {
@@ -57,6 +63,11 @@ public class Game {
 			e.distanceFromCam = (float)Math.sqrt(Math.pow(e.pos.x - camPos.x, 2)
 					+ Math.pow(e.pos.y - camPos.y, 2)
 					+ Math.pow(e.pos.z - camPos.z, 2));
+			
+			e.vel.x = (e.pos.x - e.lastPos.x) / 2;
+			e.vel.y = (e.pos.y - e.lastPos.y) / 2;
+			e.vel.z = (e.pos.z - e.lastPos.z) / 2;
+			e.lastPos = e.pos;
 		}
 	}
 }

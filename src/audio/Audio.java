@@ -7,6 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -20,6 +21,7 @@ import javax.vecmath.Vector3f;
 import main.Main;
 import main.Util;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
@@ -65,19 +67,27 @@ public class Audio {
 				bindSource(source, source.currentBuffer);
 			}
 		}
+
+		float[] orientation = {Game.player.pos.x, Game.player.pos.y, Game.player.pos.z,
+				Game.player.rot.x, Game.player.rot.y, Game.player.rot.z};
+		FloatBuffer orientationBuffer = BufferUtils.createFloatBuffer(6);
+		orientationBuffer.put(orientation);
+		orientationBuffer.flip();
 		
-		alListener(AL_POSITION, Util.toBuffer(Game.player.pos));
-		alListener(AL_VELOCITY, Util.toBuffer(Game.player.pos));
+		alListener(AL_POSITION, Util.toBuffer(Game.camPos));
+		//I can't get these to work properly, but the audio should be sufficient for now.
+		//alListener(AL_VELOCITY, Util.toBuffer(Game.player.vel));
+		//alListener(AL_ORIENTATION, orientationBuffer);
 		
 		lastUpdate = System.currentTimeMillis();
 	}
 	
-	public static Buffer play(String loc, Vector3f pos, Vector3f vel) {
+	public static Buffer play(String loc, Vector3f pos, Vector3f vel, float volume) {
 		if(loadedBuffers.containsKey(loc)) {
 			int i = getAvailableSource();
 			Buffer buffer = loadedBuffers.get(loc);
 			buffer.looping = false;
-			buffer.gain = Game.fxVolume;
+			buffer.gain = volume * Game.fxVolume;
 			buffer.isMusic = false;
 			alSource(sources[i].id, AL_POSITION, Util.toBuffer(pos));
 			alSource(sources[i].id, AL_VELOCITY, Util.toBuffer(vel));
@@ -86,12 +96,12 @@ public class Audio {
 			return buffer;
 		} else {
 			loadBuffer(loc);
-			return play(loc, pos, vel);
+			return play(loc, pos, vel, volume);
 		}
 	}
 	
 	public static Buffer playAtPlayer(String loc) {
-		return play(loc, Game.player.pos, new Vector3f(0,0,0));
+		return play(loc, Game.player.pos, new Vector3f(0,0,0), 1);
 	}
 	
 	public static Buffer playMusic(String loc) {
