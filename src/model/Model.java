@@ -8,14 +8,13 @@ public class Model {
 
 	public final String name;
 	public final int vaoID, vertexID, indexID, indexCount;
-	public int indicesToRender;
+	public int indicesToRender, indexOffset;
 	
 	public final ModelData data;
-	public /*final*/ Model parentNode;
 	
 	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
-	public Matrix4f matrix;
-
+	public Matrix4f matrix = new Matrix4f();
+	
 	public Color4f colorFill = new Color4f(1,1,1,1), colorLine = new Color4f(0,0,0,1);
 	
 	public Model(String name, int vaoID, int vertexID, int indexID, int indexCount, ModelData data) {
@@ -27,6 +26,17 @@ public class Model {
 		this.indicesToRender = indexCount;
 		this.data = data;
 		this.matrix = new Matrix4f();
+	}
+	
+	public Model(Model model) {
+		this.name = new String(model.name);
+		this.vaoID = new Integer(model.vaoID);
+		this.vertexID = new Integer(model.vertexID);
+		this.indexID = new Integer(model.indexID);
+		this.indexCount = new Integer(model.indexCount);
+		this.indicesToRender = new Integer(model.indicesToRender);
+		this.data = model.data;
+		this.matrix = new Matrix4f(model.matrix);
 	}
 	
 	public void calculateMatrix() {

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Calendar;
+import java.util.Random;
 
 import model.ModelParser;
 
@@ -24,6 +25,8 @@ public class Main {
 	public static boolean RUNNING = true;
 	public static long numLoops, numTicks, lag;
 	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(10000);
+	
+	public static Random rng = new Random();
 	
 	static {
 		SYSTEM_OS = OS.getOS();
@@ -54,9 +57,9 @@ public class Main {
 			Input.mouseUpdate();
 			Graphics.update();
 			Audio.update();
-			Game.update();
 
-			int timePassed = (int) (System.currentTimeMillis() - initialTime);
+			int timePassed = (int) (System.currentTimeMillis() - initialTime) * (Game.gui.pausesGame?0:1);
+			Game.update(timePassed);
 			Physics.update(timePassed);
 			//System.out.println(1000f/timePassed);
 			lag += timePassed;

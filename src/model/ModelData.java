@@ -1,6 +1,5 @@
 package model;
 
-import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 public class ModelData {
@@ -9,8 +8,7 @@ public class ModelData {
 	public final float[] vertices;
 	public final short[] indices;
 	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
-	public Matrix4f matrix;
-	
+		
 	public ModelData(String name, float[] vertices, short[] indices) {
 		this.name = name;
 		this.vertices = vertices;

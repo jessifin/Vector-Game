@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -60,6 +61,7 @@ public class ModelParser {
 		for(int i = 0; i < nodes.getLength(); i++) {
 			//Why aren't these enumerations? It's just annoying this way.
 			Node geometryNode = nodes.item(i);
+
 			String name = geometryNode.getAttributes().item(0).getNodeValue();
 			
 			Node meshNode = geometryNode.getFirstChild().getNextSibling();
@@ -76,38 +78,72 @@ public class ModelParser {
 			} else {
 				float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
 				short[] inds = {0,1,2,1,2,3};
-				ModelData currentData = new ModelData("triangle",verts,inds);
+				ModelData currentData = new ModelData("missingno",verts,inds);
 				modelData[i] = currentData;
 			}
 		}
 		
+		if(modelData.length == 0) {
+			modelData = new ModelData[1];
+			float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
+			short[] inds = {0,1,2,1,2,3};
+			ModelData currentData = new ModelData("missingno",verts,inds);
+			modelData[0] = currentData;
+		}
+		
 		NodeList transforms = document.getElementsByTagName("visual_scene").item(0).getChildNodes();
-		
+	
 		for(int i = 1; i < transforms.getLength(); i+=2) {
-			NodeList children = transforms.item(i).getChildNodes();
-			
-			float[] rawPos = Util.toArray(children.item(1).getTextContent());
-			float[] pos = {rawPos[0], rawPos[2], rawPos[1]};
-			modelData[(i-1)/2].pos = new Vector3f(pos);
-			
-			float[] scale = Util.toArray(children.item(9).getTextContent());
-			modelData[(i-1)/2].scale = new Vector3f(scale);
-			
-			float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
-			float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
-			float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f - (3.1415f/2f);
-			modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
+			if(!transforms.item(i).getAttributes().item(0).getNodeValue().equals("Armature")) {
+				NodeList children = transforms.item(i).getChildNodes();
+				float[] rawPos = Util.toArray(children.item(1).getTextContent());
+				float[] pos = {rawPos[0], rawPos[2], rawPos[1]};
+				modelData[(i-1)/2].pos = new Vector3f(pos);
+				
+				float[] scale = Util.toArray(children.item(9).getTextContent());
+				modelData[(i-1)/2].scale = new Vector3f(scale);
+				
+				float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
+				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
+				float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f - (3.1415f/2f);
+				modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
+			}
 		}
-		
-		Node grandpaNode = document.getElementById("Bone");
-		if(grandpaNode != null) {
-			Node grandpaMatrix = grandpaNode.getFirstChild();
-			Matrix4f matrix = new Matrix4f(Util.toArray(grandpaMatrix.getTextContent()));
-			matrix.transpose();
-		}
-		
-		
+
 		return buildModel(loc, modelData);
+	}
+	
+	public static Matrix4f[] getArmature(String loc) {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+		
+		DocumentBuilder builder = null;
+		try {
+			builder = builderFactory.newDocumentBuilder();
+		} catch(ParserConfigurationException exception) { 
+			exception.printStackTrace();
+		}
+		
+		Document document = null;
+		try {
+			document = builder.parse(new File("res/model/" + loc));
+		} catch(IOException exception) {
+			exception.printStackTrace();
+		} catch(SAXException exception) {
+			exception.printStackTrace();
+		}
+		
+		document.getDocumentElement().normalize();
+		
+		NodeList matrices = document.getElementsByTagName("matrix");
+		
+		Matrix4f[] data = new Matrix4f[matrices.getLength()];
+		for(int i = 0; i < matrices.getLength(); i++) {
+			Matrix4f mat = new Matrix4f(Util.toArray(matrices.item(i).getTextContent()));
+			mat.transpose();
+			data[i] = mat;
+		}
+		
+		return data;
 	}
 	
 	public static Model[] buildModel(String id, ModelData[] modelData) {
@@ -150,7 +186,7 @@ public class ModelParser {
 			return models;
 		}
 	}
-	
+
 	public static void clearModelMap() {
 		//Why you gotta use set and collection? Make up your mind, Oracle.
 		Iterator<String> keys = loadedModels.keySet().iterator();

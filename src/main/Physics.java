@@ -71,7 +71,7 @@ public class Physics {
 			TriangleIndexVertexArray triangleInfo = new TriangleIndexVertexArray(
 					data.indices.length/3, indexBuffer, 4 * 3, data.vertices.length, vertexBuffer, 4 * 3);
 			
-			CollisionShape shape = new SphereShape(5);//new BvhTriangleMeshShape(triangleInfo, true);
+			CollisionShape shape = new BvhTriangleMeshShape(triangleInfo, true);
 			
 			MotionState motionState = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0,0,0,1),new Vector3f(0,0,0), 1)));
 			RigidBodyConstructionInfo construction = new RigidBodyConstructionInfo(5, motionState, shape, new Vector3f(0,0,0));
