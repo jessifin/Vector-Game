@@ -3,7 +3,7 @@ package entity;
 public class Terrain extends Entity {
 
 	public Terrain() {
-		super("plane.dae");
+		super("terrain.dae");
 	}
 
 	public void update() {

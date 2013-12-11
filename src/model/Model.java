@@ -8,7 +8,7 @@ public class Model {
 
 	public final String name;
 	public final int vaoID, vertexID, indexID, indexCount;
-	public int indicesToRender, indexOffset;
+	public int indicesToRender;
 	
 	public final ModelData data;
 	

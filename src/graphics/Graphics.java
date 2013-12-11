@@ -58,7 +58,7 @@ public class Graphics {
 	
 	public static float WIDTH, HEIGHT;
 	public static float LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR;
-	public static Color4f clearColor = new Color4f(1,1,1,1);
+	public static Color4f clearColor = new Color4f(0,0,0,1);
 	
 	private static Shader defaultShader;
 	
@@ -72,15 +72,17 @@ public class Graphics {
 	public static void update() {
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+			
 		setup3D();
 		renderBatch(Game.entities);
-		
+		renderText("This is a line.\nThis is another line.\nTada.", new Vector3f(0,0,0), new Vector3f(0,0,0), new Vector3f(1,1,1), new Color4f(1,1,0,1));
+
 		setup2D();
 		Game.gui.render();
-		Graphics.renderText("Pootisakdbaskjdaksjdakjsdb");
-
-		//renderBox((RIGHT - LEFT)/2,(BOTTOM - TOP)/2,5,5,Main.numLoops/20f, new Color4f(1,1,1,0.5f));
+		for(int i = 0; i < 17; i++) {
+			//renderBox(i,0,i+1,1,0,new Color4f(1,1,1,1));
+		//	renderText("OOOOOOOOOOOOOOOOO",new Vector3f(0,i,0),new Vector3f(0,0,0),new Vector3f(1,1,1),new Color4f(0,1,0,1));
+		}
 		
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
@@ -89,8 +91,8 @@ public class Graphics {
 	private static void setup2D() {
 		LEFT = 0;
 		RIGHT = 16 * WIDTH / HEIGHT;
-		BOTTOM = 16;
-		TOP = 0;
+		BOTTOM = 0;
+		TOP = 16;
 		NEAR = -1;
 		FAR = 1;
 		
@@ -229,7 +231,15 @@ public class Graphics {
 				model.colorFill.z * entity.colorFill.z,
 				model.colorFill.w * entity.colorFill.w);
 		
-		glDrawElements(GL_TRIANGLES, model.indicesToRender, GL_UNSIGNED_SHORT, model.indexOffset);
+		int indicesToDraw = (int)(model.indexCount * (float)(entity.health)/(float)(entity.maxHealth));
+		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
+		if(model.indicesToRender != indicesToDraw) {
+			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
+					model.colorFill.y * entity.colorFill.y,
+					model.colorFill.z * entity.colorFill.z,
+					0.4f);
+		//	glDrawElements(GL_TRIANGLES, model.indexCount - indicesToDraw, GL_UNSIGNED_SHORT, model.indicesToRender);
+		}
 	
 		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x * entity.colorLine.x,
 				model.colorLine.y * entity.colorLine.y,
@@ -241,23 +251,18 @@ public class Graphics {
 		GL30.glBindVertexArray(0);
 	}
     
-    private static void renderModel(Model model) {		
+    private static void renderModel(Model model, Color4f color) {
 		GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
 		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x,
-				model.colorFill.y,
-				model.colorFill.z,
-				model.colorFill.w);
+		GL20.glUniform4f(defaultShader.getUniform("color"), color.x,
+				color.y,
+				color.z,
+				color.w);
 		
-		glDrawElements(GL_TRIANGLES, model.indicesToRender, GL_UNSIGNED_SHORT, model.indexOffset);
-	
-		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x,
-				model.colorLine.y,
-				model.colorLine.z,
-				model.colorLine.w);
+		glDrawElements(GL_TRIANGLES, model.indicesToRender, GL_UNSIGNED_SHORT, 0);
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
@@ -278,40 +283,66 @@ public class Graphics {
 		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 		GL20.glUniform4f(defaultShader.getUniform("color"),color.x,color.y,color.z,color.w);
 		
-		glDrawElements(GL_TRIANGLES, boxModel.indicesToRender, GL_UNSIGNED_SHORT, boxModel.indexOffset);
+		glDrawElements(GL_TRIANGLES, boxModel.indicesToRender, GL_UNSIGNED_SHORT, 0);
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 	}
 	
-	public static void renderText(String text) {
-		Vector3f pos = new Vector3f(10,5,0);
-		Vector3f scale = new Vector3f(1,1,1);
-		Vector3f rot = new Vector3f(0,0,0);
-		generateMatrix(pos,scale,rot);
+	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
+		modelMatrix.setIdentity();
 		matrixStack.push(modelMatrix);
-		renderModel(boxModel);
-		matrixStack.pop();
+				
+		String[] lines = text.split("\n");
+
+		Vector3f realPos = new Vector3f(pos.x*0.5f-0.359f,1+(pos.y-2)/2-lines.length,pos.z);
+		generateMatrix(realPos,rot,scale);
+		pushMatrix(modelMatrix);
 		
-		char[] sequence = text.toCharArray();
-		for(int c = 0; c < sequence.length; c++) {
+		for(int line = lines.length - 1; line >= 0; line--) {
+	
+			Vector3f linePos = new Vector3f(0,scale.y,0);
+			Vector3f lineRot = new Vector3f(0,0,0);
+			Vector3f lineScale = new Vector3f(1,1,1);
+						
+			generateMatrix(linePos,lineRot,lineScale);
+			pushMatrix(modelMatrix);
 			
+			char[] characters = lines[line].toCharArray();
+
+			Vector3f charPos = new Vector3f(scale.x*0.5f,0,0);
+			Vector3f charRot = new Vector3f(0,0,0);
+			Vector3f charScale = new Vector3f(1,1,1);
+			generateMatrix(charPos,charRot,charScale);
+			
+			for(int character = 0; character < characters.length; character++) {
+				pushMatrix(modelMatrix);
+				if(characters[character] >= '!' && characters[character] <= '~') {
+					GL20.glUniform1i(defaultShader.getUniform("mode"), 1);
+					glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+					renderModel(font[characters[character] - 33],color);
+					glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+					GL20.glUniform1i(defaultShader.getUniform("mode"), 0);
+				}
+			}
+			
+			int i = 0;
+			while(i < characters.length) {
+				popMatrix();
+				i++;
+			}
 		}
 		
-		/*
-		String[] lines = text.split("\n");
-    	for(int l = 0; l < lines.length; l++) {
-    		char[] currentLine = lines[l].toCharArray();
-	    	for(int i = 0; i < currentLine.length; i++) {
-	    		if(currentLine[i] >= '!' && currentLine[i] <= '~') {
-	    			matrixStack.push(modelMatrix);
-		    		renderModel(font[currentLine[i] - 33]);
-		    		matrixStack.pop();
-	    		}
-	    	}
-    	}
-    	*/
+		int j = 0;
+		while(j < lines.length) {
+			popMatrix();
+			j++;
+		}
+		
+		popMatrix();
+		
+		matrixStack.pop();
 	}
 
 	private static void pushMatrix(Matrix4f matrix) {
@@ -414,11 +445,12 @@ public class Graphics {
 		 */
 		
 		defaultShader = ShaderParser.getShader("default");
-		
+		GL20.glUseProgram(defaultShader.programID);
+
 			//box init
 			float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
 			short[] inds = {0,1,2,1,2,3};
-			ModelData square = new ModelData("gui",verts,inds);
+			ModelData square = new ModelData("box",verts,inds);
 			boxModel = ModelParser.buildModel("box", new ModelData[] {square})[0];
 			
 			//font init
@@ -426,7 +458,6 @@ public class Graphics {
 			
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
 		glEnable(GL_DEPTH_TEST);
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
@@ -434,13 +465,11 @@ public class Graphics {
 		
 		LEFT = 0;
 		RIGHT = 16 * WIDTH / HEIGHT;
-		BOTTOM = 16;
-		TOP = 0;
+		BOTTOM = 0;
+		TOP = 16;
 		NEAR = -1;
 		FAR = 1;
 		
-		GL20.glUseProgram(defaultShader.programID);
-	
 	}
 
 	public static void destroy() {

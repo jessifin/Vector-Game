@@ -1,6 +1,9 @@
 package main;
 
 import static org.lwjgl.input.Keyboard.*;
+
+import javax.vecmath.Vector3f;
+
 import game.Game;
 import graphics.Graphics;
 
@@ -30,26 +33,24 @@ public class Input {
 		}
 	}
 	
-	public static void mouseUpdate() {
-		dX = (Mouse.getDX())/mouseSensitivity;
-		dY = (Mouse.getDY())/mouseSensitivity;
+	public static void mouseUpdate(float millisPassed) {
+		dX = (Mouse.getDX())/mouseSensitivity*16f/millisPassed;
+		dY = (Mouse.getDY())/mouseSensitivity*16f/millisPassed;
 		absX = Mouse.getX()/Graphics.WIDTH;
 		absY = Mouse.getY()/Graphics.HEIGHT;
 		x += dX; y += dY;
-		
-		
 		
 		if(Mouse.isButtonDown(0)) {
 			Audio.playAtPlayer("pootis.wav");
 			//Main.entities.add(new EntityProjectile(new Vector3f(GameInfo.player.pos.x, GameInfo.player.pos.y, GameInfo.player.pos.z)));
 		}
 		if(Mouse.isButtonDown(1)) {
-			Audio.playMusic("le_elephante.wav");
+			//Audio.playMusic("le_elephante.wav");
 			Graphics.takeScreenShot();
 		}
 	}
 	
-	public static void keyboardUpdate() {
+	public static void keyboardUpdate(float millisPassed) {
 		poll();
 		while(next()) {
 			int keyID = getEventKey();
@@ -58,14 +59,36 @@ public class Input {
 		}
 		
 		if(keyboardInfo[KEY_W].state) {
+			Vector3f forward = new Vector3f(
+					Game.player.pos.x - Game.camPos.x,
+					Game.player.pos.y - Game.camPos.y,
+					Game.player.pos.z - Game.camPos.z
+					);
+			
+			forward.normalize();
+			forward.scale(speed*3);
+			Physics.applyImpulse(Game.player, forward);
+			/*
 			Game.player.pos.x -= (float) (Math.cos(x) * Math.sin(y))*speed;
 			Game.player.pos.y -= (float) (Math.cos(y))*speed;
 			Game.player.pos.z -= (float) (Math.sin(x) * Math.sin(y))*speed;
+			*/
 		}
 		if(keyboardInfo[KEY_S].state) {
+			Vector3f backward = new Vector3f(
+					Game.camPos.x - Game.player.pos.x,
+					Game.camPos.y - Game.player.pos.y,
+					Game.camPos.z - Game.player.pos.z
+					);
+						
+			backward.normalize();
+			backward.scale(speed*3);
+			Physics.applyImpulse(Game.player, backward);
+			/*
 			Game.player.pos.x += (float) (Math.cos(x) * Math.sin(y))*speed;
 			Game.player.pos.y += (float) (Math.cos(y))*speed;
 			Game.player.pos.z += (float) (Math.sin(x) * Math.sin(y))*speed;
+			*/
 		}
 		/*
 		if(keyboardInfo[KEY_Q].state) {
@@ -108,10 +131,9 @@ public class Input {
 			Mouse.setGrabbed(true);
 		}
 		if(keyboardInfo[KEY_BACK].state) {
-		//	Main.loadLevel();
+			Game.reboot();
 		}
 		if(keyboardInfo[KEY_RETURN].state) {
-			Game.player.model[0].indicesToRender = (Game.player.model[0].indicesToRender >= 0) ? Game.player.model[0].indicesToRender - 1 : Game.player.model[0].indexCount;
 		}
 		
 	}
@@ -120,10 +142,6 @@ public class Input {
 		
 		public int nanosPressed;
 		public boolean state;
-		
-		public KeyInfo() {
-			
-		}
 		
 		public static KeyInfo getKeyInfo() {
 			return new KeyInfo();

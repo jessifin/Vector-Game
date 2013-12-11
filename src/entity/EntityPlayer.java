@@ -10,7 +10,7 @@ import model.ModelParser;
 public class EntityPlayer extends Entity {
 
 	public EntityPlayer() {
-		super("pizzard.dae");
+		super("hoovy.dae");
 		/*
 		Matrix4f[] matrices = ModelParser.getArmature("characterWithMesh.dae");
 		

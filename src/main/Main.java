@@ -23,8 +23,8 @@ public class Main {
 	private static Calendar calendar;
 	
 	public static boolean RUNNING = true;
-	public static long numLoops, numTicks, lag;
-	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(10000);
+	public static long numLoops, numTicks, millisPassed;
+	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(100000);
 	
 	public static Random rng = new Random();
 	
@@ -52,17 +52,16 @@ public class Main {
 			numLoops++;
 			
 			long initialTime = System.currentTimeMillis();
-			
-			Input.keyboardUpdate();
-			Input.mouseUpdate();
+
 			Graphics.update();
 			Audio.update();
 
 			int timePassed = (int) (System.currentTimeMillis() - initialTime) * (Game.gui.pausesGame?0:1);
 			Game.update(timePassed);
 			Physics.update(timePassed);
-			//System.out.println(1000f/timePassed);
-			lag += timePassed;
+			Input.keyboardUpdate(timePassed);
+			Input.mouseUpdate(timePassed);
+			millisPassed += timePassed;
 			Timer.updateAll(timePassed);
 			
 			while(tickTimer.poll()) {
@@ -78,7 +77,7 @@ public class Main {
 		Audio.destroy();
 		Graphics.destroy();
 		
-		System.out.println(1000f/(lag/numLoops));
+		System.out.println(1000f/millisPassed*numLoops);
 		System.exit(0);
 	}
 	

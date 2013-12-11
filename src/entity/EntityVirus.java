@@ -16,10 +16,10 @@ public class EntityVirus extends Entity {
 			m.colorFill = new Color4f(0.1f,0.9f,0.05f,1);
 		}
 		
-		model[0].pos.x = 100;
-		model[0].pos.y = 100;
-		model[0].pos.z = 100;
-		
+		model[0].pos.x = 0;
+		model[0].pos.y = 0;
+		model[0].pos.z = 0;
+		/*
 		rootBone = new Bone();
 		rootBone.model = 															model[0];
 		System.out.println(rootBone.model.pos.x);
@@ -38,6 +38,7 @@ public class EntityVirus extends Entity {
 					rootBone.children[0].children[0].children[0].model.calculateMatrix();
 		
 		loopThroughBones(rootBone);
+		*/
 	}
 	
 	public void update() {
