@@ -51,16 +51,13 @@ public class Game {
 		}
 		entities.add(player);
 		
-		currentLevel = LevelParser.getLevel("default.lvl");
-		entities = currentLevel.entities;
-		/*
 		Physics.addEntity(player,5,1);
 
 		for(int i = 0; i < 30; i++) {
 			Terrain ball = new Terrain();
 			ball.pos.y = i;
 			entities.add(ball);
-			ball.model = ModelParser.getModel("poogeon.dae");
+			ball.model = ModelParser.getModel("pizzard.dae");
 			ball.scale = new Vector3f(10,10,10);
 			Physics.addSphere(ball, 5, 1, 1);
 		}
@@ -77,7 +74,10 @@ public class Game {
 		Physics.addBox(new Vector3f(0,-50,50),0,1,new Vector3f(10,40,10));
 		Physics.addBox(new Vector3f(0,-50,-50),0,1,new Vector3f(10,40,10));
 		Physics.addBox(new Vector3f(0,40,0),0,1,new Vector3f(50,10,50));
-		*/
+		
+		currentLevel = LevelIO.getLevel("test2");
+		entities = currentLevel.entities;
+		
 		gui = new GUIHUD();
 		
 		//I like this color: 0.2f,0.5f,1,1
@@ -94,7 +94,7 @@ public class Game {
 	}
 	
 	public static void update(int millisPassed) {
-		player.health = 100-(int)(Main.numLoops % 100);
+		//player.health = 100-(int)(Main.numLoops % 100);
 		gui.update(millisPassed);
 		
 		camPos.x = (float) (camDist * Math.cos(Input.x) * Math.sin(Input.y) + player.pos.x);

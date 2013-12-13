@@ -13,7 +13,7 @@ import model.Model;
 import model.ModelData;
 import model.ModelParser;
 
-public abstract class Entity {
+public abstract class Entity implements Cloneable {
 	
 	public Vector3f pos = new Vector3f(0,0,0), rot = new Vector3f(0,0,0), scale = new Vector3f(1,1,1);
 	public Vector3f lastPos = new Vector3f(0,0,0), vel = new Vector3f(0,0,0);
@@ -34,9 +34,18 @@ public abstract class Entity {
 			this.model = ModelParser.getModel(model);
 		}
 	}
-	
+
 	public Entity(ModelData[] modelData) {
 		this.model = ModelParser.buildModel("MODEL DATA", modelData);
+	}
+	
+	public Entity copy() {
+		try {
+			return (Entity) this.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	protected void loopThroughBones(Bone bone) {			

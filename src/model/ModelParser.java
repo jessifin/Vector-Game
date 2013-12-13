@@ -78,7 +78,7 @@ public class ModelParser {
 			} else {
 				float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
 				short[] inds = {0,1,2,1,2,3};
-				ModelData currentData = new ModelData("missingno",verts,inds);
+				ModelData currentData = new ModelData("missingno%missingno",verts,inds);
 				modelData[i] = currentData;
 			}
 		}
@@ -87,7 +87,7 @@ public class ModelParser {
 			modelData = new ModelData[1];
 			float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
 			short[] inds = {0,1,2,1,2,3};
-			ModelData currentData = new ModelData("missingno",verts,inds);
+			ModelData currentData = new ModelData("missingno%missingno",verts,inds);
 			modelData[0] = currentData;
 		}
 		
@@ -174,7 +174,7 @@ public class ModelParser {
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);	
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				
-				Model model = new Model(modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
+				Model model = new Model(id+"%"+modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
 				model.pos = modelData[i].pos;
 				model.rot = modelData[i].rot;
 				model.scale = modelData[i].scale;

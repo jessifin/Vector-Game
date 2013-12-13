@@ -433,7 +433,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+			//Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
