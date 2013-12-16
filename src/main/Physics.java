@@ -3,6 +3,7 @@ package main;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -80,17 +81,22 @@ public class Physics {
 		return shape;
 	}
 	
-	private static BoxShape createBox(Vector3f lengths) {
+	public static BoxShape createBox(Vector3f lengths) {
 		BoxShape shape = new BoxShape(lengths);
 		return shape;
 	}
 	
-	private static SphereShape createSphere(float radius) {
+	public static SphereShape createSphere(float radius) {
 		SphereShape shape = new SphereShape(radius);
 		return shape;
 	}
 	
-	private static RigidBody createRigidBody(float mass, float restitution, Transform transform, CollisionShape shape) {		
+	public static StaticPlaneShape createPlane(Vector3f normal) {
+		StaticPlaneShape shape = new StaticPlaneShape(normal, 1);
+		return shape;
+	}
+	
+	public static RigidBody createRigidBody(float mass, float restitution, Transform transform, CollisionShape shape) {		
 		Vector3f localInertia = new Vector3f(0,0,0);
 		if(mass != 0) {
 			shape.calculateLocalInertia(mass, localInertia);
@@ -106,7 +112,7 @@ public class Physics {
 		return body;
 	}
 	
-	public static void addSphere(Entity entity, float mass, float rest, float radius) {
+	public static void addSphere(Entity entity, float mass, float rest, float frict, float radius) {
 		CollisionShape shape = createSphere(radius);
 		Transform transform = new Transform();
 		transform.setIdentity();
@@ -114,29 +120,59 @@ public class Physics {
 		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
-		body.setFriction(10);
+		body.setFriction(frict);
 
 		world.addRigidBody(body);
 		
 		entity.body = body;
 	}
 	
-	public static void addBox(Entity entity, float mass, float rest, Vector3f lengths) {
-		CollisionShape shape = createBox(lengths);
+	public static void addPlane(float rest, float frict, Vector3f pos) {
+		CollisionShape shape = createPlane(new Vector3f(0,1,0));
+		Transform transform = new Transform();
+		transform.setRotation(new Quat4f(0,0,0,1));
+		
+		RigidBody body = createRigidBody(0,rest,transform,shape);
+		body.setFriction(frict);
+		body.translate(pos);
+
+		world.addRigidBody(body);
+	}
+	
+	public static void addPlane(Entity entity, float rest, float frict, float height) {
+		CollisionShape shape = createPlane(new Vector3f(0,1,0));
+		Transform transform = new Transform();
+		transform.setIdentity();
+		transform.setRotation(new Quat4f(0,0,0,1));
+		
+		RigidBody body = createRigidBody(0,rest,transform,shape);
+		body.setFriction(frict);
+		body.translate(entity.pos);
+
+		world.addRigidBody(body);
+		
+		entity.body = body;
+	}
+	
+	public static void addBox(Entity entity, float mass, float rest, float frict) {
+		CollisionShape shape = createBox(new Vector3f(
+				entity.scale.x,
+				entity.scale.y,
+				entity.scale.z));
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(entity.pos);
 		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
-		body.setFriction(10);
+		body.setFriction(frict);
 
 		world.addRigidBody(body);
 		
 		entity.body = body;
 	}
 	
-	public static void addBox(Vector3f pos, float mass, float rest, Vector3f lengths) {
+	public static void addBox(Vector3f pos, float mass, float rest, float frict, Vector3f lengths) {
 		CollisionShape shape = createBox(lengths);
 		Transform transform = new Transform();
 		transform.setIdentity();
@@ -144,7 +180,7 @@ public class Physics {
 		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
-		body.setFriction(10);
+		body.setFriction(frict);
 
 		world.addRigidBody(body);
 	}
@@ -152,6 +188,7 @@ public class Physics {
 	public static void addEntity(Entity entity, float mass, float rest) {
 		
 		CollisionShape shape = createMesh(entity.model[0]);
+		shape.setLocalScaling(entity.scale);
 		/*
 		MotionState motionState = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0,0,0,1),new Vector3f(0,0,0), 1)));
 		RigidBodyConstructionInfo construction = new RigidBodyConstructionInfo(5, motionState, shape, new Vector3f(0,0,0));
@@ -161,7 +198,7 @@ public class Physics {
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(entity.pos);
-		transform.setRotation(new Quat4f(1,0,0,1));
+		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
 		//body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
@@ -183,13 +220,59 @@ public class Physics {
 			if(e.body != null ) {
 				Transform transform = new Transform();
 				e.pos = e.body.getWorldTransform(transform).origin;
-				Quat4f quat = new Quat4f();
-				e.body.getWorldTransform(transform).getRotation(quat);
-				e.rot.x = quat.x;
-				e.rot.y = quat.y;
-				e.rot.z = quat.z;
+				Matrix3f rotMat = transform.basis;
+				Vector3f rot = new Vector3f();
+				rot.y = (float) Math.asin(rotMat.getElement(2,0));
+				float c = (float) Math.cos(rot.y);
+				if(Math.abs(c) > .005f) {
+					float TRX = rotMat.getElement(2,2)/c;
+					float TRY = rotMat.getElement(2,1)/c;
+					rot.x = (float)Math.atan2(TRY, TRX);
+					
+					TRX = rotMat.getElement(0,0)/c;
+					TRY = rotMat.getElement(1,0)/c;
+					rot.z = (float)Math.atan2(TRY, TRX);
+				} else {
+					rot.x = 0;
+					float TRX = rotMat.getElement(1,1);
+					float TRY = rotMat.getElement(1,0);
+					rot.z = (float)Math.atan2(TRY, TRX);
+				}
+				e.rot = rot;
+				//printMatrix(rotMat);
+				/*
+				Matrix3f xRotMat = new Matrix3f(new float[] {
+						1, 0, 0,
+						0, (float) Math.cos(rot.x), - (float) Math.sin(rot.x),
+						0, (float) Math.sin(rot.x), (float) Math.cos(rot.x),
+				});
+				
+				Matrix3f yRotMat = new Matrix3f(new float[] {
+						(float) Math.cos(rot.y), 0, (float) Math.sin(rot.y),
+						0, 1, 0,
+						- (float) Math.sin(rot.y), 0, (float) Math.cos(rot.y),
+				});
+				
+				Matrix3f zRotMat = new Matrix3f(new float[] {
+						(float) Math.cos(rot.z), - (float) Math.sin(rot.z), 0,
+						(float) Math.sin(rot.z), (float) Math.cos(rot.z), 0,
+						0, 0, 1,
+				});
+				xRotMat.mul(yRotMat); xRotMat.mul(zRotMat);
+				printMatrix(xRotMat);
+				*/
 			}
 		}
+	}
+	
+	public static void printMatrix(Matrix3f mat) {
+		for(int y = 0; y < 3; y++) {
+			for(int x = 0; x < 3; x++) {
+				System.out.print(mat.getElement(x,y) + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 	
 	public static void destroy() {

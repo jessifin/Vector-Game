@@ -5,6 +5,8 @@ import static org.lwjgl.input.Keyboard.*;
 import javax.vecmath.Vector3f;
 
 import game.Game;
+import game.Level;
+import game.LevelIO;
 import graphics.Graphics;
 
 import org.lwjgl.input.Keyboard;
@@ -57,7 +59,9 @@ public class Input {
 			keyboardInfo[keyID].nanosPressed = (int) getEventNanoseconds();
 			keyboardInfo[keyID].state = getEventKeyState();
 		}
-		
+		if(keyboardInfo[Keyboard.KEY_S].state && keyboardInfo[Keyboard.KEY_RETURN].state) {
+			LevelIO.writeLevel("test2", new Level(Game.entities));
+		}
 		if(keyboardInfo[KEY_W].state) {
 			Vector3f forward = new Vector3f(
 					Game.player.pos.x - Game.camPos.x,

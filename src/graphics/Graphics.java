@@ -121,7 +121,7 @@ public class Graphics {
 				Game.player.pos.x - Game.camPos.x,
 				Game.player.pos.y - Game.camPos.y,
 				Game.player.pos.z - Game.camPos.z
-				);
+		);
 		
 		forward.normalize();
 		
@@ -231,14 +231,14 @@ public class Graphics {
 				model.colorFill.z * entity.colorFill.z,
 				model.colorFill.w * entity.colorFill.w);
 		
-		int indicesToDraw = (int)(model.indexCount * (float)(entity.health)/(float)(entity.maxHealth));
+		int indicesToDraw = (int)(model.indexCount * entity.health/(float)(entity.maxHealth));
 		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
 		if(model.indicesToRender != indicesToDraw) {
 			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
 					model.colorFill.y * entity.colorFill.y,
 					model.colorFill.z * entity.colorFill.z,
 					0.4f);
-		//	glDrawElements(GL_TRIANGLES, model.indexCount - indicesToDraw, GL_UNSIGNED_SHORT, model.indicesToRender);
+		//	glDrawElements(GL_TRIANGLES, model.indexCount - indicesToDraw, GL_UNSIGNED_SHORT, indicesToDraw);
 		}
 	
 		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x * entity.colorLine.x,

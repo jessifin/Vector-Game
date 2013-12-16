@@ -9,6 +9,11 @@ import java.util.Scanner;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.shapes.SphereShape;
+import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.dynamics.RigidBody;
+
+import main.Physics;
 import model.Model;
 import model.ModelParser;
 import entity.Entity;
@@ -33,8 +38,24 @@ public class LevelIO {
 			outputStream.println("colorf = " + e.colorFill.x + " " + e.colorFill.y + " " + e.colorFill.z + " " + e.colorFill.w);
 			outputStream.println("colorl = " + e.colorLine.x + " " + e.colorLine.y + " " + e.colorLine.z + " " + e.colorLine.w);
 			if(e.body != null) {
-				outputStream.println("phys.shape = " + e.body.getCollisionShape().getName());
-				outputStream.println("phys.mass = " + 1f/e.body.getInvMass());
+				String collisionShape =  e.body.getCollisionShape().getName();
+				float mass = 1f/e.body.getInvMass();
+				if(mass==Float.POSITIVE_INFINITY) {
+					mass = 0;
+				}
+				float restitution = e.body.getRestitution();
+				float friction = e.body.getFriction();
+				String phys = "phys = " + collisionShape + " " + mass + " " + restitution + " " + friction + " ";
+				if(collisionShape.equals("SPHERE")) {
+					float radius = ((SphereShape)(e.body.getCollisionShape())).getRadius();
+					outputStream.println(phys + radius);
+				} else if(collisionShape.equals("BOX")) {
+					Vector3f lengths = new Vector3f();
+					((BoxShape)(e.body.getCollisionShape())).getHalfExtentsWithMargin(lengths);
+					outputStream.println(phys + lengths.x + " " + lengths.y + " " + lengths.z);
+				} else if(collisionShape.equals("BVHTRIANGLEMESH")) {
+					outputStream.println(phys);
+				}
 			}
 			outputStream.println("Model Count: " + e.model.length);
 			for(int i = 0; i < e.model.length; i++) {
@@ -62,11 +83,13 @@ public class LevelIO {
 		String line = "";
 		ArrayList<Entity> entities = new ArrayList<Entity>();
 		Entity currentEntity = null;
+		boolean createTriangleMesh = false; float meshMass = 5; float meshRest = 0.1f; float meshFrict = 0;
 		Model[] currentModels = new Model[1];
 		while(scan.hasNext()) {
 			line = scan.nextLine();
 			if(line.equals("EntityPlayer")) {
 				currentEntity = new EntityPlayer();
+				Game.player = (EntityPlayer)currentEntity;
 				continue;
 			}
 			if(line.equals("EntityVirus")) {
@@ -79,12 +102,15 @@ public class LevelIO {
 			}
 			if(line.equals("end")) {
 				currentEntity.model = currentModels.clone();
-				entities.add(currentEntity.copy());
+				if(createTriangleMesh) {
+					Physics.addEntity(currentEntity, meshMass, meshRest);
+					createTriangleMesh = false;
+				}
+				entities.add(currentEntity);
 				continue;
 			}
 			if(line.contains("Count")) {
 				int count = Integer.valueOf(line.split(":")[1].replaceAll(" ", ""));
-				System.out.println(count);
 				currentModels = new Model[count];
 				continue;
 			}
@@ -184,7 +210,7 @@ public class LevelIO {
 						}
 					}
 				} else {
-					currentEntity.model = ModelParser.getModel(parts[parts.length-1]);
+					currentEntity.model = ModelParser.getModel(parts[parts.length-1].replaceAll(" ",""));
 					continue;
 				}
 			}
@@ -262,6 +288,51 @@ public class LevelIO {
 				}
 				currentEntity.colorLine = new Color4f(color);
 				continue;
+			}
+			if(line.startsWith("phys")) {
+				String type = "";
+				if(line.split("=")[1].split(" ")[0].equals("")) {
+					type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
+				} else {
+					type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
+				}
+				if(type.equals("SPHERE")) {
+					String[] attributes = line.split("=")[1].split(" ");
+					int start = 1;
+					if(attributes[0].equals("")) {
+						start = 2;
+					}
+					float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+					float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+					float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
+					float radius = Float.valueOf(attributes[start+3].replaceAll(" ",""));
+					Physics.addSphere(currentEntity, mass, restitution, friction, radius);
+				} else if(type.equals("BOX")) {
+					String[] attributes = line.split("=")[1].split(" ");
+					int start = 1;
+					if(attributes[0].equals("")) {
+						start = 2;
+					}
+					float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+					float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+					float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
+					float width = Float.valueOf(attributes[start+3].replaceAll(" ",""));
+					float height = Float.valueOf(attributes[start+4].replaceAll(" ",""));
+					float depth = Float.valueOf(attributes[start+5].replaceAll(" ",""));
+					Vector3f lengths = new Vector3f(width,height,depth);
+					currentEntity.scale = lengths;
+					Physics.addBox(currentEntity, mass, restitution, friction);
+				} else if(type.equals("BVHTRIANGLEMESH")) {
+					createTriangleMesh = true;
+					String[] attributes = line.split("=")[1].split(" ");
+					int start = 1;
+					if(attributes[0].equals("")) {
+						start = 2;
+					}
+					meshMass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+					meshRest = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+					meshFrict = Float.valueOf(attributes[start+2].replaceAll(" ", ""));
+				}
 			}
 		}
 		Level level = new Level(entities);
