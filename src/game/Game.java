@@ -48,7 +48,7 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		
 		player = new EntityPlayer();
-		player.model = ModelParser.getModel("sphere.dae");
+		player.model = ModelParser.getModel("poogeon2.dae");
 		player.scale = new Vector3f(10,10,10);
 		player.pos = new Vector3f(10,20,0);
 		for(Model m: player.model) {
@@ -69,9 +69,9 @@ public class Game {
 		
 		Terrain terrain = new Terrain();
 		terrain.pos = new Vector3f(0,-10,0);
-		terrain.scale = new Vector3f(100,5,100);
+		terrain.scale = new Vector3f(100,100,100);
 		entities.add(terrain);
-		Physics.addBox(terrain, 0, 0, 10);
+		//Physics.addBox(terrain, 0, 0, 10);
 		Physics.addPlane(0, 10, new Vector3f(0,-100,0));
 		
 		gui = new GUIHUD();

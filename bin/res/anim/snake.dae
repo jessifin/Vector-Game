@@ -1,0 +1,2136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.68.0 r58536</authoring_tool>
+    </contributor>
+    <created>2013-11-22T15:10:59</created>
+    <modified>2013-11-22T15:10:59</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_geometries>
+    <geometry id="Icosphere_002-mesh" name="Icosphere.002">
+      <mesh>
+        <source id="Icosphere_002-mesh-positions">
+          <float_array id="Icosphere_002-mesh-positions-array" count="126">0 0 -1 0.7236073 -0.5257253 -0.4472195 -0.276388 -0.8506492 -0.4472199 -0.8944262 0 -0.4472156 -0.276388 0.8506492 -0.4472199 0.7236073 0.5257253 -0.4472195 0.276388 -0.8506492 0.4472199 -0.7236073 -0.5257253 0.4472195 -0.7236073 0.5257253 0.4472195 0.276388 0.8506492 0.4472199 0.8944262 0 0.4472156 0 0 1 0.4253227 -0.3090114 -0.8506542 0.2628688 -0.8090116 -0.5257377 -0.1624554 -0.4999952 -0.8506544 0.4253227 0.3090114 -0.8506542 0.8506479 0 -0.5257359 -0.6881894 -0.4999969 -0.5257362 -0.5257298 0 -0.8506517 -0.6881894 0.4999969 -0.5257362 -0.1624554 0.4999952 -0.8506544 0.2628688 0.8090116 -0.5257377 0.9510579 0.3090126 0 0.9510579 -0.3090126 0 0.5877856 -0.8090167 0 0 -1 0 -0.5877856 -0.8090167 0 -0.9510579 -0.3090126 0 -0.9510579 0.3090126 0 -0.5877856 0.8090167 0 0 1 0 0.5877856 0.8090167 0 0.6881894 -0.4999969 0.5257362 -0.2628688 -0.8090116 0.5257377 -0.8506479 0 0.5257359 -0.2628688 0.8090116 0.5257377 0.6881894 0.4999969 0.5257362 0.5257298 0 0.8506517 0.1624554 -0.4999952 0.8506544 -0.4253227 -0.3090114 0.8506542 -0.4253227 0.3090114 0.8506542 0.1624554 0.4999952 0.8506544</float_array>
+          <technique_common>
+            <accessor source="#Icosphere_002-mesh-positions-array" count="42" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Icosphere_002-mesh-normals">
+          <float_array id="Icosphere_002-mesh-normals-array" count="240">0.1023809 -0.3150898 -0.9435235 0.7002239 -0.2680318 -0.6616988 -0.2680342 -0.1947365 -0.9435229 -0.2680342 0.1947366 -0.9435229 0.1023809 0.3150898 -0.9435235 0.904989 -0.2680316 -0.3303846 0.02474653 -0.9435213 -0.3303863 -0.8896972 -0.3150946 -0.3303848 -0.5746018 0.7487835 -0.3303876 0.5345759 0.7778646 -0.3303866 0.802609 -0.5831264 -0.1256273 -0.306569 -0.9435214 -0.1256288 -0.9920774 0 -0.1256284 -0.306569 0.9435214 -0.1256288 0.802609 0.5831264 -0.1256273 0.408946 -0.6284251 0.6616985 -0.4712997 -0.5831223 0.6616986 -0.700224 0.2680318 0.6616988 0.0385304 0.748779 0.6616989 0.7240422 0.1947361 0.6616953 -0.0385304 -0.748779 -0.6616989 0.1875942 -0.5773454 -0.7946577 0.4712997 -0.5831224 -0.6616986 0.7002239 0.2680318 -0.6616988 0.6070605 0 -0.7946556 0.3313045 0 -0.9435238 -0.7240422 -0.1947361 -0.6616953 -0.4911192 -0.3568211 -0.7946575 -0.408946 -0.6284251 -0.6616985 -0.408946 0.6284251 -0.6616985 -0.4911192 0.3568211 -0.7946575 -0.7240422 0.1947361 -0.6616953 0.4712997 0.5831223 -0.6616986 0.1875942 0.5773453 -0.7946577 -0.0385304 0.748779 -0.661699 0.9920774 0 0.1256284 0.9822458 0 -0.1875985 0.904989 0.2680315 -0.3303846 0.306569 -0.9435214 0.1256288 0.3035309 -0.9341714 -0.1875975 0.5345759 -0.7778645 -0.3303866 -0.802609 -0.5831264 0.1256273 -0.7946556 -0.5773479 -0.187595 -0.5746018 -0.7487835 -0.3303876 -0.802609 0.5831264 0.1256273 -0.7946556 0.5773479 -0.187595 -0.8896972 0.3150946 -0.3303848 0.306569 0.9435214 0.1256288 0.3035309 0.9341714 -0.1875975 0.02474653 0.9435212 -0.3303863 0.5746018 -0.7487835 0.3303876 0.7946556 -0.5773479 0.1875951 0.8896972 -0.3150946 0.3303848 -0.5345759 -0.7778646 0.3303866 -0.3035309 -0.9341714 0.1875975 -0.02474653 -0.9435212 0.3303863 -0.904989 0.2680316 0.3303846 -0.9822458 0 0.1875985 -0.904989 -0.2680315 0.3303846 -0.02474653 0.9435213 0.3303863 -0.3035309 0.9341714 0.1875975 -0.5345759 0.7778645 0.3303866 0.8896972 0.3150946 0.3303848 0.7946556 0.5773479 0.187595 0.5746018 0.7487835 0.3303876 0.2680342 -0.1947366 0.9435229 0.4911192 -0.3568212 0.7946575 0.7240422 -0.1947361 0.6616953 -0.1023809 -0.3150898 0.9435235 -0.1875942 -0.5773454 0.7946577 0.0385304 -0.748779 0.661699 -0.3313045 0 0.9435238 -0.6070605 0 0.7946556 -0.7002239 -0.2680318 0.6616988 -0.1023809 0.3150898 0.9435235 -0.1875942 0.5773454 0.7946577 -0.4712997 0.5831224 0.6616986 0.2680342 0.1947365 0.9435229 0.4911192 0.3568212 0.7946575 0.408946 0.6284251 0.6616985</float_array>
+          <technique_common>
+            <accessor source="#Icosphere_002-mesh-normals-array" count="80" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Icosphere_002-mesh-vertices">
+          <input semantic="POSITION" source="#Icosphere_002-mesh-positions"/>
+        </vertices>
+        <polylist count="80">
+          <input semantic="VERTEX" source="#Icosphere_002-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Icosphere_002-mesh-normals" offset="1"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>0 0 12 0 14 0 1 1 12 1 16 1 0 2 14 2 18 2 0 3 18 3 20 3 0 4 20 4 15 4 1 5 16 5 23 5 2 6 13 6 25 6 3 7 17 7 27 7 4 8 19 8 29 8 5 9 21 9 31 9 1 10 23 10 24 10 2 11 25 11 26 11 3 12 27 12 28 12 4 13 29 13 30 13 5 14 31 14 22 14 6 15 32 15 38 15 7 16 33 16 39 16 8 17 34 17 40 17 9 18 35 18 41 18 10 19 36 19 37 19 14 20 13 20 2 20 14 21 12 21 13 21 12 22 1 22 13 22 16 23 15 23 5 23 16 24 12 24 15 24 12 25 0 25 15 25 18 26 17 26 3 26 18 27 14 27 17 27 14 28 2 28 17 28 20 29 19 29 4 29 20 30 18 30 19 30 18 31 3 31 19 31 15 32 21 32 5 32 15 33 20 33 21 33 20 34 4 34 21 34 23 35 22 35 10 35 23 36 16 36 22 36 16 37 5 37 22 37 25 38 24 38 6 38 25 39 13 39 24 39 13 40 1 40 24 40 27 41 26 41 7 41 27 42 17 42 26 42 17 43 2 43 26 43 29 44 28 44 8 44 29 45 19 45 28 45 19 46 3 46 28 46 31 47 30 47 9 47 31 48 21 48 30 48 21 49 4 49 30 49 24 50 32 50 6 50 24 51 23 51 32 51 23 52 10 52 32 52 26 53 33 53 7 53 26 54 25 54 33 54 25 55 6 55 33 55 28 56 34 56 8 56 28 57 27 57 34 57 27 58 7 58 34 58 30 59 35 59 9 59 30 60 29 60 35 60 29 61 8 61 35 61 22 62 36 62 10 62 22 63 31 63 36 63 31 64 9 64 36 64 38 65 37 65 11 65 38 66 32 66 37 66 32 67 10 67 37 67 39 68 38 68 11 68 39 69 33 69 38 69 33 70 6 70 38 70 40 71 39 71 11 71 40 72 34 72 39 72 34 73 7 73 39 73 41 74 40 74 11 74 41 75 35 75 40 75 35 76 8 76 40 76 37 77 41 77 11 77 37 78 36 78 41 78 36 79 9 79 41 79</p>
+        </polylist>
+      </mesh>
+      <extra><technique profile="MAYA"><double_sided>1</double_sided></technique></extra>
+    </geometry>
+    <geometry id="Icosphere_001-mesh" name="Icosphere.001">
+      <mesh>
+        <source id="Icosphere_001-mesh-positions">
+          <float_array id="Icosphere_001-mesh-positions-array" count="126">0 0 -1 0.7236073 -0.5257253 -0.4472195 -0.276388 -0.8506492 -0.4472199 -0.8944262 0 -0.4472156 -0.276388 0.8506492 -0.4472199 0.7236073 0.5257253 -0.4472195 0.276388 -0.8506492 0.4472199 -0.7236073 -0.5257253 0.4472195 -0.7236073 0.5257253 0.4472195 0.276388 0.8506492 0.4472199 0.8944262 0 0.4472156 0 0 1 0.4253227 -0.3090114 -0.8506542 0.2628688 -0.8090116 -0.5257377 -0.1624554 -0.4999952 -0.8506544 0.4253227 0.3090114 -0.8506542 0.8506479 0 -0.5257359 -0.6881894 -0.4999969 -0.5257362 -0.5257298 0 -0.8506517 -0.6881894 0.4999969 -0.5257362 -0.1624554 0.4999952 -0.8506544 0.2628688 0.8090116 -0.5257377 0.9510579 0.3090126 0 0.9510579 -0.3090126 0 0.5877856 -0.8090167 0 0 -1 0 -0.5877856 -0.8090167 0 -0.9510579 -0.3090126 0 -0.9510579 0.3090126 0 -0.5877856 0.8090167 0 0 1 0 0.5877856 0.8090167 0 0.6881894 -0.4999969 0.5257362 -0.2628688 -0.8090116 0.5257377 -0.8506479 0 0.5257359 -0.2628688 0.8090116 0.5257377 0.6881894 0.4999969 0.5257362 0.5257298 0 0.8506517 0.1624554 -0.4999952 0.8506544 -0.4253227 -0.3090114 0.8506542 -0.4253227 0.3090114 0.8506542 0.1624554 0.4999952 0.8506544</float_array>
+          <technique_common>
+            <accessor source="#Icosphere_001-mesh-positions-array" count="42" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Icosphere_001-mesh-normals">
+          <float_array id="Icosphere_001-mesh-normals-array" count="240">0.1023809 -0.3150898 -0.9435235 0.7002239 -0.2680318 -0.6616988 -0.2680342 -0.1947365 -0.9435229 -0.2680342 0.1947366 -0.9435229 0.1023809 0.3150898 -0.9435235 0.904989 -0.2680316 -0.3303846 0.02474653 -0.9435213 -0.3303863 -0.8896972 -0.3150946 -0.3303848 -0.5746018 0.7487835 -0.3303876 0.5345759 0.7778646 -0.3303866 0.802609 -0.5831264 -0.1256273 -0.306569 -0.9435214 -0.1256288 -0.9920774 0 -0.1256284 -0.306569 0.9435214 -0.1256288 0.802609 0.5831264 -0.1256273 0.408946 -0.6284251 0.6616985 -0.4712997 -0.5831223 0.6616986 -0.700224 0.2680318 0.6616988 0.0385304 0.748779 0.6616989 0.7240422 0.1947361 0.6616953 -0.0385304 -0.748779 -0.6616989 0.1875942 -0.5773454 -0.7946577 0.4712997 -0.5831224 -0.6616986 0.7002239 0.2680318 -0.6616988 0.6070605 0 -0.7946556 0.3313045 0 -0.9435238 -0.7240422 -0.1947361 -0.6616953 -0.4911192 -0.3568211 -0.7946575 -0.408946 -0.6284251 -0.6616985 -0.408946 0.6284251 -0.6616985 -0.4911192 0.3568211 -0.7946575 -0.7240422 0.1947361 -0.6616953 0.4712997 0.5831223 -0.6616986 0.1875942 0.5773453 -0.7946577 -0.0385304 0.748779 -0.661699 0.9920774 0 0.1256284 0.9822458 0 -0.1875985 0.904989 0.2680315 -0.3303846 0.306569 -0.9435214 0.1256288 0.3035309 -0.9341714 -0.1875975 0.5345759 -0.7778645 -0.3303866 -0.802609 -0.5831264 0.1256273 -0.7946556 -0.5773479 -0.187595 -0.5746018 -0.7487835 -0.3303876 -0.802609 0.5831264 0.1256273 -0.7946556 0.5773479 -0.187595 -0.8896972 0.3150946 -0.3303848 0.306569 0.9435214 0.1256288 0.3035309 0.9341714 -0.1875975 0.02474653 0.9435212 -0.3303863 0.5746018 -0.7487835 0.3303876 0.7946556 -0.5773479 0.1875951 0.8896972 -0.3150946 0.3303848 -0.5345759 -0.7778646 0.3303866 -0.3035309 -0.9341714 0.1875975 -0.02474653 -0.9435212 0.3303863 -0.904989 0.2680316 0.3303846 -0.9822458 0 0.1875985 -0.904989 -0.2680315 0.3303846 -0.02474653 0.9435213 0.3303863 -0.3035309 0.9341714 0.1875975 -0.5345759 0.7778645 0.3303866 0.8896972 0.3150946 0.3303848 0.7946556 0.5773479 0.187595 0.5746018 0.7487835 0.3303876 0.2680342 -0.1947366 0.9435229 0.4911192 -0.3568212 0.7946575 0.7240422 -0.1947361 0.6616953 -0.1023809 -0.3150898 0.9435235 -0.1875942 -0.5773454 0.7946577 0.0385304 -0.748779 0.661699 -0.3313045 0 0.9435238 -0.6070605 0 0.7946556 -0.7002239 -0.2680318 0.6616988 -0.1023809 0.3150898 0.9435235 -0.1875942 0.5773454 0.7946577 -0.4712997 0.5831224 0.6616986 0.2680342 0.1947365 0.9435229 0.4911192 0.3568212 0.7946575 0.408946 0.6284251 0.6616985</float_array>
+          <technique_common>
+            <accessor source="#Icosphere_001-mesh-normals-array" count="80" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Icosphere_001-mesh-vertices">
+          <input semantic="POSITION" source="#Icosphere_001-mesh-positions"/>
+        </vertices>
+        <polylist count="80">
+          <input semantic="VERTEX" source="#Icosphere_001-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Icosphere_001-mesh-normals" offset="1"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>0 0 12 0 14 0 1 1 12 1 16 1 0 2 14 2 18 2 0 3 18 3 20 3 0 4 20 4 15 4 1 5 16 5 23 5 2 6 13 6 25 6 3 7 17 7 27 7 4 8 19 8 29 8 5 9 21 9 31 9 1 10 23 10 24 10 2 11 25 11 26 11 3 12 27 12 28 12 4 13 29 13 30 13 5 14 31 14 22 14 6 15 32 15 38 15 7 16 33 16 39 16 8 17 34 17 40 17 9 18 35 18 41 18 10 19 36 19 37 19 14 20 13 20 2 20 14 21 12 21 13 21 12 22 1 22 13 22 16 23 15 23 5 23 16 24 12 24 15 24 12 25 0 25 15 25 18 26 17 26 3 26 18 27 14 27 17 27 14 28 2 28 17 28 20 29 19 29 4 29 20 30 18 30 19 30 18 31 3 31 19 31 15 32 21 32 5 32 15 33 20 33 21 33 20 34 4 34 21 34 23 35 22 35 10 35 23 36 16 36 22 36 16 37 5 37 22 37 25 38 24 38 6 38 25 39 13 39 24 39 13 40 1 40 24 40 27 41 26 41 7 41 27 42 17 42 26 42 17 43 2 43 26 43 29 44 28 44 8 44 29 45 19 45 28 45 19 46 3 46 28 46 31 47 30 47 9 47 31 48 21 48 30 48 21 49 4 49 30 49 24 50 32 50 6 50 24 51 23 51 32 51 23 52 10 52 32 52 26 53 33 53 7 53 26 54 25 54 33 54 25 55 6 55 33 55 28 56 34 56 8 56 28 57 27 57 34 57 27 58 7 58 34 58 30 59 35 59 9 59 30 60 29 60 35 60 29 61 8 61 35 61 22 62 36 62 10 62 22 63 31 63 36 63 31 64 9 64 36 64 38 65 37 65 11 65 38 66 32 66 37 66 32 67 10 67 37 67 39 68 38 68 11 68 39 69 33 69 38 69 33 70 6 70 38 70 40 71 39 71 11 71 40 72 34 72 39 72 34 73 7 73 39 73 41 74 40 74 11 74 41 75 35 75 40 75 35 76 8 76 40 76 37 77 41 77 11 77 37 78 36 78 41 78 36 79 9 79 41 79</p>
+        </polylist>
+      </mesh>
+      <extra><technique profile="MAYA"><double_sided>1</double_sided></technique></extra>
+    </geometry>
+    <geometry id="Icosphere-mesh" name="Icosphere">
+      <mesh>
+        <source id="Icosphere-mesh-positions">
+          <float_array id="Icosphere-mesh-positions-array" count="126">0 0 -1 0.7236073 -0.5257253 -0.4472195 -0.276388 -0.8506492 -0.4472199 -0.8944262 0 -0.4472156 -0.276388 0.8506492 -0.4472199 0.7236073 0.5257253 -0.4472195 0.276388 -0.8506492 0.4472199 -0.7236073 -0.5257253 0.4472195 -0.7236073 0.5257253 0.4472195 0.276388 0.8506492 0.4472199 0.8944262 0 0.4472156 0 0 1 0.4253227 -0.3090114 -0.8506542 0.2628688 -0.8090116 -0.5257377 -0.1624554 -0.4999952 -0.8506544 0.4253227 0.3090114 -0.8506542 0.8506479 0 -0.5257359 -0.6881894 -0.4999969 -0.5257362 -0.5257298 0 -0.8506517 -0.6881894 0.4999969 -0.5257362 -0.1624554 0.4999952 -0.8506544 0.2628688 0.8090116 -0.5257377 0.9510579 0.3090126 0 0.9510579 -0.3090126 0 0.5877856 -0.8090167 0 0 -1 0 -0.5877856 -0.8090167 0 -0.9510579 -0.3090126 0 -0.9510579 0.3090126 0 -0.5877856 0.8090167 0 0 1 0 0.5877856 0.8090167 0 0.6881894 -0.4999969 0.5257362 -0.2628688 -0.8090116 0.5257377 -0.8506479 0 0.5257359 -0.2628688 0.8090116 0.5257377 0.6881894 0.4999969 0.5257362 0.5257298 0 0.8506517 0.1624554 -0.4999952 0.8506544 -0.4253227 -0.3090114 0.8506542 -0.4253227 0.3090114 0.8506542 0.1624554 0.4999952 0.8506544</float_array>
+          <technique_common>
+            <accessor source="#Icosphere-mesh-positions-array" count="42" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Icosphere-mesh-normals">
+          <float_array id="Icosphere-mesh-normals-array" count="240">0.1023809 -0.3150898 -0.9435235 0.7002239 -0.2680318 -0.6616988 -0.2680342 -0.1947365 -0.9435229 -0.2680342 0.1947366 -0.9435229 0.1023809 0.3150898 -0.9435235 0.904989 -0.2680316 -0.3303846 0.02474653 -0.9435213 -0.3303863 -0.8896972 -0.3150946 -0.3303848 -0.5746018 0.7487835 -0.3303876 0.5345759 0.7778646 -0.3303866 0.802609 -0.5831264 -0.1256273 -0.306569 -0.9435214 -0.1256288 -0.9920774 0 -0.1256284 -0.306569 0.9435214 -0.1256288 0.802609 0.5831264 -0.1256273 0.408946 -0.6284251 0.6616985 -0.4712997 -0.5831223 0.6616986 -0.700224 0.2680318 0.6616988 0.0385304 0.748779 0.6616989 0.7240422 0.1947361 0.6616953 -0.0385304 -0.748779 -0.6616989 0.1875942 -0.5773454 -0.7946577 0.4712997 -0.5831224 -0.6616986 0.7002239 0.2680318 -0.6616988 0.6070605 0 -0.7946556 0.3313045 0 -0.9435238 -0.7240422 -0.1947361 -0.6616953 -0.4911192 -0.3568211 -0.7946575 -0.408946 -0.6284251 -0.6616985 -0.408946 0.6284251 -0.6616985 -0.4911192 0.3568211 -0.7946575 -0.7240422 0.1947361 -0.6616953 0.4712997 0.5831223 -0.6616986 0.1875942 0.5773453 -0.7946577 -0.0385304 0.748779 -0.661699 0.9920774 0 0.1256284 0.9822458 0 -0.1875985 0.904989 0.2680315 -0.3303846 0.306569 -0.9435214 0.1256288 0.3035309 -0.9341714 -0.1875975 0.5345759 -0.7778645 -0.3303866 -0.802609 -0.5831264 0.1256273 -0.7946556 -0.5773479 -0.187595 -0.5746018 -0.7487835 -0.3303876 -0.802609 0.5831264 0.1256273 -0.7946556 0.5773479 -0.187595 -0.8896972 0.3150946 -0.3303848 0.306569 0.9435214 0.1256288 0.3035309 0.9341714 -0.1875975 0.02474653 0.9435212 -0.3303863 0.5746018 -0.7487835 0.3303876 0.7946556 -0.5773479 0.1875951 0.8896972 -0.3150946 0.3303848 -0.5345759 -0.7778646 0.3303866 -0.3035309 -0.9341714 0.1875975 -0.02474653 -0.9435212 0.3303863 -0.904989 0.2680316 0.3303846 -0.9822458 0 0.1875985 -0.904989 -0.2680315 0.3303846 -0.02474653 0.9435213 0.3303863 -0.3035309 0.9341714 0.1875975 -0.5345759 0.7778645 0.3303866 0.8896972 0.3150946 0.3303848 0.7946556 0.5773479 0.187595 0.5746018 0.7487835 0.3303876 0.2680342 -0.1947366 0.9435229 0.4911192 -0.3568212 0.7946575 0.7240422 -0.1947361 0.6616953 -0.1023809 -0.3150898 0.9435235 -0.1875942 -0.5773454 0.7946577 0.0385304 -0.748779 0.661699 -0.3313045 0 0.9435238 -0.6070605 0 0.7946556 -0.7002239 -0.2680318 0.6616988 -0.1023809 0.3150898 0.9435235 -0.1875942 0.5773454 0.7946577 -0.4712997 0.5831224 0.6616986 0.2680342 0.1947365 0.9435229 0.4911192 0.3568212 0.7946575 0.408946 0.6284251 0.6616985</float_array>
+          <technique_common>
+            <accessor source="#Icosphere-mesh-normals-array" count="80" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Icosphere-mesh-vertices">
+          <input semantic="POSITION" source="#Icosphere-mesh-positions"/>
+        </vertices>
+        <polylist count="80">
+          <input semantic="VERTEX" source="#Icosphere-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Icosphere-mesh-normals" offset="1"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>0 0 12 0 14 0 1 1 12 1 16 1 0 2 14 2 18 2 0 3 18 3 20 3 0 4 20 4 15 4 1 5 16 5 23 5 2 6 13 6 25 6 3 7 17 7 27 7 4 8 19 8 29 8 5 9 21 9 31 9 1 10 23 10 24 10 2 11 25 11 26 11 3 12 27 12 28 12 4 13 29 13 30 13 5 14 31 14 22 14 6 15 32 15 38 15 7 16 33 16 39 16 8 17 34 17 40 17 9 18 35 18 41 18 10 19 36 19 37 19 14 20 13 20 2 20 14 21 12 21 13 21 12 22 1 22 13 22 16 23 15 23 5 23 16 24 12 24 15 24 12 25 0 25 15 25 18 26 17 26 3 26 18 27 14 27 17 27 14 28 2 28 17 28 20 29 19 29 4 29 20 30 18 30 19 30 18 31 3 31 19 31 15 32 21 32 5 32 15 33 20 33 21 33 20 34 4 34 21 34 23 35 22 35 10 35 23 36 16 36 22 36 16 37 5 37 22 37 25 38 24 38 6 38 25 39 13 39 24 39 13 40 1 40 24 40 27 41 26 41 7 41 27 42 17 42 26 42 17 43 2 43 26 43 29 44 28 44 8 44 29 45 19 45 28 45 19 46 3 46 28 46 31 47 30 47 9 47 31 48 21 48 30 48 21 49 4 49 30 49 24 50 32 50 6 50 24 51 23 51 32 51 23 52 10 52 32 52 26 53 33 53 7 53 26 54 25 54 33 54 25 55 6 55 33 55 28 56 34 56 8 56 28 57 27 57 34 57 27 58 7 58 34 58 30 59 35 59 9 59 30 60 29 60 35 60 29 61 8 61 35 61 22 62 36 62 10 62 22 63 31 63 36 63 31 64 9 64 36 64 38 65 37 65 11 65 38 66 32 66 37 66 32 67 10 67 37 67 39 68 38 68 11 68 39 69 33 69 38 69 33 70 6 70 38 70 40 71 39 71 11 71 40 72 34 72 39 72 34 73 7 73 39 73 41 74 40 74 11 74 41 75 35 75 40 75 35 76 8 76 40 76 37 77 41 77 11 77 37 78 36 78 41 78 36 79 9 79 41 79</p>
+        </polylist>
+      </mesh>
+      <extra><technique profile="MAYA"><double_sided>1</double_sided></technique></extra>
+    </geometry>
+  </library_geometries>
+  <library_animations>
+    <animation id="Icosphere_002_location_X">
+      <source id="Icosphere_002_location_X-input">
+        <float_array id="Icosphere_002_location_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_X-output">
+        <float_array id="Icosphere_002_location_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_X-interpolation">
+        <Name_array id="Icosphere_002_location_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_X-intangent">
+        <float_array id="Icosphere_002_location_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_X-outtangent">
+        <float_array id="Icosphere_002_location_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_location_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_location_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_location_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_location_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_location_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_location_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_location_X-sampler" target="Icosphere_002/location.X"/>
+    </animation>
+    <animation id="Icosphere_002_location_Y">
+      <source id="Icosphere_002_location_Y-input">
+        <float_array id="Icosphere_002_location_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Y-output">
+        <float_array id="Icosphere_002_location_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Y-interpolation">
+        <Name_array id="Icosphere_002_location_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Y-intangent">
+        <float_array id="Icosphere_002_location_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Y-outtangent">
+        <float_array id="Icosphere_002_location_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_location_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_location_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_location_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_location_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_location_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_location_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_location_Y-sampler" target="Icosphere_002/location.Y"/>
+    </animation>
+    <animation id="Icosphere_002_location_Z">
+      <source id="Icosphere_002_location_Z-input">
+        <float_array id="Icosphere_002_location_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Z-output">
+        <float_array id="Icosphere_002_location_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Z-interpolation">
+        <Name_array id="Icosphere_002_location_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Z-intangent">
+        <float_array id="Icosphere_002_location_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_location_Z-outtangent">
+        <float_array id="Icosphere_002_location_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_location_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_location_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_location_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_location_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_location_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_location_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_location_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_location_Z-sampler" target="Icosphere_002/location.Z"/>
+    </animation>
+    <animation id="Icosphere_002_rotation_euler_X">
+      <source id="Icosphere_002_rotation_euler_X-input">
+        <float_array id="Icosphere_002_rotation_euler_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_X-output">
+        <float_array id="Icosphere_002_rotation_euler_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_X-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_X-interpolation">
+        <Name_array id="Icosphere_002_rotation_euler_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_X-intangent">
+        <float_array id="Icosphere_002_rotation_euler_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_X-outtangent">
+        <float_array id="Icosphere_002_rotation_euler_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_rotation_euler_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_rotation_euler_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_rotation_euler_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_rotation_euler_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_rotation_euler_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_rotation_euler_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_rotation_euler_X-sampler" target="Icosphere_002/rotationX.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_002_rotation_euler_Y">
+      <source id="Icosphere_002_rotation_euler_Y-input">
+        <float_array id="Icosphere_002_rotation_euler_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Y-output">
+        <float_array id="Icosphere_002_rotation_euler_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Y-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Y-interpolation">
+        <Name_array id="Icosphere_002_rotation_euler_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Y-intangent">
+        <float_array id="Icosphere_002_rotation_euler_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Y-outtangent">
+        <float_array id="Icosphere_002_rotation_euler_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_rotation_euler_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_rotation_euler_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_rotation_euler_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_rotation_euler_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_rotation_euler_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_rotation_euler_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_rotation_euler_Y-sampler" target="Icosphere_002/rotationY.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_002_rotation_euler_Z">
+      <source id="Icosphere_002_rotation_euler_Z-input">
+        <float_array id="Icosphere_002_rotation_euler_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Z-output">
+        <float_array id="Icosphere_002_rotation_euler_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Z-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Z-interpolation">
+        <Name_array id="Icosphere_002_rotation_euler_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Z-intangent">
+        <float_array id="Icosphere_002_rotation_euler_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_rotation_euler_Z-outtangent">
+        <float_array id="Icosphere_002_rotation_euler_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_rotation_euler_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_rotation_euler_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_rotation_euler_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_rotation_euler_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_rotation_euler_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_rotation_euler_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_rotation_euler_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_rotation_euler_Z-sampler" target="Icosphere_002/rotationZ.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_002_scale_X">
+      <source id="Icosphere_002_scale_X-input">
+        <float_array id="Icosphere_002_scale_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_X-output">
+        <float_array id="Icosphere_002_scale_X-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_X-interpolation">
+        <Name_array id="Icosphere_002_scale_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_X-intangent">
+        <float_array id="Icosphere_002_scale_X-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_X-outtangent">
+        <float_array id="Icosphere_002_scale_X-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_scale_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_scale_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_scale_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_scale_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_scale_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_scale_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_scale_X-sampler" target="Icosphere_002/scale.X"/>
+    </animation>
+    <animation id="Icosphere_002_scale_Y">
+      <source id="Icosphere_002_scale_Y-input">
+        <float_array id="Icosphere_002_scale_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Y-output">
+        <float_array id="Icosphere_002_scale_Y-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Y-interpolation">
+        <Name_array id="Icosphere_002_scale_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Y-intangent">
+        <float_array id="Icosphere_002_scale_Y-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Y-outtangent">
+        <float_array id="Icosphere_002_scale_Y-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_scale_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_scale_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_scale_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_scale_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_scale_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_scale_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_scale_Y-sampler" target="Icosphere_002/scale.Y"/>
+    </animation>
+    <animation id="Icosphere_002_scale_Z">
+      <source id="Icosphere_002_scale_Z-input">
+        <float_array id="Icosphere_002_scale_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Z-output">
+        <float_array id="Icosphere_002_scale_Z-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Z-interpolation">
+        <Name_array id="Icosphere_002_scale_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Z-intangent">
+        <float_array id="Icosphere_002_scale_Z-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_002_scale_Z-outtangent">
+        <float_array id="Icosphere_002_scale_Z-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_002_scale_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_002_scale_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_002_scale_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_002_scale_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_002_scale_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_002_scale_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_002_scale_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_002_scale_Z-sampler" target="Icosphere_002/scale.Z"/>
+    </animation>
+    <animation id="Icosphere_001_location_X">
+      <source id="Icosphere_001_location_X-input">
+        <float_array id="Icosphere_001_location_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_X-output">
+        <float_array id="Icosphere_001_location_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_X-interpolation">
+        <Name_array id="Icosphere_001_location_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_X-intangent">
+        <float_array id="Icosphere_001_location_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_X-outtangent">
+        <float_array id="Icosphere_001_location_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_location_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_location_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_location_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_location_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_location_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_location_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_location_X-sampler" target="Icosphere_001/location.X"/>
+    </animation>
+    <animation id="Icosphere_001_location_Y">
+      <source id="Icosphere_001_location_Y-input">
+        <float_array id="Icosphere_001_location_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Y-output">
+        <float_array id="Icosphere_001_location_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Y-interpolation">
+        <Name_array id="Icosphere_001_location_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Y-intangent">
+        <float_array id="Icosphere_001_location_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Y-outtangent">
+        <float_array id="Icosphere_001_location_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_location_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_location_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_location_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_location_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_location_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_location_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_location_Y-sampler" target="Icosphere_001/location.Y"/>
+    </animation>
+    <animation id="Icosphere_001_location_Z">
+      <source id="Icosphere_001_location_Z-input">
+        <float_array id="Icosphere_001_location_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Z-output">
+        <float_array id="Icosphere_001_location_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Z-interpolation">
+        <Name_array id="Icosphere_001_location_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Z-intangent">
+        <float_array id="Icosphere_001_location_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_location_Z-outtangent">
+        <float_array id="Icosphere_001_location_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_location_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_location_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_location_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_location_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_location_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_location_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_location_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_location_Z-sampler" target="Icosphere_001/location.Z"/>
+    </animation>
+    <animation id="Icosphere_001_rotation_euler_X">
+      <source id="Icosphere_001_rotation_euler_X-input">
+        <float_array id="Icosphere_001_rotation_euler_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_X-output">
+        <float_array id="Icosphere_001_rotation_euler_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_X-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_X-interpolation">
+        <Name_array id="Icosphere_001_rotation_euler_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_X-intangent">
+        <float_array id="Icosphere_001_rotation_euler_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_X-outtangent">
+        <float_array id="Icosphere_001_rotation_euler_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_rotation_euler_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_rotation_euler_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_rotation_euler_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_rotation_euler_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_rotation_euler_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_rotation_euler_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_rotation_euler_X-sampler" target="Icosphere_001/rotationX.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_001_rotation_euler_Y">
+      <source id="Icosphere_001_rotation_euler_Y-input">
+        <float_array id="Icosphere_001_rotation_euler_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Y-output">
+        <float_array id="Icosphere_001_rotation_euler_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Y-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Y-interpolation">
+        <Name_array id="Icosphere_001_rotation_euler_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Y-intangent">
+        <float_array id="Icosphere_001_rotation_euler_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Y-outtangent">
+        <float_array id="Icosphere_001_rotation_euler_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_rotation_euler_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_rotation_euler_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_rotation_euler_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_rotation_euler_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_rotation_euler_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_rotation_euler_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_rotation_euler_Y-sampler" target="Icosphere_001/rotationY.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_001_rotation_euler_Z">
+      <source id="Icosphere_001_rotation_euler_Z-input">
+        <float_array id="Icosphere_001_rotation_euler_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Z-output">
+        <float_array id="Icosphere_001_rotation_euler_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Z-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Z-interpolation">
+        <Name_array id="Icosphere_001_rotation_euler_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Z-intangent">
+        <float_array id="Icosphere_001_rotation_euler_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_rotation_euler_Z-outtangent">
+        <float_array id="Icosphere_001_rotation_euler_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_rotation_euler_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_rotation_euler_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_rotation_euler_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_rotation_euler_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_rotation_euler_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_rotation_euler_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_rotation_euler_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_rotation_euler_Z-sampler" target="Icosphere_001/rotationZ.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_001_scale_X">
+      <source id="Icosphere_001_scale_X-input">
+        <float_array id="Icosphere_001_scale_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_X-output">
+        <float_array id="Icosphere_001_scale_X-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_X-interpolation">
+        <Name_array id="Icosphere_001_scale_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_X-intangent">
+        <float_array id="Icosphere_001_scale_X-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_X-outtangent">
+        <float_array id="Icosphere_001_scale_X-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_scale_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_scale_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_scale_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_scale_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_scale_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_scale_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_scale_X-sampler" target="Icosphere_001/scale.X"/>
+    </animation>
+    <animation id="Icosphere_001_scale_Y">
+      <source id="Icosphere_001_scale_Y-input">
+        <float_array id="Icosphere_001_scale_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Y-output">
+        <float_array id="Icosphere_001_scale_Y-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Y-interpolation">
+        <Name_array id="Icosphere_001_scale_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Y-intangent">
+        <float_array id="Icosphere_001_scale_Y-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Y-outtangent">
+        <float_array id="Icosphere_001_scale_Y-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_scale_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_scale_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_scale_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_scale_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_scale_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_scale_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_scale_Y-sampler" target="Icosphere_001/scale.Y"/>
+    </animation>
+    <animation id="Icosphere_001_scale_Z">
+      <source id="Icosphere_001_scale_Z-input">
+        <float_array id="Icosphere_001_scale_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Z-output">
+        <float_array id="Icosphere_001_scale_Z-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Z-interpolation">
+        <Name_array id="Icosphere_001_scale_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Z-intangent">
+        <float_array id="Icosphere_001_scale_Z-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_001_scale_Z-outtangent">
+        <float_array id="Icosphere_001_scale_Z-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_001_scale_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_001_scale_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_001_scale_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_001_scale_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_001_scale_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_001_scale_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_001_scale_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_001_scale_Z-sampler" target="Icosphere_001/scale.Z"/>
+    </animation>
+    <animation id="Armature_Bone_pose_matrix">
+      <source id="Armature_Bone_pose_matrix-input">
+        <float_array id="Armature_Bone_pose_matrix-input-array" count="3">0.04166662 1.666667 3.25</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_pose_matrix-input-array" count="3" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_pose_matrix-output">
+        <float_array id="Armature_Bone_pose_matrix-output-array" count="48">-0.5340195 -0.03076087 -0.7405948 0 0.05571205 0.908532 -0.07790837 0 0.7391368 -0.0907046 -0.5292007 0 0 0 0 1 4.90075e-7 0.9135665 -1.14351e-6 0 0.9135667 -5.44528e-7 7.47821e-7 0 6.93367e-7 -1.19796e-6 -0.9135666 0 0 0 0 1 0.495247 3.05423e-4 0.05702722 0 0.04592702 -0.2976602 -0.3972543 0 0.03380691 0.3999002 -0.2957343 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_pose_matrix-output-array" count="3" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_pose_matrix-interpolation">
+        <Name_array id="Armature_Bone_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_pose_matrix-interpolation-array" count="3" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_Bone_pose_matrix-sampler">
+        <input semantic="INPUT" source="#Armature_Bone_pose_matrix-input"/>
+        <input semantic="OUTPUT" source="#Armature_Bone_pose_matrix-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_Bone_pose_matrix-interpolation"/>
+      </sampler>
+      <channel source="#Armature_Bone_pose_matrix-sampler" target="Bone/transform"/>
+    </animation>
+    <animation id="Armature_Bone_001_pose_matrix">
+      <source id="Armature_Bone_001_pose_matrix-input">
+        <float_array id="Armature_Bone_001_pose_matrix-input-array" count="3">0.04166662 1.666667 3.25</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_001_pose_matrix-input-array" count="3" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_001_pose_matrix-output">
+        <float_array id="Armature_Bone_001_pose_matrix-output-array" count="48">-0.05311656 0.9865361 -0.1546779 0 -0.52678 -0.1592729 -0.8349462 1 -0.8483405 0.0371318 0.5281475 0 0 0 0 1 0.4777646 -0.6448798 -0.5965495 0 0.8728707 0.4251441 0.2394771 1 0.09918553 -0.6351242 0.7660154 0 0 0 0 1 0.4777646 -0.6448798 -0.5965495 0 0.8728707 0.4251441 0.2394771 1 0.09918553 -0.6351242 0.7660154 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_001_pose_matrix-output-array" count="3" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_001_pose_matrix-interpolation">
+        <Name_array id="Armature_Bone_001_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_001_pose_matrix-interpolation-array" count="3" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_Bone_001_pose_matrix-sampler">
+        <input semantic="INPUT" source="#Armature_Bone_001_pose_matrix-input"/>
+        <input semantic="OUTPUT" source="#Armature_Bone_001_pose_matrix-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_Bone_001_pose_matrix-interpolation"/>
+      </sampler>
+      <channel source="#Armature_Bone_001_pose_matrix-sampler" target="Bone_001/transform"/>
+    </animation>
+    <animation id="Armature_Bone_002_pose_matrix">
+      <source id="Armature_Bone_002_pose_matrix-input">
+        <float_array id="Armature_Bone_002_pose_matrix-input-array" count="3">0.04166662 1.666667 3.25</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_002_pose_matrix-input-array" count="3" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_002_pose_matrix-output">
+        <float_array id="Armature_Bone_002_pose_matrix-output-array" count="48">0.2384067 0.9711452 0.006263703 0 -0.6386586 0.1616369 -0.7523221 1 -0.7316264 0.1753581 0.6587656 0 0 0 0 1 -0.1423084 0.5901677 0.74005 0 -0.9458716 -0.06017106 -0.1339024 1 0.03603761 0.7512022 -0.5921315 0 0 0 0 1 1.924494 0.285509 -1.335503 0 1.267299 0.4866632 1.930251 1 0.5089557 -2.291375 0.2435586 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_002_pose_matrix-output-array" count="3" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_Bone_002_pose_matrix-interpolation">
+        <Name_array id="Armature_Bone_002_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#Armature_Bone_002_pose_matrix-interpolation-array" count="3" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_Bone_002_pose_matrix-sampler">
+        <input semantic="INPUT" source="#Armature_Bone_002_pose_matrix-input"/>
+        <input semantic="OUTPUT" source="#Armature_Bone_002_pose_matrix-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_Bone_002_pose_matrix-interpolation"/>
+      </sampler>
+      <channel source="#Armature_Bone_002_pose_matrix-sampler" target="Bone_002/transform"/>
+    </animation>
+    <animation id="Armature_location.X">
+      <source id="Armature_location.X-input">
+        <float_array id="Armature_location.X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.X-output">
+        <float_array id="Armature_location.X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.X-interpolation">
+        <Name_array id="Armature_location.X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_location.X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.X-intangent">
+        <float_array id="Armature_location.X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.X-outtangent">
+        <float_array id="Armature_location.X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_location.X-sampler">
+        <input semantic="INPUT" source="#Armature_location.X-input"/>
+        <input semantic="OUTPUT" source="#Armature_location.X-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_location.X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_location.X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_location.X-outtangent"/>
+      </sampler>
+      <channel source="#Armature_location.X-sampler" target="Armature/location.X"/>
+    </animation>
+    <animation id="Armature_location.Y">
+      <source id="Armature_location.Y-input">
+        <float_array id="Armature_location.Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Y-output">
+        <float_array id="Armature_location.Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Y-interpolation">
+        <Name_array id="Armature_location.Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_location.Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Y-intangent">
+        <float_array id="Armature_location.Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Y-outtangent">
+        <float_array id="Armature_location.Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_location.Y-sampler">
+        <input semantic="INPUT" source="#Armature_location.Y-input"/>
+        <input semantic="OUTPUT" source="#Armature_location.Y-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_location.Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_location.Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_location.Y-outtangent"/>
+      </sampler>
+      <channel source="#Armature_location.Y-sampler" target="Armature/location.Y"/>
+    </animation>
+    <animation id="Armature_location.Z">
+      <source id="Armature_location.Z-input">
+        <float_array id="Armature_location.Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Z-output">
+        <float_array id="Armature_location.Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Z-interpolation">
+        <Name_array id="Armature_location.Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_location.Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Z-intangent">
+        <float_array id="Armature_location.Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_location.Z-outtangent">
+        <float_array id="Armature_location.Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_location.Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_location.Z-sampler">
+        <input semantic="INPUT" source="#Armature_location.Z-input"/>
+        <input semantic="OUTPUT" source="#Armature_location.Z-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_location.Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_location.Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_location.Z-outtangent"/>
+      </sampler>
+      <channel source="#Armature_location.Z-sampler" target="Armature/location.Z"/>
+    </animation>
+    <animation id="Armature_rotation_euler.X">
+      <source id="Armature_rotation_euler.X-input">
+        <float_array id="Armature_rotation_euler.X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.X-output">
+        <float_array id="Armature_rotation_euler.X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.X-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.X-interpolation">
+        <Name_array id="Armature_rotation_euler.X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.X-intangent">
+        <float_array id="Armature_rotation_euler.X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.X-outtangent">
+        <float_array id="Armature_rotation_euler.X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_rotation_euler.X-sampler">
+        <input semantic="INPUT" source="#Armature_rotation_euler.X-input"/>
+        <input semantic="OUTPUT" source="#Armature_rotation_euler.X-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_rotation_euler.X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_rotation_euler.X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_rotation_euler.X-outtangent"/>
+      </sampler>
+      <channel source="#Armature_rotation_euler.X-sampler" target="Armature/rotationX.ANGLE"/>
+    </animation>
+    <animation id="Armature_rotation_euler.Y">
+      <source id="Armature_rotation_euler.Y-input">
+        <float_array id="Armature_rotation_euler.Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Y-output">
+        <float_array id="Armature_rotation_euler.Y-output-array" count="1">89.99997</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Y-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Y-interpolation">
+        <Name_array id="Armature_rotation_euler.Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Y-intangent">
+        <float_array id="Armature_rotation_euler.Y-intangent-array" count="2">0 89.99997</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Y-outtangent">
+        <float_array id="Armature_rotation_euler.Y-outtangent-array" count="2">0.08333331 89.99997</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_rotation_euler.Y-sampler">
+        <input semantic="INPUT" source="#Armature_rotation_euler.Y-input"/>
+        <input semantic="OUTPUT" source="#Armature_rotation_euler.Y-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_rotation_euler.Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_rotation_euler.Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_rotation_euler.Y-outtangent"/>
+      </sampler>
+      <channel source="#Armature_rotation_euler.Y-sampler" target="Armature/rotationY.ANGLE"/>
+    </animation>
+    <animation id="Armature_rotation_euler.Z">
+      <source id="Armature_rotation_euler.Z-input">
+        <float_array id="Armature_rotation_euler.Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Z-output">
+        <float_array id="Armature_rotation_euler.Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Z-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Z-interpolation">
+        <Name_array id="Armature_rotation_euler.Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Z-intangent">
+        <float_array id="Armature_rotation_euler.Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_rotation_euler.Z-outtangent">
+        <float_array id="Armature_rotation_euler.Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Armature_rotation_euler.Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_rotation_euler.Z-sampler">
+        <input semantic="INPUT" source="#Armature_rotation_euler.Z-input"/>
+        <input semantic="OUTPUT" source="#Armature_rotation_euler.Z-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_rotation_euler.Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_rotation_euler.Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_rotation_euler.Z-outtangent"/>
+      </sampler>
+      <channel source="#Armature_rotation_euler.Z-sampler" target="Armature/rotationZ.ANGLE"/>
+    </animation>
+    <animation id="Armature_scale.X">
+      <source id="Armature_scale.X-input">
+        <float_array id="Armature_scale.X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.X-output">
+        <float_array id="Armature_scale.X-output-array" count="1">1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.X-interpolation">
+        <Name_array id="Armature_scale.X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_scale.X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.X-intangent">
+        <float_array id="Armature_scale.X-intangent-array" count="2">0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.X-outtangent">
+        <float_array id="Armature_scale.X-outtangent-array" count="2">0.08333331 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_scale.X-sampler">
+        <input semantic="INPUT" source="#Armature_scale.X-input"/>
+        <input semantic="OUTPUT" source="#Armature_scale.X-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_scale.X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_scale.X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_scale.X-outtangent"/>
+      </sampler>
+      <channel source="#Armature_scale.X-sampler" target="Armature/scale.X"/>
+    </animation>
+    <animation id="Armature_scale.Y">
+      <source id="Armature_scale.Y-input">
+        <float_array id="Armature_scale.Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Y-output">
+        <float_array id="Armature_scale.Y-output-array" count="1">1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Y-interpolation">
+        <Name_array id="Armature_scale.Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Y-intangent">
+        <float_array id="Armature_scale.Y-intangent-array" count="2">0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Y-outtangent">
+        <float_array id="Armature_scale.Y-outtangent-array" count="2">0.08333331 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_scale.Y-sampler">
+        <input semantic="INPUT" source="#Armature_scale.Y-input"/>
+        <input semantic="OUTPUT" source="#Armature_scale.Y-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_scale.Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_scale.Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_scale.Y-outtangent"/>
+      </sampler>
+      <channel source="#Armature_scale.Y-sampler" target="Armature/scale.Y"/>
+    </animation>
+    <animation id="Armature_scale.Z">
+      <source id="Armature_scale.Z-input">
+        <float_array id="Armature_scale.Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Z-output">
+        <float_array id="Armature_scale.Z-output-array" count="1">1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Z-interpolation">
+        <Name_array id="Armature_scale.Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Z-intangent">
+        <float_array id="Armature_scale.Z-intangent-array" count="2">0 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Armature_scale.Z-outtangent">
+        <float_array id="Armature_scale.Z-outtangent-array" count="2">0.08333331 1</float_array>
+        <technique_common>
+          <accessor source="#Armature_scale.Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Armature_scale.Z-sampler">
+        <input semantic="INPUT" source="#Armature_scale.Z-input"/>
+        <input semantic="OUTPUT" source="#Armature_scale.Z-output"/>
+        <input semantic="INTERPOLATION" source="#Armature_scale.Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Armature_scale.Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Armature_scale.Z-outtangent"/>
+      </sampler>
+      <channel source="#Armature_scale.Z-sampler" target="Armature/scale.Z"/>
+    </animation>
+    <animation id="Icosphere_location_X">
+      <source id="Icosphere_location_X-input">
+        <float_array id="Icosphere_location_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_X-output">
+        <float_array id="Icosphere_location_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_X-interpolation">
+        <Name_array id="Icosphere_location_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_X-intangent">
+        <float_array id="Icosphere_location_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_X-outtangent">
+        <float_array id="Icosphere_location_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_location_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_location_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_location_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_location_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_location_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_location_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_location_X-sampler" target="Icosphere/location.X"/>
+    </animation>
+    <animation id="Icosphere_location_Y">
+      <source id="Icosphere_location_Y-input">
+        <float_array id="Icosphere_location_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Y-output">
+        <float_array id="Icosphere_location_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Y-interpolation">
+        <Name_array id="Icosphere_location_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Y-intangent">
+        <float_array id="Icosphere_location_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Y-outtangent">
+        <float_array id="Icosphere_location_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_location_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_location_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_location_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_location_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_location_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_location_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_location_Y-sampler" target="Icosphere/location.Y"/>
+    </animation>
+    <animation id="Icosphere_location_Z">
+      <source id="Icosphere_location_Z-input">
+        <float_array id="Icosphere_location_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Z-output">
+        <float_array id="Icosphere_location_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Z-interpolation">
+        <Name_array id="Icosphere_location_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Z-intangent">
+        <float_array id="Icosphere_location_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_location_Z-outtangent">
+        <float_array id="Icosphere_location_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_location_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_location_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_location_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_location_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_location_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_location_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_location_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_location_Z-sampler" target="Icosphere/location.Z"/>
+    </animation>
+    <animation id="Icosphere_rotation_euler_X">
+      <source id="Icosphere_rotation_euler_X-input">
+        <float_array id="Icosphere_rotation_euler_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_X-output">
+        <float_array id="Icosphere_rotation_euler_X-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_X-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_X-interpolation">
+        <Name_array id="Icosphere_rotation_euler_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_X-intangent">
+        <float_array id="Icosphere_rotation_euler_X-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_X-outtangent">
+        <float_array id="Icosphere_rotation_euler_X-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_rotation_euler_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_rotation_euler_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_rotation_euler_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_rotation_euler_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_rotation_euler_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_rotation_euler_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_rotation_euler_X-sampler" target="Icosphere/rotationX.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_rotation_euler_Y">
+      <source id="Icosphere_rotation_euler_Y-input">
+        <float_array id="Icosphere_rotation_euler_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Y-output">
+        <float_array id="Icosphere_rotation_euler_Y-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Y-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Y-interpolation">
+        <Name_array id="Icosphere_rotation_euler_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Y-intangent">
+        <float_array id="Icosphere_rotation_euler_Y-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Y-outtangent">
+        <float_array id="Icosphere_rotation_euler_Y-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_rotation_euler_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_rotation_euler_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_rotation_euler_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_rotation_euler_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_rotation_euler_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_rotation_euler_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_rotation_euler_Y-sampler" target="Icosphere/rotationY.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_rotation_euler_Z">
+      <source id="Icosphere_rotation_euler_Z-input">
+        <float_array id="Icosphere_rotation_euler_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Z-output">
+        <float_array id="Icosphere_rotation_euler_Z-output-array" count="1">0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Z-output-array" count="1" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Z-interpolation">
+        <Name_array id="Icosphere_rotation_euler_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Z-intangent">
+        <float_array id="Icosphere_rotation_euler_Z-intangent-array" count="2">0 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_rotation_euler_Z-outtangent">
+        <float_array id="Icosphere_rotation_euler_Z-outtangent-array" count="2">0.08333331 0</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_rotation_euler_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_rotation_euler_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_rotation_euler_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_rotation_euler_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_rotation_euler_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_rotation_euler_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_rotation_euler_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_rotation_euler_Z-sampler" target="Icosphere/rotationZ.ANGLE"/>
+    </animation>
+    <animation id="Icosphere_scale_X">
+      <source id="Icosphere_scale_X-input">
+        <float_array id="Icosphere_scale_X-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_X-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_X-output">
+        <float_array id="Icosphere_scale_X-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_X-output-array" count="1" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_X-interpolation">
+        <Name_array id="Icosphere_scale_X-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_X-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_X-intangent">
+        <float_array id="Icosphere_scale_X-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_X-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_X-outtangent">
+        <float_array id="Icosphere_scale_X-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_X-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_scale_X-sampler">
+        <input semantic="INPUT" source="#Icosphere_scale_X-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_scale_X-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_scale_X-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_scale_X-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_scale_X-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_scale_X-sampler" target="Icosphere/scale.X"/>
+    </animation>
+    <animation id="Icosphere_scale_Y">
+      <source id="Icosphere_scale_Y-input">
+        <float_array id="Icosphere_scale_Y-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Y-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Y-output">
+        <float_array id="Icosphere_scale_Y-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Y-output-array" count="1" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Y-interpolation">
+        <Name_array id="Icosphere_scale_Y-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Y-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Y-intangent">
+        <float_array id="Icosphere_scale_Y-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Y-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Y-outtangent">
+        <float_array id="Icosphere_scale_Y-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Y-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_scale_Y-sampler">
+        <input semantic="INPUT" source="#Icosphere_scale_Y-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_scale_Y-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_scale_Y-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_scale_Y-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_scale_Y-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_scale_Y-sampler" target="Icosphere/scale.Y"/>
+    </animation>
+    <animation id="Icosphere_scale_Z">
+      <source id="Icosphere_scale_Z-input">
+        <float_array id="Icosphere_scale_Z-input-array" count="1">0.04166662</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Z-input-array" count="1" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Z-output">
+        <float_array id="Icosphere_scale_Z-output-array" count="1">0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Z-output-array" count="1" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Z-interpolation">
+        <Name_array id="Icosphere_scale_Z-interpolation-array" count="1">BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Z-interpolation-array" count="1" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Z-intangent">
+        <float_array id="Icosphere_scale_Z-intangent-array" count="2">0 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Z-intangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Icosphere_scale_Z-outtangent">
+        <float_array id="Icosphere_scale_Z-outtangent-array" count="2">0.08333331 0.1096039</float_array>
+        <technique_common>
+          <accessor source="#Icosphere_scale_Z-outtangent-array" count="1" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Icosphere_scale_Z-sampler">
+        <input semantic="INPUT" source="#Icosphere_scale_Z-input"/>
+        <input semantic="OUTPUT" source="#Icosphere_scale_Z-output"/>
+        <input semantic="INTERPOLATION" source="#Icosphere_scale_Z-interpolation"/>
+        <input semantic="IN_TANGENT" source="#Icosphere_scale_Z-intangent"/>
+        <input semantic="OUT_TANGENT" source="#Icosphere_scale_Z-outtangent"/>
+      </sampler>
+      <channel source="#Icosphere_scale_Z-sampler" target="Icosphere/scale.Z"/>
+    </animation>
+  </library_animations>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Icosphere_002" name="Icosphere_002" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">0.1096039 0.1096039 0.1096039</scale>
+        <instance_geometry url="#Icosphere_002-mesh"/>
+      </node>
+      <node id="Icosphere_001" name="Icosphere_001" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">0.1096039 0.1096039 0.1096039</scale>
+        <instance_geometry url="#Icosphere_001-mesh"/>
+      </node>
+      <node id="Armature" name="Armature" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 89.99997</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">1 1 1</scale>
+        <node id="Bone" name="Bone" sid="Bone" type="JOINT">
+          <matrix sid="transform">0.9999999 0 0 0 0 -4.37114e-8 -1 0 0 1 -4.37114e-8 0 0 0 0 1</matrix>
+          <node id="Bone_001" name="Bone.001" sid="Bone_001" type="JOINT">
+            <matrix sid="transform">1 0 -5.52335e-7 0 0 1 0 1 5.52335e-7 0 1 0 0 0 0 1</matrix>
+            <node id="Bone_002" name="Bone.002" sid="Bone_002" type="JOINT">
+              <matrix sid="transform">1 0 -8.74228e-8 0 0 1 0 1 8.74228e-8 0 1 0 0 0 0 1</matrix>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node id="Icosphere" name="Icosphere" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">0.1096039 0.1096039 0.1096039</scale>
+        <instance_geometry url="#Icosphere-mesh"/>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

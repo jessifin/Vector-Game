@@ -231,7 +231,7 @@ public class Graphics {
 				model.colorFill.z * entity.colorFill.z,
 				model.colorFill.w * entity.colorFill.w);
 		
-		int indicesToDraw = (int)(model.indexCount * entity.health/(float)(entity.maxHealth));
+		int indicesToDraw = (int)(model.indexCount * entity.maxHealth/(float)(entity.maxHealth));
 		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
 		if(model.indicesToRender != indicesToDraw) {
 			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,

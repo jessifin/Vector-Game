@@ -46,7 +46,7 @@ public class ModelParser {
 		
 		Document document = null;
 		try {
-			document = builder.parse(new File("res/model/" + loc));
+			document = builder.parse(new File("src/res/model/" + loc));
 		} catch(IOException exception) {
 			exception.printStackTrace();
 		} catch(SAXException exception) {
@@ -103,9 +103,10 @@ public class ModelParser {
 				float[] scale = Util.toArray(children.item(9).getTextContent());
 				modelData[(i-1)/2].scale = new Vector3f(scale);
 				
-				float zRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
-				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
-				float xRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f - (3.1415f/2f);
+				float xRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
+				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;//+ 3.1415f;
+				float zRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f;
+
 				modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
 			}
 		}
@@ -125,7 +126,7 @@ public class ModelParser {
 		
 		Document document = null;
 		try {
-			document = builder.parse(new File("res/model/" + loc));
+			document = builder.parse(new File("src/res/model/" + loc));
 		} catch(IOException exception) {
 			exception.printStackTrace();
 		} catch(SAXException exception) {

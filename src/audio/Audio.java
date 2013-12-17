@@ -127,7 +127,7 @@ public class Audio {
 		AudioFormat format = null;
 		byte[] data = null;
 		try {
-			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("res/audio/"+loc)));
+			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("src/res/audio/"+loc)));
 			
 			format = inputStream.getFormat();
 

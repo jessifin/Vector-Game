@@ -47,16 +47,18 @@ public class Main {
 		Input.init();
 		Physics.init();
 		Game.init();
-				
+		
+		long lastTime = System.currentTimeMillis();
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;
 			
-			long initialTime = System.currentTimeMillis();
-
 			Graphics.update();
 			Audio.update();
 
-			int timePassed = (int) (System.currentTimeMillis() - initialTime) * (Game.gui.pausesGame?0:1);
+			long currentTime = System.currentTimeMillis();
+			int timePassed = (int) (currentTime - lastTime) * (Game.gui.pausesGame?0:1);
+			lastTime = currentTime;
+			
 			Game.update(timePassed);
 			Physics.update(timePassed);
 			Input.keyboardUpdate(timePassed);
@@ -77,7 +79,7 @@ public class Main {
 		Audio.destroy();
 		Graphics.destroy();
 		
-		System.out.println(1000f/millisPassed*numLoops);
+		System.out.println("FPS AVG: " + 1000f/millisPassed*numLoops);
 		System.exit(0);
 	}
 	
@@ -92,7 +94,7 @@ public class Main {
 	}
 	
 	public static void main(String... args) {
-		System.setProperty("org.lwjgl.librarypath", new File("lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
+		System.setProperty("org.lwjgl.librarypath", new File("src/lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
 		//System.setOut(log);
 		//System.setErr(log);
 				
