@@ -46,7 +46,7 @@ public class ModelParser {
 		
 		Document document = null;
 		try {
-			document = builder.parse(new File("src/res/model/" + loc));
+			document = builder.parse(new File("src/res/model/daes/" + loc));
 		} catch(IOException exception) {
 			exception.printStackTrace();
 		} catch(SAXException exception) {
@@ -72,8 +72,18 @@ public class ModelParser {
 				
 				float[] vertices = Util.toArray(vertexNode.getTextContent());
 				short[] indices = Util.toArray(indexNode.getTextContent(), 0, 2);
+				float[] fixedVerts = new float[vertices.length];
+				for(int j = 0; j < vertices.length; j++) {
+					if(j%3==0) {
+						fixedVerts[j] = vertices[j];
+					} else if(j%3==1) {
+						fixedVerts[j] = vertices[j+1];
+					} else {
+						fixedVerts[j] = -vertices[j-1];
+ 					}
+				}
 				
-				ModelData currentData = new ModelData(name, vertices, indices);
+				ModelData currentData = new ModelData(name, fixedVerts, indices);
 				modelData[i] = currentData;
 			} else {
 				float[] verts = {-.5f,-.5f,0,-.5f,.5f,0,.5f,-.5f,0,.5f,.5f,0};
@@ -97,17 +107,18 @@ public class ModelParser {
 			if(!transforms.item(i).getAttributes().item(0).getNodeValue().equals("Armature")) {
 				NodeList children = transforms.item(i).getChildNodes();
 				float[] rawPos = Util.toArray(children.item(1).getTextContent());
-				float[] pos = {rawPos[0], rawPos[2], rawPos[1]};
+				float[] pos = {rawPos[0], rawPos[2], -rawPos[1]};
 				modelData[(i-1)/2].pos = new Vector3f(pos);
 				
-				float[] scale = Util.toArray(children.item(9).getTextContent());
+				float[] rawScale = Util.toArray(children.item(9).getTextContent());
+				float[] scale = {rawScale[0],rawScale[2],rawScale[1]};
 				modelData[(i-1)/2].scale = new Vector3f(scale);
 				
 				float xRot = Float.valueOf(children.item(3).getTextContent().split(" ")[3]) * 0.0174533f;
-				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;//+ 3.1415f;
+				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
 				float zRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f;
 
-				modelData[(i-1)/2].rot = new Vector3f(xRot,yRot,zRot);
+				modelData[(i-1)/2].rot = new Vector3f(xRot,zRot,-yRot);
 			}
 		}
 

@@ -1,0 +1,235 @@
+11/21/2013 - 12:8:45.496
+System OS: MAC
+User Name: jessifin
+Screen Name: King Prince Chambermaid
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.16.74 310.40.00.10f02
+Loading shader: default
+Loading model: box
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+(0.0, 0.0, 0.0)
+Loading model: font.dae
+Creating 32 audio sources
+(0.0, 0.0, 0.0)
+Loading model: hoovy.dae
+(0.0, 0.0, 0.0)
+Loading model: sphere.dae
+(0.0, 0.5966641, 0.38125)
+(0.0, 0.6095557, 0.24125)
+(0.0, 0.1695558, 0.02124999)
+(0.2, 0.4695557, 0.02124999)
+(0.0, 0.3695557, 0.22125)
+(-0.2, 0.4695557, 0.02124999)
+(0.0, 0.1695558, 0.42125)
+(0.0, 0.5895557, 0.10125)
+Loading model: pizzard.dae
+(0.0, 0.0, 0.0)
+Loading model: plane.dae
+Removing 32 audio sources 
+Deleting model pizzard.dae
+	pizzard.dae%Cone_004-mesh
+	pizzard.dae%Cone_003-mesh
+	pizzard.dae%Cone_001-mesh
+	pizzard.dae%Icosphere_002-mesh
+	pizzard.dae%Icosphere-mesh
+	pizzard.dae%Icosphere_001-mesh
+	pizzard.dae%Cone-mesh
+	pizzard.dae%Cone_002-mesh
+Deleting model font.dae
+	font.dae%Mesh_017-mesh
+	font.dae%Mesh_042-mesh
+	font.dae%Mesh_019-mesh
+	font.dae%Mesh_020-mesh
+	font.dae%Mesh_023-mesh
+	font.dae%Mesh_025-mesh
+	font.dae%Mesh_040-mesh
+	font.dae%Mesh_027-mesh
+	font.dae%Mesh_028-mesh
+	font.dae%Mesh_026-mesh
+	font.dae%Mesh_030-mesh
+	font.dae%Mesh_044-mesh
+	font.dae%Mesh_012-mesh
+	font.dae%Mesh_045-mesh
+	font.dae%Mesh_046-mesh
+	font.dae%Mesh_011-mesh
+	font.dae%Mesh_002-mesh
+	font.dae%Mesh_003-mesh
+	font.dae%Mesh_004-mesh
+	font.dae%Mesh_005-mesh
+	font.dae%Mesh_006-mesh
+	font.dae%Mesh_007-mesh
+	font.dae%Mesh_008-mesh
+	font.dae%Mesh_009-mesh
+	font.dae%Mesh_010-mesh
+	font.dae%Mesh_013-mesh
+	font.dae%Mesh_038-mesh
+	font.dae%Mesh_047-mesh
+	font.dae%Mesh_014-mesh
+	font.dae%Mesh_048-mesh
+	font.dae%Mesh_050-mesh
+	font.dae%Mesh_018-mesh
+	font.dae%Mesh_051-mesh
+	font.dae%Mesh_052-mesh
+	font.dae%Mesh_053-mesh
+	font.dae%Mesh_054-mesh
+	font.dae%Mesh_055-mesh
+	font.dae%Mesh_056-mesh
+	font.dae%Mesh_057-mesh
+	font.dae%Mesh_058-mesh
+	font.dae%Mesh_059-mesh
+	font.dae%Mesh_060-mesh
+	font.dae%Mesh_061-mesh
+	font.dae%Mesh_062-mesh
+	font.dae%Mesh_063-mesh
+	font.dae%Mesh_064-mesh
+	font.dae%Mesh_065-mesh
+	font.dae%Mesh_066-mesh
+	font.dae%Mesh_067-mesh
+	font.dae%Mesh_068-mesh
+	font.dae%Mesh_069-mesh
+	font.dae%Mesh_070-mesh
+	font.dae%Mesh_071-mesh
+	font.dae%Mesh_072-mesh
+	font.dae%Mesh_073-mesh
+	font.dae%Mesh_074-mesh
+	font.dae%Mesh_075-mesh
+	font.dae%Mesh_076-mesh
+	font.dae%Mesh_031-mesh
+	font.dae%Mesh_033-mesh
+	font.dae%Mesh_032-mesh
+	font.dae%Mesh_024-mesh
+	font.dae%Mesh_029-mesh
+	font.dae%Mesh_001-mesh
+	font.dae%Mesh_077-mesh
+	font.dae%Mesh_078-mesh
+	font.dae%Mesh_079-mesh
+	font.dae%Mesh_080-mesh
+	font.dae%Mesh_081-mesh
+	font.dae%Mesh_082-mesh
+	font.dae%Mesh_083-mesh
+	font.dae%Mesh_084-mesh
+	font.dae%Mesh_085-mesh
+	font.dae%Mesh_088-mesh
+	font.dae%Mesh_089-mesh
+	font.dae%Mesh_090-mesh
+	font.dae%Mesh_091-mesh
+	font.dae%Mesh_092-mesh
+	font.dae%Mesh_093-mesh
+	font.dae%Mesh_094-mesh
+	font.dae%Mesh_095-mesh
+	font.dae%Mesh_096-mesh
+	font.dae%Mesh_097-mesh
+	font.dae%Mesh_098-mesh
+	font.dae%Mesh_099-mesh
+	font.dae%Mesh_100-mesh
+	font.dae%Mesh_101-mesh
+	font.dae%Mesh_102-mesh
+	font.dae%Mesh_103-mesh
+	font.dae%Mesh-mesh
+	font.dae%Mesh_034-mesh
+	font.dae%Mesh_036-mesh
+	font.dae%Mesh_035-mesh
+	font.dae%Mesh_015-mesh
+Deleting model box
+	box%box
+Deleting model hoovy.dae
+	hoovy.dae%_null___null__002-mesh
+Deleting model sphere.dae
+	sphere.dae%Icosphere-mesh
+Deleting model plane.dae
+	plane.dae%Plane-mesh
+Deleting shader default
+FPS AVG: 59.196487

@@ -1,6 +1,0 @@
-Exception in thread "main" java.lang.RuntimeException: No OpenGL context found in the current thread.
-	at org.lwjgl.opengl.GLContext.getCapabilities(GLContext.java:124)
-	at org.lwjgl.opengl.GL11.glViewport(GL11.java:3251)
-	at graphics.Graphics.init(Graphics.java:170)
-	at main.Main.run(Main.java:42)
-	at main.Main.main(Main.java:96)

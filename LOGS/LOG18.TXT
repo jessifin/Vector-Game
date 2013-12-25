@@ -1,9 +1,0 @@
-Exception in thread "main" java.lang.IllegalStateException: Function is not supported
-	at org.lwjgl.BufferChecks.checkFunctionAddress(BufferChecks.java:58)
-	at org.lwjgl.opengl.GL30.glGenVertexArrays(GL30.java:1550)
-	at model.ModelParser.buildModel(ModelParser.java:106)
-	at entity.Entity.<init>(Entity.java:20)
-	at entity.EntityPlayer.<init>(EntityPlayer.java:12)
-	at game.GameInfo.init(GameInfo.java:28)
-	at main.Main.run(Main.java:45)
-	at main.Main.main(Main.java:96)

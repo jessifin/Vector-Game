@@ -1,9 +1,6 @@
 package graphics;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
 import entity.Entity;
 import game.Game;
 
@@ -64,6 +61,7 @@ public class Graphics {
 	
 	private static Model boxModel;
 	private static Model[] font;
+	public static final float charWidth = 0.49341f, charHeight = 0.69407f;
 		
 	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	private static Matrix4f modelMatrix = new Matrix4f();
@@ -75,15 +73,18 @@ public class Graphics {
 			
 		setup3D();
 		renderBatch(Game.entities);
-		renderText("This is a line.\nThis is another line.\nTada.", new Vector3f(0,0,0), new Vector3f(0,0,0), new Vector3f(1,1,1), new Color4f(1,1,0,1));
-
+		Vector3f scale = new Vector3f(1,1,1);
+		renderText(Main.getTime() + 
+				"\nCamera Position: (" + (int)Game.camPos.x + "," + (int)Game.camPos.y + "," + (int)Game.camPos.z + 
+				")\nCamera Orientation: (" + Game.camUp.x + "," + Game.camUp.y + "," + Game.camUp.z + 
+				")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
+				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
+				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
+				"\nRandom number: "+Main.rng.nextInt(),Game.player.pos,new Vector3f(0,0,0),scale,new Color4f(1,1,0,1));
+		//renderBox(Game.player.pos.x,Game.player.pos.y,Game.player.pos.x+10,Game.player.pos.y-9*charHeight,0,new Color4f(1,1,1,1));
+				
 		setup2D();
 		Game.gui.render();
-		for(int i = 0; i < 17; i++) {
-			//renderBox(i,0,i+1,1,0,new Color4f(1,1,1,1));
-		//	renderText("OOOOOOOOOOOOOOOOO",new Vector3f(0,i,0),new Vector3f(0,0,0),new Vector3f(1,1,1),new Color4f(0,1,0,1));
-		}
-		
 		Display.update();
 		Display.sync(OPTIMAL_FPS);
 	}
@@ -152,11 +153,11 @@ public class Graphics {
 		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
 	}
 
-    private static void generateMatrix(Entity e) {
-		generateMatrix(e.pos, e.rot, e.scale);
+    private static Matrix4f generateMatrix(Entity e) {
+		return generateMatrix(e.pos, e.rot, e.scale);
 	}
 
-	private static void generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) { 		
+	private static Matrix4f generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) { 		
 		Matrix4f transMat = new Matrix4f(new float[] {
 				1, 0, 0, pos.x,
 				0, 1, 0, pos.y,
@@ -193,17 +194,20 @@ public class Graphics {
 			
 		});
 		
-		modelMatrix.setIdentity();
-		modelMatrix.mul(transMat);
-		modelMatrix.mul(xRotMat); modelMatrix.mul(yRotMat); modelMatrix.mul(zRotMat);
-		modelMatrix.mul(scaleMat);
+		Matrix4f mat = new Matrix4f();
+		mat.setIdentity();
+		mat.mul(transMat);
+		mat.mul(xRotMat); mat.mul(yRotMat); mat.mul(zRotMat);
+		mat.mul(scaleMat);
+		
+		return mat;
 	}
 
 	private static void renderBatch(ArrayList<Entity> entities) {    	
     	
     	for(int e = 0; e < entities.size(); e++) {
 			
-    		generateMatrix(entities.get(e));
+    		modelMatrix = generateMatrix(entities.get(e));
 			matrixStack.push(modelMatrix);
 			
 			//if(entities.get(e).rootBone != null) {
@@ -221,7 +225,7 @@ public class Graphics {
     }
     
     private static void renderModel(Entity entity, Model model) {		
-		GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
+		GL20.glUniform1i(defaultShader.getUniform("offset"), (int) (Main.numTicks * entity.flashSpeed));
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
@@ -233,7 +237,7 @@ public class Graphics {
 		
 		int indicesToDraw = (int)(model.indexCount * entity.maxHealth/(float)(entity.maxHealth));
 		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
-		if(model.indicesToRender != indicesToDraw) {
+		if(model.indexCount != indicesToDraw) {
 			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
 					model.colorFill.y * entity.colorFill.y,
 					model.colorFill.z * entity.colorFill.z,
@@ -262,7 +266,7 @@ public class Graphics {
 				color.z,
 				color.w);
 		
-		glDrawElements(GL_TRIANGLES, model.indicesToRender, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
@@ -270,11 +274,11 @@ public class Graphics {
 	}
 
 	public static void renderBox(float x1, float y1, float x2, float y2, float rotation, Color4f color) {
-		Vector3f vpos = new Vector3f(x1,y1,0);
-		Vector3f vrot = new Vector3f(0,0,rotation);
-		Vector3f vscale = new Vector3f(x2-x1,y2-y1,0);
+		Vector3f pos = new Vector3f(x1,y1,0);
+		Vector3f rot = new Vector3f(0,0,rotation);
+		Vector3f scale = new Vector3f(x2-x1,y2-y1,0);
 		
-		generateMatrix(vpos,vrot,vscale);
+		modelMatrix = generateMatrix(pos,rot,scale);
 		    	
 		GL20.glUniform1i(defaultShader.getUniform("offset"), 0);
 		GL30.glBindVertexArray(boxModel.vaoID);
@@ -283,7 +287,7 @@ public class Graphics {
 		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
 		GL20.glUniform4f(defaultShader.getUniform("color"),color.x,color.y,color.z,color.w);
 		
-		glDrawElements(GL_TRIANGLES, boxModel.indicesToRender, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, boxModel.indexCount, GL_UNSIGNED_SHORT, 0);
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
@@ -291,40 +295,44 @@ public class Graphics {
 	}
 	
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
+		//glDisable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		GL20.glUniform1i(defaultShader.getUniform("flash"), 1);
+
 		modelMatrix.setIdentity();
 		matrixStack.push(modelMatrix);
 				
 		String[] lines = text.split("\n");
 
-		Vector3f realPos = new Vector3f(pos.x*0.5f-0.359f,1+(pos.y-2)/2-lines.length,pos.z);
-		generateMatrix(realPos,rot,scale);
-		pushMatrix(modelMatrix);
+		Matrix4f textPos = generateMatrix(pos,rot,scale);
+		pushMatrix(textPos);
 		
-		for(int line = lines.length - 1; line >= 0; line--) {
+		for(int line = 0; line < lines.length; line++) {
 	
-			Vector3f linePos = new Vector3f(0,scale.y,0);
+			//Moving from line to line, up -> down
+			Vector3f linePos = new Vector3f(0,-scale.y*charHeight,0);
 			Vector3f lineRot = new Vector3f(0,0,0);
 			Vector3f lineScale = new Vector3f(1,1,1);
 						
-			generateMatrix(linePos,lineRot,lineScale);
-			pushMatrix(modelMatrix);
+			Matrix4f lineMat = generateMatrix(linePos,lineRot,lineScale);
 			
 			char[] characters = lines[line].toCharArray();
 
-			Vector3f charPos = new Vector3f(scale.x*0.5f,0,0);
+			//Moving from character to character, left -> right
+			Vector3f charPos = new Vector3f(scale.x*charWidth,0,0);
 			Vector3f charRot = new Vector3f(0,0,0);
 			Vector3f charScale = new Vector3f(1,1,1);
-			generateMatrix(charPos,charRot,charScale);
+			Matrix4f charMat = generateMatrix(charPos,charRot,charScale);
+			
+			Matrix4f mat = generateMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0),scale);
 			
 			for(int character = 0; character < characters.length; character++) {
-				pushMatrix(modelMatrix);
 				if(characters[character] >= '!' && characters[character] <= '~') {
-					GL20.glUniform1i(defaultShader.getUniform("mode"), 1);
-					glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+					pushMatrix(mat);
 					renderModel(font[characters[character] - 33],color);
-					glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-					GL20.glUniform1i(defaultShader.getUniform("mode"), 0);
+					popMatrix();
 				}
+				pushMatrix(charMat);
 			}
 			
 			int i = 0;
@@ -332,6 +340,9 @@ public class Graphics {
 				popMatrix();
 				i++;
 			}
+			
+			pushMatrix(lineMat);
+
 		}
 		
 		int j = 0;
@@ -343,6 +354,11 @@ public class Graphics {
 		popMatrix();
 		
 		matrixStack.pop();
+		
+		GL20.glUniform1i(defaultShader.getUniform("flash"), 0);
+		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+		//glEnable(GL_CULL_FACE);
 	}
 
 	private static void pushMatrix(Matrix4f matrix) {
@@ -433,7 +449,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-			//Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+	//		Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
@@ -449,7 +465,7 @@ public class Graphics {
 
 			//box init
 			float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
-			short[] inds = {0,1,2,1,2,3};
+			short[] inds = {0,1,2,1,3,2};
 			ModelData square = new ModelData("box",verts,inds);
 			boxModel = ModelParser.buildModel("box", new ModelData[] {square})[0];
 			
@@ -461,7 +477,10 @@ public class Graphics {
 		glEnable(GL_DEPTH_TEST);
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
-		GL11.glViewport(0,0,(int)WIDTH,(int)HEIGHT);
+		glViewport(0,0,(int)WIDTH,(int)HEIGHT);
+		
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
 		
 		LEFT = 0;
 		RIGHT = 16 * WIDTH / HEIGHT;

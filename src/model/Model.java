@@ -8,7 +8,6 @@ public class Model {
 
 	public final String name;
 	public final int vaoID, vertexID, indexID, indexCount;
-	public int indicesToRender;
 	
 	public final ModelData data;
 	
@@ -23,7 +22,6 @@ public class Model {
 		this.vertexID = vertexID;
 		this.indexID = indexID;
 		this.indexCount = indexCount;
-		this.indicesToRender = indexCount;
 		this.data = data;
 		this.matrix = new Matrix4f();
 	}
@@ -34,7 +32,6 @@ public class Model {
 		this.vertexID = new Integer(model.vertexID);
 		this.indexID = new Integer(model.indexID);
 		this.indexCount = new Integer(model.indexCount);
-		this.indicesToRender = new Integer(model.indicesToRender);
 		this.data = model.data;
 		this.matrix = new Matrix4f(model.matrix);
 	}

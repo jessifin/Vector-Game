@@ -4,12 +4,15 @@ import static org.lwjgl.input.Keyboard.*;
 
 import javax.vecmath.Vector3f;
 
+import entity.EntityPizzard;
 import game.Game;
 import game.Level;
 import game.LevelIO;
+import graphics.GUIHUD;
+import graphics.GUIMenu;
 import graphics.Graphics;
+import model.ModelParser;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import audio.Audio;
@@ -19,18 +22,18 @@ public class Input {
 	public static float dX = 0, dY = 0;
 	public static float absX = 0, absY = 0;
 	public static float x = 0, y = 0;
-	public static float speed = 1;
+	private static boolean grab = false;
 	
 	static final float mouseSensitivity = 100;
 	
-	public static KeyInfo[] keyboardInfo = new KeyInfo[KEYBOARD_SIZE];
+	public static KeyInfo[] keys = new KeyInfo[KEYBOARD_SIZE];
 	
 	public static void init() {
 		Mouse.setGrabbed(true);
 		enableRepeatEvents(true);
-		for(int i = 0; i < keyboardInfo.length; i++) {
-			if(Keyboard.getKeyName(i) != null) {
-				keyboardInfo[i] = KeyInfo.getKeyInfo();
+		for(int i = 0; i < keys.length; i++) {
+			if(getKeyName(i) != null) {
+				keys[i] = new KeyInfo();
 			}
 		}
 	}
@@ -43,12 +46,21 @@ public class Input {
 		x += dX; y += dY;
 		
 		if(Mouse.isButtonDown(0)) {
-			Audio.playAtPlayer("pootis.wav");
-			//Main.entities.add(new EntityProjectile(new Vector3f(GameInfo.player.pos.x, GameInfo.player.pos.y, GameInfo.player.pos.z)));
+			Audio.playAtEntity("pew.wav",Game.player);
 		}
 		if(Mouse.isButtonDown(1)) {
 			//Audio.playMusic("le_elephante.wav");
 			Graphics.takeScreenShot();
+		}
+		
+		if(Game.gui.pausesGame && !grab) {
+			Mouse.setGrabbed(true);
+			Mouse.setCursorPosition((int)Graphics.WIDTH/2, (int)Graphics.HEIGHT/2);
+			grab = true;
+		}
+		if(!Game.gui.pausesGame && grab) {
+			Mouse.setGrabbed(false);
+			grab = false;
 		}
 	}
 	
@@ -56,13 +68,25 @@ public class Input {
 		poll();
 		while(next()) {
 			int keyID = getEventKey();
-			keyboardInfo[keyID].nanosPressed = (int) getEventNanoseconds();
-			keyboardInfo[keyID].state = getEventKeyState();
+			keys[keyID].nanosPressed = (int) getEventNanoseconds();
+			
+			boolean state = getEventKeyState();
+			keys[keyID].released = false;
+			keys[keyID].pressed = false;
+			
+			if(keys[keyID].state && !state) {
+				keys[keyID].released = true;
+			}
+			if(!keys[keyID].state && state) {
+				keys[keyID].pressed = true;
+			}
+			keys[keyID].state = state;
 		}
-		if(keyboardInfo[Keyboard.KEY_S].state && keyboardInfo[Keyboard.KEY_RETURN].state) {
-			LevelIO.writeLevel("test2", new Level(Game.entities));
+		
+		if(keys[KEY_S].state && keys[KEY_RETURN].state) {
+			LevelIO.writeLevel("test", new Level(Game.entities));
 		}
-		if(keyboardInfo[KEY_W].state) {
+		if(keys[KEY_W].state) {
 			Vector3f forward = new Vector3f(
 					Game.player.pos.x - Game.camPos.x,
 					Game.player.pos.y - Game.camPos.y,
@@ -70,15 +94,15 @@ public class Input {
 					);
 			
 			forward.normalize();
-			forward.scale(speed*3);
+			forward.scale(Game.speed*60);
 			Physics.applyImpulse(Game.player, forward);
 			/*
-			Game.player.pos.x -= (float) (Math.cos(x) * Math.sin(y))*speed;
-			Game.player.pos.y -= (float) (Math.cos(y))*speed;
-			Game.player.pos.z -= (float) (Math.sin(x) * Math.sin(y))*speed;
+			Game.player.pos.x -= (float) (Math.cos(x) * Math.sin(y))*Game.speed;
+			Game.player.pos.y -= (float) (Math.cos(y))*Game.speed;
+			Game.player.pos.z -= (float) (Math.sin(x) * Math.sin(y))*Game.speed;
 			*/
 		}
-		if(keyboardInfo[KEY_S].state) {
+		if(keys[KEY_S].state) {
 			Vector3f backward = new Vector3f(
 					Game.camPos.x - Game.player.pos.x,
 					Game.camPos.y - Game.player.pos.y,
@@ -86,12 +110,12 @@ public class Input {
 					);
 						
 			backward.normalize();
-			backward.scale(speed*3);
+			backward.scale(Game.speed*60);
 			Physics.applyImpulse(Game.player, backward);
 			/*
-			Game.player.pos.x += (float) (Math.cos(x) * Math.sin(y))*speed;
-			Game.player.pos.y += (float) (Math.cos(y))*speed;
-			Game.player.pos.z += (float) (Math.sin(x) * Math.sin(y))*speed;
+			Game.player.pos.x += (float) (Math.cos(x) * Math.sin(y))*Game.speed;
+			Game.player.pos.y += (float) (Math.cos(y))*Game.speed;
+			Game.player.pos.z += (float) (Math.sin(x) * Math.sin(y))*Game.speed;
 			*/
 		}
 		/*
@@ -104,52 +128,72 @@ public class Input {
 			Graphics.camUp.z+=.1f;
 		}
 		*/
-		if(keyboardInfo[KEY_C].state && speed < 10) {
-			speed+=.01f;
+		if(keys[KEY_C].state && Game.speed < 1) {
+			Game.speed+=.01f;
 		}
-		if(keyboardInfo[KEY_Z].state && speed > .02f) {
-			speed-=.01f;
+		if(keys[KEY_Z].state && Game.speed > 0) {
+			Game.speed-=.01f;
 		}
-		if(keyboardInfo[KEY_Z].state && keyboardInfo[KEY_C].state) {
-			speed = 5;
+		if(keys[KEY_Z].state && keys[KEY_C].state) {
+			Game.speed = 0.5f;
 		}
-		if(keyboardInfo[KEY_1].state) {
-			Game.camDist-=speed;
+		if(keys[KEY_1].state) {
+			Game.camDist-=Game.speed*20;
 		}
-		if(keyboardInfo[KEY_3].state) {
-			Game.camDist+=speed;
+		if(keys[KEY_3].state) {
+			Game.camDist+=Game.speed*20;
 		}
-		if(keyboardInfo[KEY_LEFT].state) {
-			Game.FoV-=speed;
+		if(keys[KEY_LEFT].state) {
+			Game.FoV--;;
 		}
-		if(keyboardInfo[KEY_RIGHT].state) {
-			Game.FoV+=speed;
+		if(keys[KEY_RIGHT].state) {
+			Game.FoV++;
 		}
-		if(keyboardInfo[KEY_ESCAPE].state) {
-			Main.RUNNING = false;
+		if(keys[KEY_ESCAPE].pressed) {
+			if(Game.gui instanceof GUIMenu) {
+				Mouse.setGrabbed(true);
+				Game.gui = new GUIHUD();
+			} else {
+				Mouse.setGrabbed(false);
+				Game.gui = new GUIMenu();
+			}
 		}
-		if(keyboardInfo[KEY_F1].state) {
-		//	Graphics.toggleFullScreen();
-		//	Mouse.setCursorPosition(Graphics.WIDTH/2, Graphics.HEIGHT/2);
-			x = .01f; y = 3.14f;
-			Mouse.setGrabbed(true);
+		if(keys[KEY_R].pressed) {
+			Audio.playAtEntity("pew.wav", Game.player);
 		}
-		if(keyboardInfo[KEY_BACK].state) {
+		if(keys[KEY_BACK].state) {
 			Game.reboot();
 		}
-		if(keyboardInfo[KEY_RETURN].state) {
+		if(keys[KEY_RETURN].state) {
+			Vector3f forward = new Vector3f(
+					Game.player.pos.x - Game.camPos.x,
+					Game.player.pos.y - Game.camPos.y,
+					Game.player.pos.z - Game.camPos.z
+					);
+			
+			forward.normalize();
+			forward.scale(Game.speed*60);
+			
+			EntityPizzard pizzard = new EntityPizzard();
+			pizzard.model = ModelParser.getModel("sphere.dae");
+			Vector3f pizzardPos = new Vector3f(Game.player.pos.x + forward.x*5,Game.player.pos.y + forward.y*5,Game.player.pos.z + forward.z*5);
+			pizzard.pos = pizzardPos;
+			pizzard.scale = new Vector3f(5,5,5);
+			Game.entities.add(pizzard);
+			Physics.addSphere(pizzard, 5, 1, 1, 5);
+			Physics.applyImpulse(pizzard, forward);
 		}
 		
+		for(KeyInfo key: keys) {
+			if(key != null) {
+				key.pressed = false;
+				key.released = false;
+			}
+		}
 	}
 
 	public static class KeyInfo {
-		
 		public int nanosPressed;
-		public boolean state;
-		
-		public static KeyInfo getKeyInfo() {
-			return new KeyInfo();
-		}
-		
+		public boolean state, released, pressed;
 	}
 }

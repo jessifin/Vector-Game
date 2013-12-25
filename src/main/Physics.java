@@ -24,6 +24,7 @@ import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
@@ -48,7 +49,7 @@ public class Physics {
 	private static BroadphaseInterface broadphaseInterface;
 	private static Dispatcher dispatcher;
 	private static ConstraintSolver constraintSolver;
-	public static Vector3f gravity = new Vector3f(0,-9.8f,0);
+	public static Vector3f gravity = new Vector3f(0,0,0);
 
 	public static void init() {
 		collisionConfig = new DefaultCollisionConfiguration();
@@ -96,6 +97,17 @@ public class Physics {
 		return shape;
 	}
 	
+	public static CompoundShape combineShapes(Vector3f[] trans, CollisionShape[] shapes) {
+		CompoundShape compoundShape = new CompoundShape();
+		Transform t = new Transform();
+		for(int i = 0; i < shapes.length; i++) {
+			t.origin.set(trans[i]);
+			compoundShape.addChildShape(t, shapes[i]);
+		}
+		return compoundShape;
+	}
+	
+	
 	public static RigidBody createRigidBody(float mass, float restitution, Transform transform, CollisionShape shape) {		
 		Vector3f localInertia = new Vector3f(0,0,0);
 		if(mass != 0) {
@@ -121,20 +133,22 @@ public class Physics {
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
 		body.setFriction(frict);
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 
 		world.addRigidBody(body);
 		
 		entity.body = body;
 	}
 	
-	public static void addPlane(float rest, float frict, Vector3f pos) {
+	public static void addPlane(float rest, float frict, Vector3f pos, Quat4f rot) {
 		CollisionShape shape = createPlane(new Vector3f(0,1,0));
 		Transform transform = new Transform();
-		transform.setRotation(new Quat4f(0,0,0,1));
+		transform.setRotation(rot);
 		
 		RigidBody body = createRigidBody(0,rest,transform,shape);
 		body.setFriction(frict);
 		body.translate(pos);
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 
 		world.addRigidBody(body);
 	}
@@ -148,6 +162,7 @@ public class Physics {
 		RigidBody body = createRigidBody(0,rest,transform,shape);
 		body.setFriction(frict);
 		body.translate(entity.pos);
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 
 		world.addRigidBody(body);
 		
@@ -166,6 +181,7 @@ public class Physics {
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
 		body.setFriction(frict);
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 
 		world.addRigidBody(body);
 		
@@ -181,14 +197,15 @@ public class Physics {
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
 		body.setFriction(frict);
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 
 		world.addRigidBody(body);
 	}
 	
 	public static void addEntity(Entity entity, float mass, float rest) {
-		
 		CollisionShape shape = createMesh(entity.model[0]);
 		shape.setLocalScaling(entity.scale);
+		shape.calculateLocalInertia(mass, new Vector3f(0,0,0));
 		/*
 		MotionState motionState = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0,0,0,1),new Vector3f(0,0,0), 1)));
 		RigidBodyConstructionInfo construction = new RigidBodyConstructionInfo(5, motionState, shape, new Vector3f(0,0,0));
@@ -201,7 +218,7 @@ public class Physics {
 		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
-		//body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
+		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
 		
 		entity.body = body;
@@ -214,29 +231,31 @@ public class Physics {
 	}
 	
 	public static void update(int timePassed) {
-		world.stepSimulation(timePassed);
+		world.stepSimulation((Game.speed<=0.05f)?0:timePassed*10);
+	//	System.out.println((Game.speed<=0.05f)?0:(timePassed/Game.speed)/2 + " " + Game.speed + " " + timePassed);
 		
 		for(Entity e: Game.entities) {
 			if(e.body != null ) {
 				Transform transform = new Transform();
 				e.pos = e.body.getWorldTransform(transform).origin;
+				e.body.getInterpolationLinearVelocity(e.vel);
 				Matrix3f rotMat = transform.basis;
 				Vector3f rot = new Vector3f();
-				rot.y = (float) Math.asin(rotMat.getElement(2,0));
+				rot.y = (float)Math.asin(rotMat.getElement(2,0));
 				float c = (float) Math.cos(rot.y);
 				if(Math.abs(c) > .005f) {
 					float TRX = rotMat.getElement(2,2)/c;
 					float TRY = rotMat.getElement(2,1)/c;
-					rot.x = (float)Math.atan2(TRY, TRX);
+					rot.x = (float)Math.atan2(TRY,TRX);
 					
 					TRX = rotMat.getElement(0,0)/c;
 					TRY = rotMat.getElement(1,0)/c;
-					rot.z = (float)Math.atan2(TRY, TRX);
+					rot.z = (float)Math.atan2(TRY,TRX);
 				} else {
 					rot.x = 0;
 					float TRX = rotMat.getElement(1,1);
 					float TRY = rotMat.getElement(1,0);
-					rot.z = (float)Math.atan2(TRY, TRX);
+					rot.z = (float)Math.atan2(TRY,TRX);
 				}
 				e.rot = rot;
 				//printMatrix(rotMat);

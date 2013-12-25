@@ -15,5 +15,9 @@ public class Level {
 	public Level(ArrayList<Entity> entities) {
 		this.entities = entities;
 	}
+	
+	public Level() {
+		
+	}
 
 }

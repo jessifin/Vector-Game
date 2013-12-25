@@ -1,6 +1,7 @@
 package audio;
 
 import static org.lwjgl.openal.AL10.*;
+import entity.Entity;
 import game.Game;
 
 import java.io.BufferedInputStream;
@@ -89,6 +90,8 @@ public class Audio {
 			buffer.looping = false;
 			buffer.gain = volume * Game.fxVolume;
 			buffer.isMusic = false;
+			sources[i].currentBuffer = buffer;
+			sources[i].pos = pos;
 			alSource(sources[i].id, AL_POSITION, Util.toBuffer(pos));
 			alSource(sources[i].id, AL_VELOCITY, Util.toBuffer(vel));
 			bindSource(sources[i], buffer);
@@ -100,8 +103,8 @@ public class Audio {
 		}
 	}
 	
-	public static Buffer playAtPlayer(String loc) {
-		return play(loc, Game.player.pos, new Vector3f(0,0,0), 1);
+	public static Buffer playAtEntity(String loc, Entity entity) {
+		return play(loc, entity.pos, entity.vel, 1);
 	}
 	
 	public static Buffer playMusic(String loc) {
@@ -192,7 +195,7 @@ public class Audio {
 		sources[bestSource].millisPlayed = 0;
 		return bestSource;
 	}
-	
+
 	private static void bindSource(Source source, Buffer buffer) {
 		source.currentBuffer = buffer;
 		alSourcei(source.id, AL_BUFFER, buffer.id);
@@ -200,6 +203,10 @@ public class Audio {
 		alSourcef(source.id, AL_PITCH, buffer.pitch);
 		alSourcef(source.id, AL_GAIN, buffer.gain);
 		source.setPlaying();
+	}
+	
+	static void updateSource(Source source) {
+		alSource(source.id, AL_POSITION, Util.toBuffer(source.pos));
 	}
 	
 	public static void destroy() {

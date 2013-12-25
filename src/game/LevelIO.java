@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.vecmath.Color4f;
@@ -11,7 +12,6 @@ import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.dynamics.RigidBody;
 
 import main.Physics;
 import model.Model;
@@ -23,13 +23,17 @@ import entity.Terrain;
 
 public class LevelIO {
 	
+	private static HashMap<String,Level> levels = new HashMap<String,Level>();
+	
 	public static void writeLevel(String loc, Level level) {
+		System.out.println("Saving level " + loc);
 		PrintStream outputStream = null;
 		try {
-			outputStream = new PrintStream(new File("res/level/"+loc+".lvl"));
+			outputStream = new PrintStream(new File("src/res/level/"+loc+".lvl"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("level clearcolor = " + level.color.x + " " + level.color.y + " " + level.color.z + " " + level.color.w);
 		for(Entity e: level.entities) {
 			outputStream.println(e.getClass().getSimpleName());
 			outputStream.println("pos = " + e.pos.x + " " + e.pos.y + " " + e.pos.z);
@@ -73,270 +77,297 @@ public class LevelIO {
 	}
 
 	public static Level getLevel(String loc) {
-		Scanner scan = null;
-		try {
-			scan = new Scanner(new File("res/level/"+loc+".lvl"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		String line = "";
-		ArrayList<Entity> entities = new ArrayList<Entity>();
-		Entity currentEntity = null;
-		boolean createTriangleMesh = false; float meshMass = 5; float meshRest = 0.1f; float meshFrict = 0;
-		Model[] currentModels = new Model[1];
-		while(scan.hasNext()) {
-			line = scan.nextLine();
-			if(line.equals("EntityPlayer")) {
-				currentEntity = new EntityPlayer();
-				Game.player = (EntityPlayer)currentEntity;
-				continue;
+		if(levels.containsKey(loc)) {
+			return levels.get(loc);
+		} else {
+			System.out.println("Loading level " + loc);
+			Scanner scan = null;
+			try {
+				scan = new Scanner(new File("src/res/level/"+loc+".lvl"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
-			if(line.equals("EntityVirus")) {
-				currentEntity = new EntityVirus();
-				continue;
-			}
-			if(line.equals("Terrain")) {
-				currentEntity = new Terrain();
-				continue;
-			}
-			if(line.equals("end")) {
-				currentEntity.model = currentModels.clone();
-				if(createTriangleMesh) {
-					Physics.addEntity(currentEntity, meshMass, meshRest);
-					createTriangleMesh = false;
-				}
-				entities.add(currentEntity);
-				continue;
-			}
-			if(line.contains("Count")) {
-				int count = Integer.valueOf(line.split(":")[1].replaceAll(" ", ""));
-				currentModels = new Model[count];
-				continue;
-			}
-			if(line.startsWith("model")) {
-				String[] parts = line.split("=");
-				
-				if(parts[0].contains("%")) {
-					
-					String uberRawIndex = parts[0].split("%")[1];
-					String rawIndex = uberRawIndex.split("\\.")[0];
-					int index = Integer.valueOf(rawIndex.replaceAll(" ", ""));
-					
-					if(!parts[0].contains(".")) {
-						String fileName = parts[1].split("%")[0];
-						String modelName = parts[1].split("%")[1];
-						fileName = fileName.replace(" ", "");
-						Model[] model = ModelParser.getModel(fileName);
-						currentModels[index] = model[0];
-						for(Model tempModel: model) {
-							if(tempModel.name.equals(fileName + "%" + modelName)) {
-								currentModels[index] = new Model(tempModel);
-								break;
-							}
+			
+			Level level = new Level();
+			
+			String line = "";
+			ArrayList<Entity> entities = new ArrayList<Entity>();
+			Entity currentEntity = null;
+			boolean createTriangleMesh = false; float meshMass = 5; float meshRest = 0.1f; float meshFrict = 0;
+			Model[] currentModels = new Model[1];
+			while(scan.hasNext()) {
+				line = scan.nextLine();
+				if(line.startsWith("level")) {
+					if(line.contains("clearcolor")) {
+						String[] rawColor = line.split("=")[1].split(" ");
+						if(rawColor[0].equals("")) {
+							String[] refinedColor = new String[4];
+							System.arraycopy(rawColor, 1, refinedColor, 0, 4);
+							rawColor = refinedColor;
 						}
-						continue;
-					} else {
-						String type = parts[0].split("\\.")[1];
-						if(type.startsWith("pos")) {
-							String[] rawPos = parts[1].split(" ");
-							if(rawPos[0].equals("")) {
-								String[] refinedColor = new String[3];
-								System.arraycopy(rawPos, 1, refinedColor, 0, 3);
-								rawPos = refinedColor;
-							}
-							float[] pos = new float[3];
-							for(int i = 0; i < 3; i++) {
-								pos[i] = Float.valueOf(rawPos[i]);
-							}
-							currentModels[index].pos = new Vector3f(pos);
-							continue;
+						float[] clearColor = new float[4];
+						for(int i = 0; i < 4; i++) {
+							clearColor[i] = Float.valueOf(rawColor[i].replaceAll(" ",""));
 						}
-						if(type.startsWith("rot")) {
-							String[] rawRot = parts[1].split(" ");
-							if(rawRot[0].equals("")) {
-								String[] refinedColor = new String[3];
-								System.arraycopy(rawRot, 1, refinedColor, 0, 3);
-								rawRot = refinedColor;
-							}
-							float[] rot = new float[3];
-							for(int i = 0; i < 3; i++) {
-								rot[i] = Float.valueOf(rawRot[i]);
-							}
-							currentModels[index].rot = new Vector3f(rot);
-							continue;
-						}
-						if(type.startsWith("scale")) {
-							String[] rawScale = parts[1].split(" ");
-							if(rawScale[0].equals("")) {
-								String[] refinedColor = new String[3];
-								System.arraycopy(rawScale, 1, refinedColor, 0, 3);
-								rawScale = refinedColor;
-							}
-							float[] scale = new float[3];
-							for(int i = 0; i < 3; i++) {
-								scale[i] = Float.valueOf(rawScale[i]);
-							}
-							currentModels[index].scale = new Vector3f(scale);
-							continue;
-						}
-						if(type.startsWith("colorf")) {
-							String[] rawColor = parts[1].split(" ");
-							if(rawColor[0].equals("")) {
-								String[] refinedColor = new String[4];
-								System.arraycopy(rawColor, 1, refinedColor, 0, 4);
-								rawColor = refinedColor;
-							}
-							float[] color = new float[4];
-							for(int i = 0; i < 4; i++) {
-								color[i] = Float.valueOf(rawColor[i]);
-							}
-							currentModels[index].colorFill = new Color4f(color);
-							continue;
-						}
-						if(type.startsWith("colorl")) {
-							String[] rawColor = parts[1].split(" ");
-							if(rawColor[0].equals("")) {
-								String[] refinedColor = new String[4];
-								System.arraycopy(rawColor, 1, refinedColor, 0, 4);
-								rawColor = refinedColor;
-							}
-							float[] color = new float[4];
-							for(int i = 0; i < 4; i++) {
-								color[i] = Float.valueOf(rawColor[i]);
-							}
-							currentModels[index].colorLine = new Color4f(color);
-							continue;
-						}
+						level.color = new Color4f(clearColor);
 					}
-				} else {
-					currentEntity.model = ModelParser.getModel(parts[parts.length-1].replaceAll(" ",""));
+				}
+				if(line.equals("EntityPlayer")) {
+					currentEntity = new EntityPlayer();
+					Game.player = (EntityPlayer)currentEntity;
 					continue;
 				}
-			}
-			if(line.startsWith("pos")) {
-				String[] parts = line.split("=");
-				String[] rawPos = parts[1].split(" ");
-				if(rawPos[0].equals("")) {
-					String[] refinedColor = new String[3];
-					System.arraycopy(rawPos, 1, refinedColor, 0, 3);
-					rawPos = refinedColor;
+				if(line.equals("EntityVirus")) {
+					currentEntity = new EntityVirus();
+					continue;
 				}
-				float[] pos = new float[3];
-				for(int i = 0; i < 3; i++) {
-					pos[i] = Float.valueOf(rawPos[i]);
+				if(line.equals("Terrain")) {
+					currentEntity = new Terrain();
+					continue;
 				}
-				currentEntity.pos = new Vector3f(pos);
-				continue;
-			}
-			if(line.startsWith("rot")) {
-				String[] parts = line.split("=");
-				String[] rawRot = parts[1].split(" ");
-				if(rawRot[0].equals("")) {
-					String[] refinedColor = new String[3];
-					System.arraycopy(rawRot, 1, refinedColor, 0, 3);
-					rawRot = refinedColor;
-				}
-				float[] rot = new float[3];
-				for(int i = 0; i < 3; i++) {
-					rot[i] = Float.valueOf(rawRot[i]);
-				}
-				currentEntity.rot = new Vector3f(rot);
-				continue;
-			}
-			if(line.startsWith("scale")) {
-				String[] parts = line.split("=");
-				String[] rawScale = parts[1].split(" ");
-				if(rawScale[0].equals("")) {
-					String[] refinedColor = new String[3];
-					System.arraycopy(rawScale, 1, refinedColor, 0, 3);
-					rawScale = refinedColor;
-				}
-				float[] scale = new float[3];
-				for(int i = 0; i < 3; i++) {
-					scale[i] = Float.valueOf(rawScale[i]);
-				}
-				currentEntity.scale = new Vector3f(scale);
-				continue;
-			}
-			if(line.startsWith("colorf")) {
-				String[] parts = line.split("=");
-				String[] rawColor = parts[1].split(" ");
-				if(rawColor[0].equals("")) {
-					String[] refinedColor = new String[4];
-					System.arraycopy(rawColor, 1, refinedColor, 0, 4);
-					rawColor = refinedColor;
-				}
-				float[] color = new float[4];
-				for(int i = 0; i < 4; i++) {
-					color[i] = Float.valueOf(rawColor[i]);
-				}
-				currentEntity.colorFill = new Color4f(color);
-				continue;
-			}
-			if(line.startsWith("colorl")) {
-				String[] parts = line.split("=");
-				String[] rawColor = parts[1].split(" ");
-				if(rawColor[0].equals("")) {
-					String[] refinedColor = new String[4];
-					System.arraycopy(rawColor, 1, refinedColor, 0, 4);
-					rawColor = refinedColor;
-				}
-				float[] color = new float[4];
-				for(int i = 0; i < 4; i++) {
-					color[i] = Float.valueOf(rawColor[i]);
-				}
-				currentEntity.colorLine = new Color4f(color);
-				continue;
-			}
-			if(line.startsWith("phys")) {
-				String type = "";
-				if(line.split("=")[1].split(" ")[0].equals("")) {
-					type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
-				} else {
-					type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
-				}
-				if(type.equals("SPHERE")) {
-					String[] attributes = line.split("=")[1].split(" ");
-					int start = 1;
-					if(attributes[0].equals("")) {
-						start = 2;
+				if(line.equals("end")) {
+					currentEntity.model = currentModels.clone();
+					if(createTriangleMesh) {
+						Physics.addEntity(currentEntity, meshMass, meshRest);
+						createTriangleMesh = false;
 					}
-					float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
-					float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
-					float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
-					float radius = Float.valueOf(attributes[start+3].replaceAll(" ",""));
-					Physics.addSphere(currentEntity, mass, restitution, friction, radius);
-				} else if(type.equals("BOX")) {
-					String[] attributes = line.split("=")[1].split(" ");
-					int start = 1;
-					if(attributes[0].equals("")) {
-						start = 2;
+					entities.add(currentEntity);
+					continue;
+				}
+				if(line.contains("Count")) {
+					int count = Integer.valueOf(line.split(":")[1].replaceAll(" ", ""));
+					currentModels = new Model[count];
+					continue;
+				}
+				if(line.startsWith("model")) {
+					String[] parts = line.split("=");
+					
+					if(parts[0].contains("%")) {
+						
+						String uberRawIndex = parts[0].split("%")[1];
+						String rawIndex = uberRawIndex.split("\\.")[0];
+						int index = Integer.valueOf(rawIndex.replaceAll(" ", ""));
+						
+						if(!parts[0].contains(".")) {
+							String fileName = parts[1].split("%")[0];
+							String modelName = parts[1].split("%")[1];
+							fileName = fileName.replace(" ", "");
+							Model[] model = ModelParser.getModel(fileName);
+							currentModels[index] = model[0];
+							for(Model tempModel: model) {
+								if(tempModel.name.equals(fileName + "%" + modelName)) {
+									currentModels[index] = new Model(tempModel);
+									break;
+								}
+							}
+							continue;
+						} else {
+							String type = parts[0].split("\\.")[1];
+							if(type.startsWith("pos")) {
+								String[] rawPos = parts[1].split(" ");
+								if(rawPos[0].equals("")) {
+									String[] refinedColor = new String[3];
+									System.arraycopy(rawPos, 1, refinedColor, 0, 3);
+									rawPos = refinedColor;
+								}
+								float[] pos = new float[3];
+								for(int i = 0; i < 3; i++) {
+									pos[i] = Float.valueOf(rawPos[i]);
+								}
+								currentModels[index].pos = new Vector3f(pos);
+								continue;
+							}
+							if(type.startsWith("rot")) {
+								String[] rawRot = parts[1].split(" ");
+								if(rawRot[0].equals("")) {
+									String[] refinedColor = new String[3];
+									System.arraycopy(rawRot, 1, refinedColor, 0, 3);
+									rawRot = refinedColor;
+								}
+								float[] rot = new float[3];
+								for(int i = 0; i < 3; i++) {
+									rot[i] = Float.valueOf(rawRot[i]);
+								}
+								currentModels[index].rot = new Vector3f(rot);
+								continue;
+							}
+							if(type.startsWith("scale")) {
+								String[] rawScale = parts[1].split(" ");
+								if(rawScale[0].equals("")) {
+									String[] refinedColor = new String[3];
+									System.arraycopy(rawScale, 1, refinedColor, 0, 3);
+									rawScale = refinedColor;
+								}
+								float[] scale = new float[3];
+								for(int i = 0; i < 3; i++) {
+									scale[i] = Float.valueOf(rawScale[i]);
+								}
+								currentModels[index].scale = new Vector3f(scale);
+								continue;
+							}
+							if(type.startsWith("colorf")) {
+								String[] rawColor = parts[1].split(" ");
+								if(rawColor[0].equals("")) {
+									String[] refinedColor = new String[4];
+									System.arraycopy(rawColor, 1, refinedColor, 0, 4);
+									rawColor = refinedColor;
+								}
+								float[] color = new float[4];
+								for(int i = 0; i < 4; i++) {
+									color[i] = Float.valueOf(rawColor[i]);
+								}
+								currentModels[index].colorFill = new Color4f(color);
+								continue;
+							}
+							if(type.startsWith("colorl")) {
+								String[] rawColor = parts[1].split(" ");
+								if(rawColor[0].equals("")) {
+									String[] refinedColor = new String[4];
+									System.arraycopy(rawColor, 1, refinedColor, 0, 4);
+									rawColor = refinedColor;
+								}
+								float[] color = new float[4];
+								for(int i = 0; i < 4; i++) {
+									color[i] = Float.valueOf(rawColor[i]);
+								}
+								currentModels[index].colorLine = new Color4f(color);
+								continue;
+							}
+						}
+					} else {
+						currentEntity.model = ModelParser.getModel(parts[parts.length-1].replaceAll(" ",""));
+						continue;
 					}
-					float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
-					float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
-					float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
-					float width = Float.valueOf(attributes[start+3].replaceAll(" ",""));
-					float height = Float.valueOf(attributes[start+4].replaceAll(" ",""));
-					float depth = Float.valueOf(attributes[start+5].replaceAll(" ",""));
-					Vector3f lengths = new Vector3f(width,height,depth);
-					currentEntity.scale = lengths;
-					Physics.addBox(currentEntity, mass, restitution, friction);
-				} else if(type.equals("BVHTRIANGLEMESH")) {
-					createTriangleMesh = true;
-					String[] attributes = line.split("=")[1].split(" ");
-					int start = 1;
-					if(attributes[0].equals("")) {
-						start = 2;
+				}
+				if(line.startsWith("pos")) {
+					String[] parts = line.split("=");
+					String[] rawPos = parts[1].split(" ");
+					if(rawPos[0].equals("")) {
+						String[] refinedColor = new String[3];
+						System.arraycopy(rawPos, 1, refinedColor, 0, 3);
+						rawPos = refinedColor;
 					}
-					meshMass = Float.valueOf(attributes[start].replaceAll(" ", ""));
-					meshRest = Float.valueOf(attributes[start+1].replaceAll(" ",""));
-					meshFrict = Float.valueOf(attributes[start+2].replaceAll(" ", ""));
+					float[] pos = new float[3];
+					for(int i = 0; i < 3; i++) {
+						pos[i] = Float.valueOf(rawPos[i]);
+					}
+					currentEntity.pos = new Vector3f(pos);
+					continue;
+				}
+				if(line.startsWith("rot")) {
+					String[] parts = line.split("=");
+					String[] rawRot = parts[1].split(" ");
+					if(rawRot[0].equals("")) {
+						String[] refinedColor = new String[3];
+						System.arraycopy(rawRot, 1, refinedColor, 0, 3);
+						rawRot = refinedColor;
+					}
+					float[] rot = new float[3];
+					for(int i = 0; i < 3; i++) {
+						rot[i] = Float.valueOf(rawRot[i]);
+					}
+					currentEntity.rot = new Vector3f(rot);
+					continue;
+				}
+				if(line.startsWith("scale")) {
+					String[] parts = line.split("=");
+					String[] rawScale = parts[1].split(" ");
+					if(rawScale[0].equals("")) {
+						String[] refinedColor = new String[3];
+						System.arraycopy(rawScale, 1, refinedColor, 0, 3);
+						rawScale = refinedColor;
+					}
+					float[] scale = new float[3];
+					for(int i = 0; i < 3; i++) {
+						scale[i] = Float.valueOf(rawScale[i]);
+					}
+					currentEntity.scale = new Vector3f(scale);
+					continue;
+				}
+				if(line.startsWith("colorf")) {
+					String[] parts = line.split("=");
+					String[] rawColor = parts[1].split(" ");
+					if(rawColor[0].equals("")) {
+						String[] refinedColor = new String[4];
+						System.arraycopy(rawColor, 1, refinedColor, 0, 4);
+						rawColor = refinedColor;
+					}
+					float[] color = new float[4];
+					for(int i = 0; i < 4; i++) {
+						color[i] = Float.valueOf(rawColor[i]);
+					}
+					currentEntity.colorFill = new Color4f(color);
+					continue;
+				}
+				if(line.startsWith("colorl")) {
+					String[] parts = line.split("=");
+					String[] rawColor = parts[1].split(" ");
+					if(rawColor[0].equals("")) {
+						String[] refinedColor = new String[4];
+						System.arraycopy(rawColor, 1, refinedColor, 0, 4);
+						rawColor = refinedColor;
+					}
+					float[] color = new float[4];
+					for(int i = 0; i < 4; i++) {
+						color[i] = Float.valueOf(rawColor[i]);
+					}
+					currentEntity.colorLine = new Color4f(color);
+					continue;
+				}
+				if(line.startsWith("phys")) {
+					String type = "";
+					if(line.split("=")[1].split(" ")[0].equals("")) {
+						System.out.println(type);
+						type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
+					} else {
+						type = line.split("=")[1].split(" ")[1].replaceAll(" ", "");
+					}
+					System.out.println(type);
+					if(type.equals("SPHERE")) {
+						String[] attributes = line.split("=")[1].split(" ");
+						int start = 1;
+						if(attributes[0].equals("")) {
+							start = 2;
+						}
+						float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+						float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+						float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
+						float radius = Float.valueOf(attributes[start+3].replaceAll(" ",""));
+						Physics.addSphere(currentEntity, mass, restitution, friction, radius);
+					} else if(type.equals("BOX")) {
+						String[] attributes = line.split("=")[1].split(" ");
+						int start = 1;
+						if(attributes[0].equals("")) {
+							start = 2;
+						}
+						float mass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+						float restitution = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+						float friction = Float.valueOf(attributes[start+2].replaceAll(" ",""));
+						float width = Float.valueOf(attributes[start+3].replaceAll(" ",""));
+						float height = Float.valueOf(attributes[start+4].replaceAll(" ",""));
+						float depth = Float.valueOf(attributes[start+5].replaceAll(" ",""));
+						Vector3f lengths = new Vector3f(width,height,depth);
+						currentEntity.scale = lengths;
+						Physics.addBox(currentEntity, mass, restitution, friction);
+					} else if(type.equals("BVHTRIANGLEMESH")) {
+						createTriangleMesh = true;
+						String[] attributes = line.split("=")[1].split(" ");
+						int start = 1;
+						if(attributes[0].equals("")) {
+							start = 2;
+						}
+						meshMass = Float.valueOf(attributes[start].replaceAll(" ", ""));
+						meshRest = Float.valueOf(attributes[start+1].replaceAll(" ",""));
+						meshFrict = Float.valueOf(attributes[start+2].replaceAll(" ", ""));
+					}
 				}
 			}
+			
+			level.entities = entities;
+			
+			levels.put(loc, level);
+			
+			return getLevel(loc);
 		}
-		Level level = new Level(entities);
-		return level;
 	}
-
 }

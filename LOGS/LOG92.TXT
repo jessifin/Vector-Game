@@ -1,8 +1,0 @@
-Exception in thread "main" java.lang.NullPointerException
-	at model.ModelParser.parseModel(ModelParser.java:95)
-	at model.ModelParser.getModel(ModelParser.java:31)
-	at entity.Entity.<init>(Entity.java:16)
-	at entity.EntityPlayer.<init>(EntityPlayer.java:8)
-	at game.GameInfo.init(GameInfo.java:32)
-	at main.Main.run(Main.java:45)
-	at main.Main.main(Main.java:96)

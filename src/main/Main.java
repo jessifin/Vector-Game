@@ -56,11 +56,11 @@ public class Main {
 			Audio.update();
 
 			long currentTime = System.currentTimeMillis();
-			int timePassed = (int) (currentTime - lastTime) * (Game.gui.pausesGame?0:1);
+			int timePassed = (int) (currentTime - lastTime);
 			lastTime = currentTime;
 			
-			Game.update(timePassed);
 			Physics.update(timePassed);
+			Game.update(timePassed);
 			Input.keyboardUpdate(timePassed);
 			Input.mouseUpdate(timePassed);
 			millisPassed += timePassed;
@@ -104,13 +104,13 @@ public class Main {
 		if(args.length == 2) {
 			System.out.println("User Name: " + args[0] + "\nScreen Name: " + args[1]);
 		}
-
+		
 		run();
 	}
 	
 	private static int getLogNumber() {
 		int i = 0;
-		while(new File("LOGS/LOG" + i + ".TXT").exists()) { i++; }
+		while(new File("LOGS/LOG" + i + ".txt").exists()) { i++; }
 		return i;
 	}
 	

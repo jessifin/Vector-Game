@@ -1,7 +1,0 @@
-Exception in thread "main" java.lang.IllegalStateException: Function is not supported
-	at org.lwjgl.BufferChecks.checkFunctionAddress(BufferChecks.java:58)
-	at org.lwjgl.opengl.GL11.glEnableClientState(GL11.java:998)
-	at graphics.Graphics.render(Graphics.java:102)
-	at graphics.Graphics.update(Graphics.java:58)
-	at main.Main.run(Main.java:58)
-	at main.Main.main(Main.java:96)
