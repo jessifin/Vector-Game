@@ -13,6 +13,7 @@ import graphics.GUIMenu;
 import graphics.Graphics;
 import model.ModelParser;
 
+import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
 import audio.Audio;
@@ -96,6 +97,12 @@ public class Input {
 			forward.normalize();
 			forward.scale(Game.speed*60);
 			Physics.applyImpulse(Game.player, forward);
+			if(Game.speed<=0) {
+				Game.reboot();
+				Game.speed = 1;
+			} else {
+				Game.speed-=.0025f;
+			}
 			/*
 			Game.player.pos.x -= (float) (Math.cos(x) * Math.sin(y))*Game.speed;
 			Game.player.pos.y -= (float) (Math.cos(y))*Game.speed;
@@ -112,6 +119,12 @@ public class Input {
 			backward.normalize();
 			backward.scale(Game.speed*60);
 			Physics.applyImpulse(Game.player, backward);
+			if(Game.speed<=0) {
+				Game.reboot();
+				Game.speed = 1;
+			} else {
+				Game.speed-=.0025f;
+			}
 			/*
 			Game.player.pos.x += (float) (Math.cos(x) * Math.sin(y))*Game.speed;
 			Game.player.pos.y += (float) (Math.cos(y))*Game.speed;
@@ -128,14 +141,8 @@ public class Input {
 			Graphics.camUp.z+=.1f;
 		}
 		*/
-		if(keys[KEY_C].state && Game.speed < 1) {
-			Game.speed+=.01f;
-		}
-		if(keys[KEY_Z].state && Game.speed > 0) {
-			Game.speed-=.01f;
-		}
 		if(keys[KEY_Z].state && keys[KEY_C].state) {
-			Game.speed = 0.5f;
+			Game.speed = 1;
 		}
 		if(keys[KEY_1].state) {
 			Game.camDist-=Game.speed*20;
@@ -182,6 +189,9 @@ public class Input {
 			Game.entities.add(pizzard);
 			Physics.addSphere(pizzard, 5, 1, 1, 5);
 			Physics.applyImpulse(pizzard, forward);
+		}
+		if(keys[KEY_F1].pressed) {
+			Graphics.setDisplayMode(Graphics.getDefaultDisplayMode(), !Graphics.fullscreen);
 		}
 		
 		for(KeyInfo key: keys) {

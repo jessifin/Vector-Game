@@ -19,7 +19,7 @@ public class ComponentBar extends Component {
 		
 		this.width = border;
 		
-		title = new ComponentText(text,new Vector3f(x1+(x2-x1)/2f-text.length()*Graphics.charWidth*0.5f+.05f,y2+Graphics.charHeight-.2f,0),new Vector3f(0,0,0), new Vector3f(1,0.8f,1),outsideColor);
+		title = new ComponentText(text,new Vector3f(x1+(x2-x1)/2f-text.length()*Graphics.charWidth*0.5f+.05f,y2+Graphics.charHeight-.2f,0),new Vector3f(0,0,0), new Vector3f(0.8f,0.8f,1),outsideColor);
 	}
 	
 	public void setColor(Color4f insideColor, Color4f outsideColor) {

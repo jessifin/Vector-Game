@@ -6,19 +6,14 @@ import javax.vecmath.Color4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-import audio.Audio;
 import main.Input;
 import main.Main;
 import main.Physics;
-import main.Timer;
 import model.Model;
-import model.ModelData;
 import model.ModelParser;
 import entity.Entity;
 import entity.EntityPizzard;
 import entity.EntityPlayer;
-import entity.EntityPlayer;
-import entity.EntityVirus;
 import entity.Terrain;
 import graphics.GUI;
 import graphics.GUIHUD;
@@ -31,7 +26,7 @@ public class Game {
 
 	//Current Level
 	public static Level currentLevel;
-	public static float speed = 0.5f;
+	public static float speed = 1;
 	
 	//Entities
 	public static ArrayList<Entity> entities = new ArrayList<Entity>();

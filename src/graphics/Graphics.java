@@ -52,6 +52,7 @@ public class Graphics {
 	private static int OPTIMAL_FPS = 60;
 	public static String VERSION, VENDOR;
 	public static DisplayMode[] availableDisplayModes;
+	public static boolean fullscreen;
 	
 	public static float WIDTH, HEIGHT;
 	public static float LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR;
@@ -261,10 +262,7 @@ public class Graphics {
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
 		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(defaultShader.getUniform("color"), color.x,
-				color.y,
-				color.z,
-				color.w);
+		GL20.glUniform4f(defaultShader.getUniform("color"), color.x, color.y, color.z, color.w);
 		
 		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 		
@@ -297,34 +295,39 @@ public class Graphics {
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
 		//glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		GL20.glUniform1i(defaultShader.getUniform("flash"), 1);
-
-		modelMatrix.setIdentity();
-		matrixStack.push(modelMatrix);
+		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
 				
 		String[] lines = text.split("\n");
 
-		Matrix4f textPos = generateMatrix(pos,rot,scale);
-		pushMatrix(textPos);
+		Matrix4f textPos = generateMatrix(pos,rot,scale);		
+		matrixStack.push(textPos);
 		
 		for(int line = 0; line < lines.length; line++) {
 	
 			//Moving from line to line, up -> down
-			Vector3f linePos = new Vector3f(0,-scale.y*charHeight,0);
-			Vector3f lineRot = new Vector3f(0,0,0);
-			Vector3f lineScale = new Vector3f(1,1,1);
-						
-			Matrix4f lineMat = generateMatrix(linePos,lineRot,lineScale);
+			Matrix4f lineMat = new Matrix4f(new float[] {
+					1,0,0,0,
+					0,1,0,-scale.y,
+					0,0,1,0,
+					0,0,0,1});
 			
 			char[] characters = lines[line].toCharArray();
 
 			//Moving from character to character, left -> right
-			Vector3f charPos = new Vector3f(scale.x*charWidth,0,0);
-			Vector3f charRot = new Vector3f(0,0,0);
-			Vector3f charScale = new Vector3f(1,1,1);
-			Matrix4f charMat = generateMatrix(charPos,charRot,charScale);
+			Matrix4f charMat = new Matrix4f(new float[] {
+					1,0,0,scale.x,
+					0,1,0,0,
+					0,0,1,0,
+					0,0,0,1
+				});
 			
-			Matrix4f mat = generateMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0),scale);
+			Matrix4f mat = new Matrix4f(new float[] {
+				scale.x,0,0,0,
+				0,scale.y,0,0,
+				0,0,scale.z,0,
+				0,0,0,1
+			});
+
 			
 			for(int character = 0; character < characters.length; character++) {
 				if(characters[character] >= '!' && characters[character] <= '~') {
@@ -335,27 +338,17 @@ public class Graphics {
 				pushMatrix(charMat);
 			}
 			
-			int i = 0;
-			while(i < characters.length) {
-				popMatrix();
-				i++;
-			}
+			int i = 0; while(i < characters.length) { popMatrix(); i++; }
 			
 			pushMatrix(lineMat);
 
 		}
 		
-		int j = 0;
-		while(j < lines.length) {
-			popMatrix();
-			j++;
-		}
-		
-		popMatrix();
-		
+		int i = 0; while(i < lines.length) { popMatrix(); i++; }
+				
 		matrixStack.pop();
 		
-		GL20.glUniform1i(defaultShader.getUniform("flash"), 0);
+		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 0);
 		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 		//glEnable(GL_CULL_FACE);
@@ -388,7 +381,28 @@ public class Graphics {
 		Util.saveScreenshot(data);
 	}
 
-	private static DisplayMode getBestDisplayMode() {
+	public static void setDisplayMode(DisplayMode dm, boolean fullscreen) {
+		Graphics.fullscreen = fullscreen;
+		System.out.println("Setting DisplayMode: " + dm.toString() + " " + fullscreen);
+		try {
+			if(fullscreen) {
+				Display.setDisplayModeAndFullscreen(dm);
+			} else {
+				Display.setDisplayMode(dm);
+			}
+		} catch(LWJGLException exception) {
+			exception.printStackTrace();
+		}
+		
+		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
+		glViewport(0,0,(int)WIDTH,(int)HEIGHT);
+	}
+	
+	public static DisplayMode getDefaultDisplayMode() {
+		return Display.getDesktopDisplayMode();
+	}
+
+	public static DisplayMode getBestDisplayMode() {
 		int bestScore = 0, index = 0;
 		for(int i = 0; i < availableDisplayModes.length; i++) {
 			DisplayMode dm = availableDisplayModes[i];
@@ -399,6 +413,14 @@ public class Graphics {
 			}
 		}
 		return availableDisplayModes[index];
+	}
+	
+	public static void setProps(float gamma, float brightness, float contrast) {
+		try {
+			Display.setDisplayConfiguration(gamma, brightness, contrast);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void init() {
@@ -449,7 +471,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-	//		Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
@@ -488,9 +510,8 @@ public class Graphics {
 		TOP = 16;
 		NEAR = -1;
 		FAR = 1;
-		
 	}
-
+	
 	public static void destroy() {
 		ModelParser.clearModelMap();
 		ShaderParser.clearShaderMap();

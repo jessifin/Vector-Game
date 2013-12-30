@@ -17,12 +17,9 @@ public class ComponentButton extends Component {
 		float centerX = (x2-x1)/2f + x1;
 		float centerY = (y2-y1)/2f + y1;
 		
-		float scaleX = (x2-x1)/(Graphics.charWidth*text.length());
-		float offsetX = text.length()*Graphics.charWidth*0.5f*scaleX;
-		float scaleY = (y2-y1)/(Graphics.charHeight);
-		float offsetY = (Graphics.charHeight*0.5f);
-	
-		title = new ComponentText(text, new Vector3f(centerX - offsetX,centerY,0), new Vector3f(0,0,0), new Vector3f(1,1,1), new Color4f(1,1,1,1));
+		float scaleX = (x2-x1)/(text.length()/Graphics.charWidth);
+			
+		title = new ComponentText(text, new Vector3f(x1,y1,0), new Vector3f(0,0,0), new Vector3f(scaleX,1,1), new Color4f(1,1,1,1));
 	}
 
 	public void render() {

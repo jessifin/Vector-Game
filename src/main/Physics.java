@@ -15,11 +15,15 @@ import model.ModelData;
 import model.ModelParser;
 
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
+import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.broadphase.Dispatcher;
+import com.bulletphysics.collision.broadphase.OverlappingPairCache;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.CollisionWorld;
+import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
@@ -36,6 +40,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
 
 import entity.Entity;
 import game.Game;
@@ -49,7 +54,7 @@ public class Physics {
 	private static BroadphaseInterface broadphaseInterface;
 	private static Dispatcher dispatcher;
 	private static ConstraintSolver constraintSolver;
-	public static Vector3f gravity = new Vector3f(0,0,0);
+	public static Vector3f gravity = new Vector3f(0,-9.8f,0);
 
 	public static void init() {
 		collisionConfig = new DefaultCollisionConfiguration();
@@ -234,6 +239,12 @@ public class Physics {
 		world.stepSimulation((Game.speed<=0.05f)?0:timePassed*10);
 	//	System.out.println((Game.speed<=0.05f)?0:(timePassed/Game.speed)/2 + " " + Game.speed + " " + timePassed);
 		
+		OverlappingPairCache cache = broadphaseInterface.getOverlappingPairCache();
+		ObjectArrayList<BroadphasePair> pairs = cache.getOverlappingPairArray();
+		for(BroadphasePair pair: pairs) {
+			
+		}
+		
 		for(Entity e: Game.entities) {
 			if(e.body != null ) {
 				Transform transform = new Transform();
@@ -297,5 +308,24 @@ public class Physics {
 	public static void destroy() {
 		world.destroy();
 	}
-
+	
+	/**
+	 * @param pos is the center of the box
+	 */
+	public static boolean intersectsBox(Vector3f aabbMin, Vector3f aabbMax, Entity e) {
+		Vector3f eaabbMin = new Vector3f(); Vector3f eaabbMax = new Vector3f();
+		e.body.getAabb(eaabbMin, eaabbMax);
+		
+		if((((aabbMin.x < eaabbMin.x && aabbMax.x > eaabbMin.x) || (aabbMin.x < eaabbMax.x && aabbMax.x > eaabbMin.x))) &&
+			(((aabbMin.y < eaabbMin.y && aabbMax.y > eaabbMin.y) || (aabbMin.y < eaabbMax.y && aabbMax.y > eaabbMin.y))) &&
+			((aabbMin.z < eaabbMin.z && aabbMax.z > eaabbMin.z) || (aabbMin.z < eaabbMax.z && aabbMax.z > eaabbMin.z)))
+				return true;
+		
+		return false;
+	}
+	
+	public static void raytest(Vector3f rayFromWorld, boolean first) {
+		
+		
+	}
 }

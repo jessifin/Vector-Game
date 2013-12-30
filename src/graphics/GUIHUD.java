@@ -4,9 +4,6 @@ import game.Game;
 
 import javax.vecmath.Color4f;
 
-import main.Input;
-import main.Main;
-
 public class GUIHUD extends GUI {
 	
 	float healthBarWidth, healthBarLeftBound;
@@ -40,5 +37,4 @@ public class GUIHUD extends GUI {
 			component.render();
 		}
 	}
-
 }
