@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.vecmath.Matrix4f;
@@ -82,6 +83,13 @@ public class Util {
 			array[i/stride] = Short.valueOf(splitString[i]);
 		}
 		return array;
+	}
+	
+	public static ArrayList ensureSize(ArrayList list, int size) {
+		while(list.size() < size) {
+			list.add(null);
+		}
+		return list;
 	}
 	
 	public static BufferedImage saveScreenshot(ByteBuffer data) {

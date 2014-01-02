@@ -18,7 +18,7 @@ public class ComponentBar extends Component {
 		outsideBox = new ComponentBox(x1-border,y1-border,x2+border,y2+border,0,outsideColor);
 		
 		this.width = border;
-		
+		 		
 		title = new ComponentText(text,new Vector3f(x1+(x2-x1)/2f-text.length()*Graphics.charWidth*0.5f+.05f,y2+Graphics.charHeight-.2f,0),new Vector3f(0,0,0), new Vector3f(0.8f,0.8f,1),outsideColor);
 	}
 	

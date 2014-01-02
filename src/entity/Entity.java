@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Color4f;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
@@ -21,6 +23,8 @@ public abstract class Entity implements Cloneable {
 	public float distanceFromCam;
 
 	public RigidBody body;
+	public int physID;
+	public ArrayList<Entity> collisions = new ArrayList<Entity>();
 
 	public Model[] model;
 	public Bone rootBone;
@@ -59,6 +63,5 @@ public abstract class Entity implements Cloneable {
 		}
 	}
 	
-	public abstract void update();
-	
+	public abstract void update();	
 }

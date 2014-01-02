@@ -64,7 +64,7 @@ public class EntityPlayer extends Entity {
 	}
 	
 	public void update() {
-		
+		System.out.println(collisions + " " + physID);
 	}
 
 }

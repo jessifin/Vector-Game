@@ -58,8 +58,9 @@ public class Main {
 			long currentTime = System.currentTimeMillis();
 			int timePassed = (int) (currentTime - lastTime);
 			lastTime = currentTime;
-			
-			Physics.update(timePassed);
+			if(!Game.gui.pausesGame) {
+				Physics.update(timePassed);
+			}
 			Game.update(timePassed);
 			Input.keyboardUpdate(timePassed);
 			Input.mouseUpdate(timePassed);

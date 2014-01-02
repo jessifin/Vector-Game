@@ -42,7 +42,6 @@ public class Game {
 	public static GUI gui;
 		
 	public static void init() {
-		
 		entities = new ArrayList<Entity>();
 		
 		player = new EntityPlayer();
@@ -120,7 +119,7 @@ public class Game {
 
 		for(Entity e: entities) {
 			e.update();
-			
+						
 			e.distanceFromCam = (float)Math.sqrt((e.pos.x - camPos.x)*(e.pos.x - camPos.x)
 					+ (e.pos.y - camPos.y)*(e.pos.y - camPos.y))
 					+ (e.pos.z - camPos.z)*(e.pos.z - camPos.z);

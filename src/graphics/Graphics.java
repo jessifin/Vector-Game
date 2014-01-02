@@ -293,7 +293,6 @@ public class Graphics {
 	}
 	
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
-		//glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
 				
@@ -302,46 +301,45 @@ public class Graphics {
 		Matrix4f textPos = generateMatrix(pos,rot,scale);		
 		matrixStack.push(textPos);
 		
-		for(int line = 0; line < lines.length; line++) {
-	
-			//Moving from line to line, up -> down
-			Matrix4f lineMat = new Matrix4f(new float[] {
-					1,0,0,0,
-					0,1,0,-scale.y,
-					0,0,1,0,
-					0,0,0,1});
-			
-			char[] characters = lines[line].toCharArray();
-
-			//Moving from character to character, left -> right
-			Matrix4f charMat = new Matrix4f(new float[] {
-					1,0,0,scale.x,
-					0,1,0,0,
-					0,0,1,0,
-					0,0,0,1
-				});
-			
-			Matrix4f mat = new Matrix4f(new float[] {
-				scale.x,0,0,0,
-				0,scale.y,0,0,
-				0,0,scale.z,0,
+		//Moving from line to line, up -> down
+		Matrix4f yMat = new Matrix4f(new float[] {
+				1,0,0,0,
+				0,1,0,-scale.y,
+				0,0,1,0,
+				0,0,0,1});
+		
+		//Moving from character to character, left -> right
+		Matrix4f xMat = new Matrix4f(new float[] {
+				1,0,0,scale.x,
+				0,1,0,0,
+				0,0,1,0,
 				0,0,0,1
 			});
 
-			
+		Matrix4f charMat = new Matrix4f(new float[] {
+			scale.x,0,0,0,
+			0,scale.y,0,0,
+			0,0,scale.z,0,
+			0,0,0,1
+		});
+
+		
+		for(int line = 0; line < lines.length; line++) {
+
+			char[] characters = lines[line].toCharArray();
+
 			for(int character = 0; character < characters.length; character++) {
 				if(characters[character] >= '!' && characters[character] <= '~') {
-					pushMatrix(mat);
+					pushMatrix(charMat);
 					renderModel(font[characters[character] - 33],color);
 					popMatrix();
 				}
-				pushMatrix(charMat);
+				pushMatrix(xMat);
 			}
 			
 			int i = 0; while(i < characters.length) { popMatrix(); i++; }
 			
-			pushMatrix(lineMat);
-
+			pushMatrix(yMat);
 		}
 		
 		int i = 0; while(i < lines.length) { popMatrix(); i++; }
@@ -350,9 +348,7 @@ public class Graphics {
 		
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 0);
 		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
-		//glEnable(GL_CULL_FACE);
-	}
+ 	}
 
 	private static void pushMatrix(Matrix4f matrix) {
 		Matrix4f m = new Matrix4f(matrixStack.peek());

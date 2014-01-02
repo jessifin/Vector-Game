@@ -9,5 +9,4 @@ public class Terrain extends Entity {
 	public void update() {
 		
 	}
-
 }
