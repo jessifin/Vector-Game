@@ -1,0 +1,143 @@
+Hello, Jesse. We've been waiting for you.
+0/2/2014 - 23:24:24.926
+System OS: MAC
+User Name: jessifin
+Screen Name: King Prince Chambermaid
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.18.22 310.40.05f01
+Loading shader: default
+Loading model: box
+Loading model: font.dae
+0
+Creating 32 audio sources
+Loading model: hoovy.dae
+Loading model: poogeon.dae
+Loading model: pizzard.dae
+Loading model: rock.dae
+Loading model: plane.dae
+Removing 32 audio sources 
+Deleting model pizzard.dae
+	pizzard.dae%Cone_004-mesh
+	pizzard.dae%Cone_003-mesh
+	pizzard.dae%Cone_001-mesh
+	pizzard.dae%Icosphere_002-mesh
+	pizzard.dae%Icosphere-mesh
+	pizzard.dae%Icosphere_001-mesh
+	pizzard.dae%Cone-mesh
+	pizzard.dae%Cone_002-mesh
+Deleting model font.dae
+	font.dae%Text_033_001_Mesh_004-mesh
+	font.dae%Text_034_Mesh_004-mesh
+	font.dae%Text_035_001_Mesh_004-mesh
+	font.dae%Text_036_001_Mesh_004-mesh
+	font.dae%Text_037_Mesh_004-mesh
+	font.dae%Text_038_001_Mesh_004-mesh
+	font.dae%Text_039_Mesh_004-mesh
+	font.dae%Text_040_001_Mesh_004-mesh
+	font.dae%Text_041_Mesh_004-mesh
+	font.dae%Text_042_001_Mesh_004-mesh
+	font.dae%Text_043_Mesh_004-mesh
+	font.dae%Text_044_Mesh_004-mesh
+	font.dae%Text_045_001_Mesh_004-mesh
+	font.dae%Text_046_001_Mesh_004-mesh
+	font.dae%Text_047_001_Mesh_004-mesh
+	font.dae%Text_048_001_Mesh_004-mesh
+	font.dae%Text_049_Mesh_005-mesh
+	font.dae%Text_050_001_Mesh_005-mesh
+	font.dae%Text_051_001_Mesh_005-mesh
+	font.dae%Text_052_001_Mesh_004-mesh
+	font.dae%Text_053_001_Mesh_004-mesh
+	font.dae%Text_054_001_Mesh_004-mesh
+	font.dae%Text_055_001_Mesh_004-mesh
+	font.dae%Text_056_001_Mesh_004-mesh
+	font.dae%Text_057_001_Mesh_004-mesh
+	font.dae%Text_058_Mesh_004-mesh
+	font.dae%Text_059_001_Mesh_004-mesh
+	font.dae%Text_060_001_Mesh_004-mesh
+	font.dae%Text_061_001_Mesh_004-mesh
+	font.dae%Text_062_001_Mesh_004-mesh
+	font.dae%Text_063_001_Mesh_004-mesh
+	font.dae%Text_064_001_Mesh_004-mesh
+	font.dae%Text_065_001_Mesh_004-mesh
+	font.dae%Text_066_001_Mesh_004-mesh
+	font.dae%Text_067_001_Mesh_004-mesh
+	font.dae%Text_068_001_Mesh_004-mesh
+	font.dae%Text_069_001_Mesh_004-mesh
+	font.dae%Text_070_001_Mesh_004-mesh
+	font.dae%Text_071_001_Mesh_004-mesh
+	font.dae%Text_072_001_Mesh_004-mesh
+	font.dae%Text_073_001_Mesh_004-mesh
+	font.dae%Text_074_Mesh_004-mesh
+	font.dae%Text_075_001_Mesh_004-mesh
+	font.dae%Text_076_001_Mesh_004-mesh
+	font.dae%Text_077_001_Mesh_004-mesh
+	font.dae%Text_078_001_Mesh_004-mesh
+	font.dae%Text_079_001_Mesh_004-mesh
+	font.dae%Text_080_Mesh_004-mesh
+	font.dae%Text_081_001_Mesh_004-mesh
+	font.dae%Text_082_001_Mesh_004-mesh
+	font.dae%Text_083_001_Mesh_004-mesh
+	font.dae%Text_084_001_Mesh_004-mesh
+	font.dae%Text_085_001_Mesh_004-mesh
+	font.dae%Text_086_Mesh_004-mesh
+	font.dae%Text_087_Mesh_004-mesh
+	font.dae%Text_088_001_Mesh_004-mesh
+	font.dae%Text_089_001_Mesh_004-mesh
+	font.dae%Text_090_001_Mesh_004-mesh
+	font.dae%Text_091_001_Mesh_004-mesh
+	font.dae%Text_092_001_Mesh_004-mesh
+	font.dae%Text_093_001_Mesh_004-mesh
+	font.dae%Text_094_001_Mesh_004-mesh
+	font.dae%Text_095_001_Mesh_004-mesh
+	font.dae%Text_096_001_Mesh_005-mesh
+	font.dae%Text_097_001_Mesh_004-mesh
+	font.dae%Text_098_001_Mesh_004-mesh
+	font.dae%Text_099_001_Mesh_004-mesh
+	font.dae%Text_100_001_Mesh_004-mesh
+	font.dae%Text_101_001_Mesh_004-mesh
+	font.dae%Text_102_001_Mesh_004-mesh
+	font.dae%Text_103_001_Mesh_004-mesh
+	font.dae%Text_104_001_Mesh_004-mesh
+	font.dae%Text_105_001_Mesh_004-mesh
+	font.dae%Text_106_Mesh_004-mesh
+	font.dae%Text_107_Mesh_004-mesh
+	font.dae%Text_108_Mesh_004-mesh
+	font.dae%Text_109_Mesh_004-mesh
+	font.dae%Text_110_Mesh_004-mesh
+	font.dae%Text_111_Mesh_004-mesh
+	font.dae%Text_112_Mesh_004-mesh
+	font.dae%Text_113_Mesh_004-mesh
+	font.dae%Text_114_Mesh_004-mesh
+	font.dae%Text_115_Mesh_004-mesh
+	font.dae%Text_116_Mesh_004-mesh
+	font.dae%Text_117_Mesh_004-mesh
+	font.dae%Text_118_Mesh_004-mesh
+	font.dae%Text_119_Mesh_004-mesh
+	font.dae%Text_120_Mesh_004-mesh
+	font.dae%Text_121_Mesh_004-mesh
+	font.dae%Text_122_Mesh_005-mesh
+	font.dae%Text_123_Mesh_004-mesh
+	font.dae%Text_124_Mesh_004-mesh
+	font.dae%Text_125_Mesh_004-mesh
+	font.dae%Text_126_Mesh_004-mesh
+Deleting model poogeon.dae
+	poogeon.dae%Cone_000-mesh
+	poogeon.dae%Cylinder_003-mesh
+	poogeon.dae%Cylinder_002-mesh
+	poogeon.dae%Icosphere_002-mesh
+	poogeon.dae%Icosphere_003-mesh
+	poogeon.dae%Icosphere_001-mesh
+	poogeon.dae%Icosphere_000-mesh
+	poogeon.dae%Plane_003-mesh
+	poogeon.dae%Plane_002-mesh
+Deleting model box
+	box%box
+Deleting model hoovy.dae
+	hoovy.dae%_null___null__002-mesh
+Deleting model plane.dae
+	plane.dae%Plane-mesh
+Deleting model rock.dae
+	rock.dae%rock-mesh
+Deleting shader default
+FPS AVG: 58.445972
