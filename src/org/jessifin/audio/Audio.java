@@ -1,10 +1,12 @@
 package org.jessifin.audio;
 
 import static org.lwjgl.openal.AL10.*;
+
 import org.jessifin.entity.Entity;
 import org.jessifin.game.Game;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -21,7 +23,6 @@ import javax.vecmath.Vector3f;
 
 import org.jessifin.main.Main;
 import org.jessifin.main.Util;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
@@ -130,7 +131,7 @@ public class Audio {
 		AudioFormat format = null;
 		byte[] data = null;
 		try {
-			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("res/audio/"+loc)));
+			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(new File(Main.resourceLoc,"audio/"+loc))));
 			
 			format = inputStream.getFormat();
 

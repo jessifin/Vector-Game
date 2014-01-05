@@ -117,10 +117,11 @@ public class Util {
 	public static ByteBuffer getBuffer(String loc) {
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File(loc));
+			image = ImageIO.read(new File(Main.resourceLoc,loc));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		
 		int width = image.getWidth(); int height = image.getHeight();
 		byte[] data = new byte[width*height*4];
@@ -149,7 +150,7 @@ public class Util {
 		ByteBuffer[] buffers = new ByteBuffer[powers.length];
 		for(int i = 0; i < powers.length; i++) {
 			int power = 1 << powers[i];
-			buffers[i] = getBuffer("res/icns/"+power+".png");
+			buffers[i] = getBuffer("icns/"+power+".png");
 		}
 		return buffers;
 	}

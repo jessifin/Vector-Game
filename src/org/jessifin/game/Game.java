@@ -72,15 +72,11 @@ public class Game {
 			}
 		}
 		
-		for(int x = 0; x < 4; x++) {
-			for(int z = 0; z < 4; z++) {
-				Terrain terrain = new Terrain();
-				terrain.pos = new Vector3f((x-2)*1000,-200,(z-2)*1000);
-				terrain.scale = new Vector3f(1000,100,1000);
-				entities.add(terrain);
-				Physics.addBox(terrain, 0, 0, 4);
-			}
-		}
+		Terrain terrain = new Terrain();
+		terrain.pos = new Vector3f(-500,-200,-500);
+		terrain.scale = new Vector3f(1000,100,1000);
+		entities.add(terrain);
+		Physics.addBox(terrain, 0, 0, 4);
 		
 		Physics.addPlane(0, 10, new Vector3f(0,-500,0), new Quat4f(0,0,0,1));
 		//Physics.addPlane(0, 10, new Vector3f(0,100,0), new Quat4f(0,1,0,1));

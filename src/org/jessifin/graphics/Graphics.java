@@ -63,7 +63,7 @@ public class Graphics {
 	
 	private static Model boxModel;
 	private static Model[] font;
-	public static final float charWidth = 0.49341f, charHeight = 0.69407f;
+	public static final float charWidth = 0.39341f, charHeight = 0.59507f;
 		
 	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
 	private static Matrix4f modelMatrix = new Matrix4f();
@@ -82,8 +82,7 @@ public class Graphics {
 				")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
 				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
 				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
-				"\nRandom number: "+Main.rng.nextInt(),Game.player.pos,new Vector3f(0,0,0),scale,new Color4f(1,1,0,1));
-		//renderBox(Game.player.pos.x,Game.player.pos.y,Game.player.pos.x+10,Game.player.pos.y-9*charHeight,0,new Color4f(1,1,1,1));
+				"\nRandom number: "+Main.rng.nextInt(),Game.player.pos,new Vector3f(1,0,0),new Vector3f(5,5,5),new Color4f(1,1,0,1));
 				
 		setup2D();
 		Game.gui.render();
@@ -292,14 +291,54 @@ public class Graphics {
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 	}
-	
+	/*
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
+		
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
 				
 		String[] lines = text.split("\n");
 
-		Matrix4f textPos = generateMatrix(pos,rot,scale);		
+		Matrix4f textPos = generateMatrix(pos,rot,scale);
+		matrixStack.push(textPos);
+		
+		Matrix4f xShift = new Matrix4f(new float[] {
+			1, 0, 0, scale.x,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0 ,0, 1
+		});
+		
+		for(int line = 0; line < lines.length; line++) {
+
+			char[] characters = lines[line].toCharArray();
+
+			for(int character = 0; character < characters.length; character++) {
+				pushMatrix(xShift);
+				if(characters[character] >= '!' && characters[character] <= '~') {
+					renderModel(font[characters[character] - 33],color);
+				}
+			}
+			int i = 0; while(i < characters.length) { popMatrix(); i++; }
+		}
+		
+		matrixStack.pop();
+		
+		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+	}
+	*/
+	
+	
+	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
+	//	renderBox(pos.x,pos.y,pos.x+scale.x*text.length(),pos.y+scale.y,0,new Color4f(1,1,1,1));
+		
+		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
+				
+		String[] lines = text.split("\n");
+
+		Matrix4f textPos = generateMatrix(pos,rot, new Vector3f(1,1,1));
 		matrixStack.push(textPos);
 		
 		//Moving from line to line, up -> down
@@ -350,7 +389,7 @@ public class Graphics {
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 0);
 		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
  	}
-
+	
 	private static void pushMatrix(Matrix4f matrix) {
 		Matrix4f m = new Matrix4f(matrixStack.peek());
 		m.mul(matrix);
@@ -484,9 +523,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-			if(!Main.debug) {
-				Display.setDisplayModeAndFullscreen(getBestDisplayMode());
-			}
+		//	Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");

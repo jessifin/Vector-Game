@@ -1,0 +1,15 @@
+Hello, Jesse. We've been waiting for you.
+0/3/2014 - 10:46:38.942
+System OS: MAC
+Exception in thread "main" java.lang.UnsatisfiedLinkError: Expecting an absolute path of the library: res/lwjgl_natives/macosx/liblwjgl.jnilib
+	at java.lang.Runtime.load0(Runtime.java:767)
+	at java.lang.System.load(System.java:1019)
+	at org.lwjgl.Sys$1.run(Sys.java:70)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at org.lwjgl.Sys.doLoadLibrary(Sys.java:66)
+	at org.lwjgl.Sys.loadLibrary(Sys.java:95)
+	at org.lwjgl.Sys.<clinit>(Sys.java:112)
+	at org.lwjgl.opengl.Display.<clinit>(Display.java:135)
+	at org.jessifin.graphics.Graphics.init(Graphics.java:445)
+	at org.jessifin.main.Main.run(Main.java:46)
+	at org.jessifin.main.Main.main(Main.java:115)

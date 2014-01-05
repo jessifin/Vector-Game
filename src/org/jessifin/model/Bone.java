@@ -7,6 +7,7 @@ public class Bone {
 	public Model model;
 	
 	public Bone() {
+		
 	}
 
 }

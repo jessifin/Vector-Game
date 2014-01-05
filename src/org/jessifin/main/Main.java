@@ -6,22 +6,24 @@ import org.jessifin.graphics.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Random;
 
 import org.jessifin.model.ModelParser;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
-
 import org.jessifin.audio.Audio;
 
 public class Main {
 
 	public static final OS SYSTEM_OS;
-	public final static boolean debug = false;
+	public final static boolean debug = true;
 	private static PrintStream log;
 	private static Calendar calendar;
+	public static final File resourceLoc;
 	
 	public static boolean RUNNING = true;
 	public static long numLoops, numTicks, millisPassed;
@@ -30,7 +32,6 @@ public class Main {
 	public static Random rng = new Random();
 	
 	static {
-		SYSTEM_OS = OS.getOS();
 		if(!debug) {
 			new File("LOGS").mkdir();
 			try {
@@ -38,7 +39,11 @@ public class Main {
 			} catch (FileNotFoundException exception) {
 				exception.printStackTrace();
 			}
+			System.setOut(log);
+			System.setErr(log);
 		}
+		SYSTEM_OS = OS.getOS();
+		resourceLoc = new File((debug?"src/":"bin/") + "org/jessifin/res");
 		calendar = Calendar.getInstance();
 	}
 	
@@ -96,14 +101,17 @@ public class Main {
 	}
 		
 	public static void main(String... args) {
-		System.setProperty("org.lwjgl.librarypath", new File("res/lwjgl_natives/" + SYSTEM_OS.nativePath).getAbsolutePath());
+		URL nativeLoc = Main.class.getResource("/org/jessifin/res/lwjgl_natives/"+SYSTEM_OS.nativePath);
+		URI decodedURL = null;
+		try {
+			decodedURL = nativeLoc.toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		System.setProperty("org.lwjgl.librarypath", decodedURL.getPath());
 		System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "true");
 		String username = System.getProperty("user.name");
 		String refinedName = Character.toUpperCase(username.charAt(0)) + username.substring(1,username.length());
-		if(!debug) {
-			System.setOut(log);
-			System.setErr(log);
-		}
 		System.out.println("Hello, " + refinedName + ". We've been waiting for you.");
 		System.out.println(getTime());
 		System.out.println("System OS: " + SYSTEM_OS.toString());

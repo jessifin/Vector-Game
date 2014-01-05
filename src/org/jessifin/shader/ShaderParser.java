@@ -67,7 +67,7 @@ public class ShaderParser {
 	private static String readRawText(String loc) {
 		Scanner scan = null;
 		try {
-			scan = new Scanner(new File("res/shader/"+loc));
+			scan = new Scanner(new File(Main.resourceLoc,"shader/"+loc));
 		} catch (FileNotFoundException exception) {
 			System.err.println("UNABLE TO LOCATE TARGET FILE");
 			exception.printStackTrace();

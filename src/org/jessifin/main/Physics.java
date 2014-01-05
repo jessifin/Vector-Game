@@ -60,8 +60,10 @@ public class Physics {
 	private static ConstraintSolver constraintSolver;
 	public static Vector3f gravity = new Vector3f(0,-9.8f,0);
 	
-	private static ArrayList<ArrayList<Integer>> collisionPairs;
-	private static HashMap<Integer,Entity> matches = new HashMap<Integer,Entity>();
+	//private static ArrayList<ArrayList<Integer>> collisionPairs;
+	//private static HashMap<Integer,Entity> matches = new HashMap<Integer,Entity>();
+	
+	private static HashMap<RigidBody,Entity> matches = new HashMap<RigidBody,Entity>();
 
 	public static void init() {
 		collisionConfig = new DefaultCollisionConfiguration();
@@ -133,8 +135,8 @@ public class Physics {
 		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
 		entity.physID = body.getBroadphaseProxy().uniqueId;
-		matches.put(entity.physID,entity);
 		entity.body = body;
+		matches.put(body,entity);
 	}
 	
 	public static void addPlane(float rest, float frict, Vector3f pos, Quat4f rot) {
@@ -161,15 +163,15 @@ public class Physics {
 		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
 		entity.physID = body.getBroadphaseProxy().uniqueId;
-		matches.put(entity.physID,entity);
 		entity.body = body;
+		matches.put(body,entity);
 	}
 	
 	public static void addBox(Entity entity, float mass, float rest, float frict) {
 		CollisionShape shape = new BoxShape(new Vector3f(
-				entity.scale.x,
-				entity.scale.y,
-				entity.scale.z));
+				entity.scale.x/2f,
+				entity.scale.y/2f,
+				entity.scale.z/2f));
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(entity.pos);
@@ -180,8 +182,8 @@ public class Physics {
 		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
 		entity.physID = body.getBroadphaseProxy().uniqueId;
-		matches.put(entity.physID,entity);
 		entity.body = body;
+		matches.put(body,entity);
 	}
 	
 	public static void addBox(Vector3f pos, float mass, float rest, float frict, Vector3f lengths) {
@@ -217,9 +219,9 @@ public class Physics {
 		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
 		entity.physID = body.getBroadphaseProxy().uniqueId;
-		matches.put(entity.physID,entity);
 		
 		entity.body = body;
+		matches.put(body,entity);
 	}
 	
 	public static void applyImpulse(Entity entity, Vector3f impulse) {
@@ -228,56 +230,29 @@ public class Physics {
 		}
 	}
 	
+
+	public static boolean intersectsBox(Vector3f aabbMin, Vector3f aabbMax, Entity e) {
+		Vector3f eaabbMin = new Vector3f(); Vector3f eaabbMax = new Vector3f();
+		e.body.getAabb(eaabbMin, eaabbMax);
+		
+		if((((aabbMin.x < eaabbMin.x && aabbMax.x > eaabbMin.x) || (aabbMin.x < eaabbMax.x && aabbMax.x > eaabbMin.x))) &&
+			(((aabbMin.y < eaabbMin.y && aabbMax.y > eaabbMin.y) || (aabbMin.y < eaabbMax.y && aabbMax.y > eaabbMin.y))) &&
+			((aabbMin.z < eaabbMin.z && aabbMax.z > eaabbMin.z) || (aabbMin.z < eaabbMax.z && aabbMax.z > eaabbMin.z)))
+				return true;
+		
+		return false;
+	}
+	
+	public boolean collidesWith(Entity e1, Entity e2) {
+		return e1.collisions.contains(e2);
+	}
+	
 	public static void update(int timePassed) {
 		world.stepSimulation((Game.speed<=0)?0:timePassed*10);
-		
-		OverlappingPairCache cache = broadphaseInterface.getOverlappingPairCache();
-		ObjectArrayList<BroadphasePair> pairs = cache.getOverlappingPairArray();
-		
-		if(pairs.size() > 0) {
-			collisionPairs = new ArrayList<ArrayList<Integer>>();
-			for(int i = 0; i < pairs.size(); i++) {
-				int id1 = pairs.get(i).pProxy0.uniqueId;
-				int id2 = pairs.get(i).pProxy1.uniqueId;
-				Util.ensureSize(collisionPairs, id1+1);
-				if(collisionPairs.get(id1) == null) {
-					ArrayList<Integer> vals = new ArrayList<Integer>();
-					vals.add(id2);
-					collisionPairs.add(id1,vals);
-				} else {
-					ArrayList<Integer> vals = collisionPairs.get(id1);
-					vals.add(id2);
-				}
-				Util.ensureSize(collisionPairs, id2+1);
-				if(collisionPairs.get(id2) == null) {
-					ArrayList<Integer> vals = new ArrayList<Integer>();
-					vals.add(id1);
-					collisionPairs.add(id2,vals);
-				} else {
-					ArrayList<Integer> vals = collisionPairs.get(id2);
-					vals.add(id1);
-				}
-			}
-			
-			for(int i = 1; i < collisionPairs.size(); i++) {
-				if(matches.containsKey(i)) {
-					Entity e = matches.get(i);
-					e.collisions.clear();
-					if(collisionPairs.contains(i)) {
-						ArrayList<Integer> collisions = collisionPairs.get(i);
-						for(int j = 0; j < collisions.size(); j++) {
-							int id = collisions.get(j);
-							if(matches.containsKey(id)) {
-								e.collisions.add(matches.get(j));
-							}
-						}
-					}
-				}
-			}
-		}
-		
+
 		for(Entity e: Game.entities) {
 			if(e.body != null ) {
+				e.collisions.clear();
 				Transform transform = new Transform();
 				e.pos = e.body.getWorldTransform(transform).origin;
 				e.body.getInterpolationLinearVelocity(e.vel);
@@ -324,6 +299,18 @@ public class Physics {
 				*/
 			}
 		}
+		
+		OverlappingPairCache cache = broadphaseInterface.getOverlappingPairCache();
+		ObjectArrayList<BroadphasePair> pairs = cache.getOverlappingPairArray();
+		
+		for(BroadphasePair pair: pairs) {
+			Entity p0 = matches.get(pair.pProxy0.clientObject);
+			Entity p1 = matches.get(pair.pProxy1.clientObject);
+			if(p0 != null && p1 != null) {
+				p0.collisions.add(p1);
+				p1.collisions.add(p0);
+			}
+		}
 	}
 		
 	public static void printMatrix(Matrix3f mat) {
@@ -338,21 +325,5 @@ public class Physics {
 	
 	public static void destroy() {
 		world.destroy();
-	}
-
-	public static boolean intersectsBox(Vector3f aabbMin, Vector3f aabbMax, Entity e) {
-		Vector3f eaabbMin = new Vector3f(); Vector3f eaabbMax = new Vector3f();
-		e.body.getAabb(eaabbMin, eaabbMax);
-		
-		if((((aabbMin.x < eaabbMin.x && aabbMax.x > eaabbMin.x) || (aabbMin.x < eaabbMax.x && aabbMax.x > eaabbMin.x))) &&
-			(((aabbMin.y < eaabbMin.y && aabbMax.y > eaabbMin.y) || (aabbMin.y < eaabbMax.y && aabbMax.y > eaabbMin.y))) &&
-			((aabbMin.z < eaabbMin.z && aabbMax.z > eaabbMin.z) || (aabbMin.z < eaabbMax.z && aabbMax.z > eaabbMin.z)))
-				return true;
-		
-		return false;
-	}
-	
-	public static boolean checkCollide(Entity e1, Entity e2) {
-		return collisionPairs.get(e1.physID).contains(e2.physID);
 	}
 }

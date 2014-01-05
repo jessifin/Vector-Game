@@ -4,6 +4,7 @@ import static org.lwjgl.input.Keyboard.*;
 
 import javax.vecmath.Vector3f;
 
+import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPizzard;
 import org.jessifin.game.Game;
 import org.jessifin.game.Level;
@@ -12,10 +13,8 @@ import org.jessifin.graphics.GUIHUD;
 import org.jessifin.graphics.GUIMenu;
 import org.jessifin.graphics.Graphics;
 import org.jessifin.model.ModelParser;
-
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
-
 import org.jessifin.audio.Audio;
 
 public class Input {
@@ -141,6 +140,12 @@ public class Input {
 			Graphics.camUp.z+=.1f;
 		}
 		*/
+		if(keys[KEY_Q].pressed) {
+			for(Entity e: Game.player.collisions) {
+				System.out.println(e);
+			}
+			
+		}
 		if(keys[KEY_Z].state && keys[KEY_C].state) {
 			Game.speed = 1;
 		}
