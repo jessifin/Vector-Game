@@ -58,6 +58,7 @@ public class Graphics {
 	public static float WIDTH, HEIGHT;
 	public static float LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR;
 	public static Color4f clearColor = new Color4f(0,0,0,1);
+	private static final int CLEAR_MASK = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	
 	private static Shader defaultShader;
 	
@@ -71,18 +72,26 @@ public class Graphics {
 		
 	public static void update() {
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
+		glClear(CLEAR_MASK);
+		
+		GL20.glUniform3f(defaultShader.getUniform("camPos"), Game.camPos.x, Game.camPos.y, Game.camPos.z);
+		GL20.glUniform1f(defaultShader.getUniform("time"), 0);
+		GL20.glUniform1f(defaultShader.getUniform("freq"), 1);
+		
 		setup3D();
 		renderBatch(Game.entities);
-		Vector3f scale = new Vector3f(1,1,1);
 		renderText(Main.getTime() + 
 				"\nCamera Position: (" + (int)Game.camPos.x + "," + (int)Game.camPos.y + "," + (int)Game.camPos.z + 
 				")\nCamera Orientation: (" + Game.camUp.x + "," + Game.camUp.y + "," + Game.camUp.z + 
 				")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
 				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
 				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
-				"\nRandom number: "+Main.rng.nextInt(),Game.player.pos,new Vector3f(1,0,0),new Vector3f(5,5,5),new Color4f(1,1,0,1));
+				"\nRandom number: "+Main.rng.nextInt(),
+				new Vector3f(-300,500,-800),
+				new Vector3f(0,0,0),
+				new Vector3f(30,30,300),
+				new Color4f(1,1,0,1),
+				false);
 				
 		setup2D();
 		Game.gui.render();
@@ -158,7 +167,8 @@ public class Graphics {
 		return generateMatrix(e.pos, e.rot, e.scale);
 	}
 
-	private static Matrix4f generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) { 		
+	private static Matrix4f generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) { 	
+		/*
 		Matrix4f transMat = new Matrix4f(new float[] {
 				1, 0, 0, pos.x,
 				0, 1, 0, pos.y,
@@ -186,7 +196,25 @@ public class Graphics {
 				0, 0, 1, 0,
 				0, 0, 0, 1
 		});
-	
+		*/
+		
+		float A = (float)Math.cos(rot.x);
+		float B = (float)Math.sin(rot.x);
+		float C = (float)Math.cos(rot.y);
+		float D = (float)Math.sin(rot.y);
+		float E = (float)Math.cos(rot.z);
+		float F = (float)Math.sin(rot.z);
+		
+		float AD = A * D;
+		float BD = B * D;
+		
+		Matrix4f rotMat = new Matrix4f(new float[] {
+			C * E, -C * F, D, pos.x,
+			BD * E + A * F, -BD * F + A * E, -B * C, pos.y,
+			-AD * E + B * F, AD * F + B * E, A * C, pos.z,
+			0, 0, 0, 1
+		});
+		
 		Matrix4f scaleMat = new Matrix4f(new float[] {
 			scale.x, 0, 0, 0,
 			0, scale.y, 0, 0,
@@ -194,14 +222,10 @@ public class Graphics {
 			0, 0, 0, 1
 			
 		});
+
+		rotMat.mul(scaleMat);
 		
-		Matrix4f mat = new Matrix4f();
-		mat.setIdentity();
-		mat.mul(transMat);
-		mat.mul(xRotMat); mat.mul(yRotMat); mat.mul(zRotMat);
-		mat.mul(scaleMat);
-		
-		return mat;
+		return rotMat;
 	}
 
 	private static void renderBatch(ArrayList<Entity> entities) {    	
@@ -270,14 +294,10 @@ public class Graphics {
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 	}
-
-	public static void renderBox(float x1, float y1, float x2, float y2, float rotation, Color4f color) {
-		Vector3f pos = new Vector3f(x1,y1,0);
-		Vector3f rot = new Vector3f(0,0,rotation);
-		Vector3f scale = new Vector3f(x2-x1,y2-y1,0);
-		
-		modelMatrix = generateMatrix(pos,rot,scale);
-		    	
+    
+    public static void renderBox(Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
+    	modelMatrix = generateMatrix(pos,rot,scale);
+    	
 		GL20.glUniform1i(defaultShader.getUniform("offset"), 0);
 		GL30.glBindVertexArray(boxModel.vaoID);
 		GL20.glEnableVertexAttribArray(0);
@@ -290,6 +310,14 @@ public class Graphics {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
+    }
+
+	public static void renderBox(float x1, float y1, float x2, float y2, float rotation, Color4f color) {
+		Vector3f pos = new Vector3f(x1,y1,0);
+		Vector3f rot = new Vector3f(0,0,rotation);
+		Vector3f scale = new Vector3f(x2-x1,y2-y1,0);
+		
+		renderBox(pos,rot,scale,color);
 	}
 	/*
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
@@ -330,14 +358,23 @@ public class Graphics {
 	*/
 	
 	
-	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
-	//	renderBox(pos.x,pos.y,pos.x+scale.x*text.length(),pos.y+scale.y,0,new Color4f(1,1,1,1));
+	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color, boolean renderBox) {
+		String[] lines = text.split("\n");
+		int longestLine = 0;
+		for(String line: lines) {
+			if(line.length() > longestLine) {
+				longestLine = line.length();
+			}
+		}
+		if(renderBox) {
+			Vector3f posBox = new Vector3f(pos.x,pos.y,pos.z-2);
+			Vector3f scaleBox = new Vector3f(scale.x*longestLine,-scale.y*lines.length,1);
+			renderBox(posBox,rot,scaleBox,new Color4f(1-color.x,1-color.y,1-color.z,color.w));
+		}
 		
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		GL20.glUniform1f(defaultShader.getUniform("lineWidth"), 1);
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
 				
-		String[] lines = text.split("\n");
-
 		Matrix4f textPos = generateMatrix(pos,rot, new Vector3f(1,1,1));
 		matrixStack.push(textPos);
 		
@@ -387,8 +424,8 @@ public class Graphics {
 		matrixStack.pop();
 		
 		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 0);
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
- 	}
+		GL20.glUniform1f(defaultShader.getUniform("lineWidth"), 0);
+		}
 	
 	private static void pushMatrix(Matrix4f matrix) {
 		Matrix4f m = new Matrix4f(matrixStack.peek());
@@ -523,7 +560,7 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-		//	Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
@@ -552,9 +589,6 @@ public class Graphics {
 		
 		WIDTH = Display.getWidth(); HEIGHT = Display.getHeight();
 		glViewport(0,0,(int)WIDTH,(int)HEIGHT);
-		
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_FRONT);
 		
 		LEFT = 0;
 		RIGHT = 16 * WIDTH / HEIGHT;

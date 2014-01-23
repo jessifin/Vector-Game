@@ -6,6 +6,10 @@ public class EntityPizzard extends Entity {
 		super("pizzard.dae");
 	}
 
+	public void onCollide(Entity e) {
+		
+	}
+
 	public void update() {
 		
 	}

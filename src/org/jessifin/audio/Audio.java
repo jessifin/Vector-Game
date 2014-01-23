@@ -2,6 +2,7 @@ package org.jessifin.audio;
 
 import static org.lwjgl.openal.AL10.*;
 
+import org.jessifin.audio.AudioUtil.BufferData;
 import org.jessifin.entity.Entity;
 import org.jessifin.game.Game;
 
@@ -52,6 +53,7 @@ public class Audio {
 			int sourceID = alGenSources();
 			sources[i] = new Source(sourceID);
 		}
+		AudioUtil.record();
 	}
 	
 	public static void update() {
@@ -104,8 +106,8 @@ public class Audio {
 		}
 	}
 	
-	public static Buffer playAtEntity(String loc, Entity entity) {
-		return play(loc, entity.pos, entity.vel, 1);
+	public static Buffer playAtEntity(String loc, Entity entity, float volume) {
+		return play(loc, entity.pos, entity.vel, volume);
 	}
 	
 	public static Buffer playMusic(String loc) {
@@ -127,29 +129,12 @@ public class Audio {
 	private static void loadBuffer(String loc) {
 		System.out.println("Loading audio buffer \"" + loc + "\"");
 
-		AudioInputStream inputStream = null;
-		AudioFormat format = null;
-		byte[] data = null;
-		try {
-			inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(new File(Main.resourceLoc,"audio/"+loc))));
-			
-			format = inputStream.getFormat();
-
-			data = new byte[inputStream.available()];
-			inputStream.read(data);
-			
-		} catch (UnsupportedAudioFileException exception) {
-	        exception.printStackTrace();
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-
-		ByteBuffer buffer = Util.toBuffer(data);
+		BufferData data = AudioUtil.readBuffer(loc);
 		
 		int bufferID = alGenBuffers();
 		
-		boolean mono = format.getChannels() == 1;
-		boolean sample8bits = format.getSampleSizeInBits() == 8;
+		boolean mono = data.CHANNELS == 1;
+		boolean sample8bits = data.SAMPLE_SIZE == 8;
 		
 		int alFormat;
 		if(mono && sample8bits) {
@@ -162,7 +147,7 @@ public class Audio {
 			alFormat = AL10.AL_FORMAT_STEREO16;
 		}
 		
-		alBufferData(bufferID, alFormat, buffer, (int)(format.getSampleRate()));
+		alBufferData(bufferID, alFormat, data.BUFFER, data.SAMPLE_RATE);
 						
 		int size = alGetBufferi(bufferID, AL_SIZE);
 		int freq = alGetBufferi(bufferID, AL_FREQUENCY);

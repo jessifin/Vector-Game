@@ -14,7 +14,7 @@ public class GUIHUD extends GUI {
 		healthBarWidth = (Graphics.RIGHT - Graphics.LEFT) / 3f;
 		healthBarLeftBound = ((Graphics.RIGHT - Graphics.LEFT) / 2f) - (healthBarWidth / 2f);
 
-		healthBar = new ComponentBar("TKJSDFKJSHDFKJ",healthBarLeftBound-.1f,0.4f,healthBarLeftBound+healthBarWidth+.1f,0.8f,.05f,new Color4f(1,1,.1f,1),new Color4f(1,1,1,1));
+		healthBar = new ComponentBar("HP",healthBarLeftBound-.1f,0.4f,healthBarLeftBound+healthBarWidth+.1f,0.8f,.05f,new Color4f(1,1,.1f,1),new Color4f(1,1,1,1));
 		components.add(healthBar);
 		
 		float speedBarWidth = healthBarWidth/3f;

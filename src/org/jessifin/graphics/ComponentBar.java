@@ -19,18 +19,16 @@ public class ComponentBar extends Component {
 		
 		this.width = border;
 				
-		float center = x1+(x2-x1)/2f;
+		float centerX = x1+(x2-x1)/2f;
 		float lengthOfString = text.length()*Graphics.charWidth;
+		float leftBoundText = centerX - lengthOfString/2f;
 		
-		float leftBoundText = center - lengthOfString/2f;
-		float rightBoundText = center + lengthOfString/2f;
-		float width = (rightBoundText - leftBoundText)/text.length();
-						
 		title = new ComponentText(text,
-		new Vector3f(leftBoundText+width/2f,y2+Graphics.charHeight-.2f,0),
+		new Vector3f(leftBoundText+Graphics.charWidth/2f,y2+Graphics.charHeight+.1f,0),
 		new Vector3f(0,0,0),
 		new Vector3f(Graphics.charWidth,1,1),
-		outsideColor);
+		outsideColor,
+		false);
 	}
 	
 	public void setColor(Color4f insideColor, Color4f outsideColor) {

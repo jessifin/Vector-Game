@@ -118,7 +118,7 @@ public class ModelParser {
 				float yRot = Float.valueOf(children.item(5).getTextContent().split(" ")[3]) * 0.0174533f;
 				float zRot = Float.valueOf(children.item(7).getTextContent().split(" ")[3]) * 0.0174533f;
 
-				modelData[(i-1)/2].rot = new Vector3f(xRot,zRot,-yRot);
+				modelData[(i-1)/2].rot = new Vector3f(xRot,-zRot,-yRot);
 			}
 		}
 

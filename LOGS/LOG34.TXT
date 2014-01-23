@@ -1,0 +1,37 @@
+Hello, Jesse. We've been waiting for you.
+0/16/2014 - 12:20:47.317
+System OS: MAC
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+VERSION: 2.1 NVIDIA-8.18.22 310.40.05f01
+Loading shader: default
+Loading model: box
+Loading model: font.dae
+0
+Creating 32 audio sources
+Loading model: hoovy.dae
+Loading model: arepo/face.dae
+Creating new Sphere Shape: 10.0
+Loading model: pizzard.dae
+Loading model: rock.dae
+Loading model: terrain.dae
+Creating Mesh Shape org.jessifin.model.Model@2a8ddc4c
+Loading audio buffer "hit.wav"
+Creating new Sphere Shape: 10.0
+Creating Mesh Shape org.jessifin.model.Model@2a8ddc4c
+Saving level test
+java.io.FileNotFoundException: src/res/level/test.lvl (No such file or directory)
+	at java.io.FileOutputStream.open(Native Method)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:194)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:145)
+	at java.io.PrintStream.<init>(PrintStream.java:228)
+	at org.jessifin.game.LevelIO.writeLevel(LevelIO.java:32)
+	at org.jessifin.main.Input.keyboardUpdate(Input.java:87)
+	at org.jessifin.main.Main.run(Main.java:73)
+	at org.jessifin.main.Main.main(Main.java:125)
+level clearcolor = 0.0 0.0 0.0 0.0
+Exception in thread "main" java.lang.NullPointerException
+	at org.jessifin.game.LevelIO.writeLevel(LevelIO.java:38)
+	at org.jessifin.main.Input.keyboardUpdate(Input.java:87)
+	at org.jessifin.main.Main.run(Main.java:73)
+	at org.jessifin.main.Main.main(Main.java:125)

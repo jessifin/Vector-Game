@@ -46,7 +46,7 @@ public class Input {
 		x += dX; y += dY;
 		
 		if(Mouse.isButtonDown(0)) {
-			Audio.playAtEntity("pew.wav",Game.player);
+			Audio.play("pootis.wav", Game.player.pos, new Vector3f(0,0,0), 5);
 		}
 		if(Mouse.isButtonDown(1)) {
 			//Audio.playMusic("le_elephante.wav");
@@ -68,7 +68,7 @@ public class Input {
 		poll();
 		while(next()) {
 			int keyID = getEventKey();
-			keys[keyID].nanosPressed = (int) getEventNanoseconds();
+			keys[keyID].nanosPressed = getEventNanoseconds();
 			
 			boolean state = getEventKeyState();
 			keys[keyID].released = false;
@@ -83,9 +83,6 @@ public class Input {
 			keys[keyID].state = state;
 		}
 		
-		if(keys[KEY_S].state && keys[KEY_RETURN].state) {
-			LevelIO.writeLevel("test", new Level(Game.entities));
-		}
 		if(keys[KEY_W].state) {
 			Vector3f forward = new Vector3f(
 					Game.player.pos.x - Game.camPos.x,
@@ -94,7 +91,7 @@ public class Input {
 					);
 			
 			forward.normalize();
-			forward.scale(Game.speed*60);
+			forward.scale(30);
 			Physics.applyImpulse(Game.player, forward);
 			if(Game.speed<=0) {
 				Game.reboot();
@@ -116,7 +113,7 @@ public class Input {
 					);
 						
 			backward.normalize();
-			backward.scale(Game.speed*60);
+			backward.scale(30);
 			Physics.applyImpulse(Game.player, backward);
 			if(Game.speed<=0) {
 				Game.reboot();
@@ -156,7 +153,7 @@ public class Input {
 			Game.camDist+=Game.speed*20;
 		}
 		if(keys[KEY_LEFT].state) {
-			Game.FoV--;;
+			Game.FoV--;
 		}
 		if(keys[KEY_RIGHT].state) {
 			Game.FoV++;
@@ -169,9 +166,6 @@ public class Input {
 				Mouse.setGrabbed(false);
 				Game.gui = new GUIMenu();
 			}
-		}
-		if(keys[KEY_R].pressed) {
-			Audio.playAtEntity("pew.wav", Game.player);
 		}
 		if(keys[KEY_BACK].state) {
 			Game.reboot();
@@ -208,7 +202,7 @@ public class Input {
 	}
 
 	public static class KeyInfo {
-		public int nanosPressed;
+		public long nanosPressed;
 		public boolean state, released, pressed;
 	}
 }

@@ -1,16 +1,12 @@
 package org.jessifin.entity;
 
-import javax.vecmath.Matrix4f;
-
-import org.jessifin.model.Bone;
-import org.jessifin.model.Model;
+import org.jessifin.game.Game;
 import org.jessifin.model.ModelData;
-import org.jessifin.model.ModelParser;
 
 public class EntityPlayer extends Entity {
-
+	
 	public EntityPlayer() {
-		super("hoovy.dae");
+		super("poogeon.dae");
 		/*
 		Matrix4f[] matrices = ModelParser.getArmature("characterWithMesh.dae");
 		
@@ -62,8 +58,15 @@ public class EntityPlayer extends Entity {
 	public EntityPlayer(ModelData[] modelData) {
 		super(modelData);
 	}
+
+	public void onCollide(Entity e) {
+		
+	}
 	
 	public void update() {
+		if(health == 0) {
+			Game.reboot();
+		}
 	}
 
 }

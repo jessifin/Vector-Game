@@ -12,8 +12,10 @@ import org.jessifin.main.Physics;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelParser;
 import org.jessifin.entity.Entity;
+import org.jessifin.entity.EntityPickup;
 import org.jessifin.entity.EntityPizzard;
 import org.jessifin.entity.EntityPlayer;
+import org.jessifin.entity.EntityVirus;
 import org.jessifin.entity.Terrain;
 import org.jessifin.graphics.GUI;
 import org.jessifin.graphics.GUIHUD;
@@ -45,38 +47,37 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		
 		player = new EntityPlayer();
-		player.model = ModelParser.getModel("poogeon.dae");
 		player.scale = new Vector3f(20,20,20);
-		player.pos = new Vector3f(100,0,0);
-		player.flashSpeed = 2;
+		player.pos = new Vector3f(100,200,0);
+		player.flashSpeed = (int) (speed*10);
 		for(Model m: player.model) {
 			m.colorFill = new Color4f(.5f,1,.5f,1);
 		}
 		entities.add(player);
 		
 		//Physics.addEntity(player, 5, 1);
-		Physics.addSphere(player, 2, 0, 3, 10);
+		Physics.addSphere(player, 2, 0, 3, 5);
 		//Physics.addBox(player, 5, 0, 2);
 
 		for(int x = 0; x < 5; x++) {
 			for(int y = 0; y < 5; y++) {
 				for(int z = 0; z < 5; z++) {
-					EntityPizzard pizzard = new EntityPizzard();
-					pizzard.pos = new Vector3f(x*10,y*10,z*10);
-					pizzard.scale = new Vector3f(5,5,5);
-					pizzard.model = ModelParser.getModel("rock.dae");
-					pizzard.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
-					entities.add(pizzard);
-					Physics.addSphere(pizzard, 1, z*3, 1, 10);
+					EntityVirus virus = new EntityVirus();
+					virus.pos = new Vector3f(x*10,200+y*10,z*10);
+					virus.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
+					entities.add(virus);
+					virus.scale = new Vector3f(5,5,5);
+					virus.flashSpeed = (int) (speed*10);
+					Physics.addBox(virus, 5, 0.1f, 0.5f);
 				}
 			}
 		}
 		
 		Terrain terrain = new Terrain();
-		terrain.pos = new Vector3f(-500,-200,-500);
-		terrain.scale = new Vector3f(1000,100,1000);
+		terrain.pos = new Vector3f(0,0,0);
+		terrain.scale = new Vector3f(1000,1000,1000);
 		entities.add(terrain);
-		Physics.addBox(terrain, 0, 0, 4);
+		Physics.addEntity(terrain, 0, 1);
 		
 		Physics.addPlane(0, 10, new Vector3f(0,-500,0), new Quat4f(0,0,0,1));
 		//Physics.addPlane(0, 10, new Vector3f(0,100,0), new Quat4f(0,1,0,1));
@@ -88,7 +89,6 @@ public class Game {
 
 		
 		//Audio.play("elephante_mono.wav", new Vector3f(0,0,0), new Vector3f(0,0,0), 5);
-
 	}
 	
 	public static void setLevel(String loc) {
@@ -100,7 +100,7 @@ public class Game {
 	
 	public static void reboot() {
 		Physics.destroy();
-		Physics.init();
+		Physics.init(true);
 		init();
 	}
 	

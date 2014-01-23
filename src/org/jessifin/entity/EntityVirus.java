@@ -12,13 +12,6 @@ public class EntityVirus extends Entity {
 
 	public EntityVirus() {
 		super("virus.dae");
-		for(Model m: model) {
-			m.colorFill = new Color4f(0.1f,0.9f,0.05f,1);
-		}
-		
-		model[0].pos.x = 0;
-		model[0].pos.y = 0;
-		model[0].pos.z = 0;
 		/*
 		rootBone = new Bone();
 		rootBone.model = 															model[0];
@@ -39,6 +32,10 @@ public class EntityVirus extends Entity {
 		
 		loopThroughBones(rootBone);
 		*/
+	}
+
+	public void onCollide(Entity e) {
+		
 	}
 	
 	public void update() {

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import org.lwjgl.opengl.GL20;
-
+import org.lwjgl.opengl.GL32;
 import org.jessifin.main.Main;
 
 public class ShaderParser {
@@ -26,6 +26,7 @@ public class ShaderParser {
 		//Vertex Shader
 		String vertexText = readRawText(loc + ".vs");
 		int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+		
 		glShaderSource(vertexShaderID, vertexText);
 		glCompileShader(vertexShaderID);
 		
@@ -46,10 +47,24 @@ public class ShaderParser {
 			System.err.println(glGetShaderInfoLog(fragmentShaderID, 1000));
 			Main.RUNNING = false;
 		}
+		
+		//Geometry Shader (available in 3.2+)
+		
+		String geometryText = readRawText(loc + ".gs");
+		int geometryShaderID = glCreateShader(GL32.GL_GEOMETRY_SHADER);
+		glShaderSource(geometryShaderID, geometryText);
+		glCompileShader(geometryShaderID);
+		
+		if(glGetShaderi(geometryShaderID, GL_COMPILE_STATUS) != 1) {
+			System.err.println("ERROR OCCURED IN COMPILING GEOMETRY SHADER.");
+			System.err.println(glGetShaderInfoLog(geometryShaderID, 1000));
+			Main.RUNNING = false;
+		}
 						
 		int shaderProgramID = glCreateProgram();
 		glAttachShader(shaderProgramID, vertexShaderID);
 		glAttachShader(shaderProgramID, fragmentShaderID);
+		glAttachShader(shaderProgramID, geometryShaderID);
 		
 		glLinkProgram(shaderProgramID);
 		glValidateProgram(shaderProgramID);
@@ -58,8 +73,8 @@ public class ShaderParser {
 			System.err.println("ERROR OCCURED IN COMPILING SHADER PROGRAM.");
 			Main.RUNNING = false;
 		}
-		
-		Shader shader = new Shader(loc, vertexShaderID, fragmentShaderID, shaderProgramID);
+				
+		Shader shader = new Shader(loc, vertexShaderID, fragmentShaderID, geometryShaderID, shaderProgramID);
 		shaders.put(loc, shader);
 		return shader;
 	}
@@ -89,6 +104,7 @@ public class ShaderParser {
 			System.out.println("Deleting shader " + s.name);
 			glDeleteShader(s.vertexID);
 			glDeleteShader(s.fragmentID);
+			glDeleteShader(s.geometryShaderID);
 			glDeleteProgram(s.programID);
 		}
 	}

@@ -3,13 +3,10 @@ package org.jessifin.entity;
 import java.util.ArrayList;
 
 import javax.vecmath.Color4f;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.dynamics.RigidBody;
 
-import org.jessifin.main.Physics;
 import org.jessifin.model.Bone;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
@@ -32,15 +29,18 @@ public abstract class Entity implements Cloneable {
 	public int maxHealth = 100;
 	public int health = maxHealth;
 	public int flashSpeed = 0;
+	public boolean isAlive;
 	
 	public Entity(String model) {
 		if(!model.equals("null") && model.endsWith(".dae")) {
 			this.model = ModelParser.getModel(model);
 		}
+		flashSpeed = 10;
 	}
 
 	public Entity(ModelData[] modelData) {
 		this.model = ModelParser.buildModel("MODEL DATA", modelData);
+		flashSpeed = 10;
 	}
 	
 	public Entity copy() {
@@ -62,6 +62,8 @@ public abstract class Entity implements Cloneable {
 			}
 		}
 	}
+	
+	public abstract void onCollide(Entity e);
 	
 	public abstract void update();	
 }

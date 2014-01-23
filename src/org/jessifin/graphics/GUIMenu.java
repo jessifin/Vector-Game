@@ -10,7 +10,7 @@ public class GUIMenu extends GUI {
 	public GUIMenu() {
 		pausesGame = true;
 
-		button = new ComponentButton("BBBBB",4,3,9,5,new Color4f(0,0,1,1));
+		button = new ComponentButton("QWERTYUIOP",4,3,9,5,new Color4f(0,0,1,1));
 		components.add(button);
 	}
 

@@ -92,26 +92,30 @@ public class Util {
 		return list;
 	}
 	
-	public static BufferedImage saveScreenshot(ByteBuffer data) {
-		BufferedImage image = new BufferedImage((int)Graphics.WIDTH, (int)Graphics.HEIGHT, BufferedImage.TYPE_INT_RGB);
-		int[] array = new int[(int) (Graphics.WIDTH * Graphics.HEIGHT)];
-		for(int i = 0; i < array.length; i++) {
-			int pootis = i*3;
-			array[i] = (data.get(pootis) << 16) + (data.get(pootis+1) << 8) + (data.get(pootis+2) << 0);
-		}
-		image.setRGB(0, 0, (int)Graphics.WIDTH, (int)Graphics.HEIGHT, array, 0, (int)Graphics.WIDTH);
-		AffineTransform trans = AffineTransform.getScaleInstance(1, -1);
-		trans.translate(0, -image.getHeight());
-		AffineTransformOp op = new AffineTransformOp(trans, AffineTransformOp.TYPE_BILINEAR);
-		BufferedImage dst = op.filter(image, null);
-		
-		try {
-			System.out.println("Taking screenshot!");
-			ImageIO.write(dst, "PNG", new File("screenshots/" + System.currentTimeMillis() + ".png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return dst;
+	public static void saveScreenshot(final ByteBuffer data) {
+		System.out.println("Taking screenshot!");
+		new Thread() {
+			BufferedImage dst;
+			public void run() {
+				BufferedImage image = new BufferedImage((int)Graphics.WIDTH, (int)Graphics.HEIGHT, BufferedImage.TYPE_INT_RGB);
+				int[] array = new int[(int) (Graphics.WIDTH * Graphics.HEIGHT)];
+				for(int i = 0; i < array.length; i++) {
+					int pootis = i*3;
+					array[i] = (data.get(pootis) << 16) + (data.get(pootis+1) << 8) + (data.get(pootis+2) << 0);
+				}
+				image.setRGB(0, 0, (int)Graphics.WIDTH, (int)Graphics.HEIGHT, array, 0, (int)Graphics.WIDTH);
+				AffineTransform trans = AffineTransform.getScaleInstance(1, -1);
+				trans.translate(0, -image.getHeight());
+				AffineTransformOp op = new AffineTransformOp(trans, AffineTransformOp.TYPE_BILINEAR);
+				dst = op.filter(image, null);
+				
+				try {
+					ImageIO.write(dst, "PNG", new File("screenshots/" + System.currentTimeMillis() + ".png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 	}
 	
 	public static ByteBuffer getBuffer(String loc) {

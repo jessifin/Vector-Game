@@ -5,7 +5,9 @@ import org.jessifin.graphics.Graphics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -13,12 +15,15 @@ import java.util.Calendar;
 import java.util.Random;
 
 import org.jessifin.model.ModelParser;
+import org.jessifin.net.WebUtil;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.jessifin.audio.Audio;
 
 public class Main {
 
+	//2596 lines of code!
+	
 	public static final OS SYSTEM_OS;
 	public final static boolean debug = true;
 	private static PrintStream log;
@@ -51,9 +56,9 @@ public class Main {
 		Graphics.init();
 		Audio.init();
 		Input.init();
-		Physics.init();
+		Physics.init(false);
 		Game.init();
-		
+
 		long lastTime = System.currentTimeMillis();
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;

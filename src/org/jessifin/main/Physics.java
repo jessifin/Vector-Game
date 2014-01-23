@@ -2,6 +2,7 @@ package org.jessifin.main;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,12 +12,12 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
-
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
 import org.jessifin.model.ModelParser;
 
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
+import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.broadphase.Dispatcher;
@@ -27,6 +28,8 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.narrowphase.ManifoldPoint;
+import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -42,10 +45,12 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
 import com.bulletphysics.dynamics.vehicle.VehicleTuning;
 import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 
+import org.jessifin.audio.Audio;
 import org.jessifin.entity.Entity;
 import org.jessifin.game.Game;
 import org.jessifin.graphics.GUIHUD;
@@ -59,23 +64,34 @@ public class Physics {
 	private static Dispatcher dispatcher;
 	private static ConstraintSolver constraintSolver;
 	public static Vector3f gravity = new Vector3f(0,-9.8f,0);
+	private static Vector3f worldCorner1 = new Vector3f(-5000,-5000,-5000);
+	private static Vector3f worldCorner2 = new Vector3f(5000, 5000, 5000);
 	
-	//private static ArrayList<ArrayList<Integer>> collisionPairs;
-	//private static HashMap<Integer,Entity> matches = new HashMap<Integer,Entity>();
-	
+	private static HashMap<Float,SphereShape> sphereShapes;
+	private static HashMap<Vector3f,BoxShape> boxShapes;
+	private static HashMap<Vector3f,StaticPlaneShape> planeShapes;
+	private static HashMap<Model,CollisionShape> meshShapes;
+
 	private static HashMap<RigidBody,Entity> matches = new HashMap<RigidBody,Entity>();
 
-	public static void init() {
+	public static void init(boolean infiniteWorld) {
 		collisionConfig = new DefaultCollisionConfiguration();
-		broadphaseInterface = new DbvtBroadphase();
+		//I should consider using an Axis Sweep instead of the default broadphase
+		broadphaseInterface = infiniteWorld ? new DbvtBroadphase() : new AxisSweep3(worldCorner1,worldCorner2);
 		dispatcher = new CollisionDispatcher(collisionConfig);
 		constraintSolver = new SequentialImpulseConstraintSolver();
 		world = new DiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
 		world.setGravity(gravity);
+		
+		sphereShapes = new HashMap<Float,SphereShape>();
+		boxShapes = new HashMap<Vector3f,BoxShape>();
+		planeShapes = new HashMap<Vector3f,StaticPlaneShape>();
+		meshShapes = new HashMap<Model,CollisionShape>();
 	}
 	
 	private static BvhTriangleMeshShape createMesh(Model model) {
 		ModelData data = model.data;
+
 		ByteBuffer vertexBuffer = ByteBuffer.allocateDirect(data.vertices.length * 4).order(ByteOrder.nativeOrder());
 		for(int i = 0; i < data.vertices.length; i++) {
 			vertexBuffer.putFloat(data.vertices[i]);
@@ -87,7 +103,7 @@ public class Physics {
 			indexBuffer.putInt((int)data.indices[i]);
 		}
 		indexBuffer.flip();
-		
+
 		TriangleIndexVertexArray triangleInfo = new TriangleIndexVertexArray(
 				data.indices.length/3, indexBuffer, 4 * 3, data.vertices.length, vertexBuffer, 4 * 3);
 		
@@ -100,7 +116,7 @@ public class Physics {
 		CompoundShape compoundShape = new CompoundShape();
 		Transform t = new Transform();
 		for(int i = 0; i < shapes.length; i++) {
-			t.origin.set(trans[i]);
+			t.origin.set(trans[i].x, trans[i].y, trans[i].z);
 			compoundShape.addChildShape(t, shapes[i]);
 		}
 		return compoundShape;
@@ -124,7 +140,14 @@ public class Physics {
 	}
 	
 	public static void addSphere(Entity entity, float mass, float rest, float frict, float radius) {
-		CollisionShape shape = new SphereShape(radius);
+		SphereShape shape;
+		if(sphereShapes.containsKey(radius)) {
+			shape = sphereShapes.get(radius);
+		} else {
+			System.out.println("Creating new Sphere Shape: " + radius);
+			shape = new SphereShape(radius);
+			sphereShapes.put(radius, shape);
+		}
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(entity.pos);
@@ -168,10 +191,18 @@ public class Physics {
 	}
 	
 	public static void addBox(Entity entity, float mass, float rest, float frict) {
-		CollisionShape shape = new BoxShape(new Vector3f(
+		Vector3f halfExtents = new Vector3f(
 				entity.scale.x/2f,
 				entity.scale.y/2f,
-				entity.scale.z/2f));
+				entity.scale.z/2f);
+		BoxShape shape;
+		if(boxShapes.containsKey(halfExtents)) {
+			shape = boxShapes.get(halfExtents);
+		} else {
+			System.out.println("Creating new Box Shape: " + halfExtents);
+			shape = new BoxShape(halfExtents);
+			boxShapes.put(halfExtents, shape);
+		}
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(entity.pos);
@@ -186,8 +217,15 @@ public class Physics {
 		matches.put(body,entity);
 	}
 	
-	public static void addBox(Vector3f pos, float mass, float rest, float frict, Vector3f lengths) {
-		CollisionShape shape = new BoxShape(lengths);
+	public static void addBox(Vector3f pos, float mass, float rest, float frict, Vector3f halfExtents) {
+		BoxShape shape;
+		if(boxShapes.containsKey(halfExtents)) {
+			shape = boxShapes.get(halfExtents);
+		} else {
+			System.out.println("Creating new Box Shape: " + halfExtents);
+			shape = new BoxShape(halfExtents);
+			boxShapes.put(halfExtents, shape);
+		}
 		Transform transform = new Transform();
 		transform.setIdentity();
 		transform.origin.set(pos);
@@ -201,7 +239,33 @@ public class Physics {
 	}
 	
 	public static void addEntity(Entity entity, float mass, float rest) {
-		CollisionShape shape = createMesh(entity.model[0]);
+		Transform transform = new Transform();
+		transform.setIdentity();
+		transform.origin.set(entity.pos.x,entity.pos.y,entity.pos.z);
+		transform.setRotation(new Quat4f(0,0,0,1));
+		
+		CollisionShape[] shapes = new CollisionShape[entity.model.length];
+		Vector3f[] positions = new Vector3f[entity.model.length];
+		float[] masses = new float[entity.model.length];
+		for(int i = 0; i < shapes.length; i++) {
+			shapes[i] = createMesh(entity.model[i]);
+			positions[i] = entity.model[i].pos;
+			masses[i] = 5;
+		}
+		
+		
+		//CompoundShape pootis = combineShapes(positions,shapes);
+		//pootis.calculatePrincipalAxisTransform(masses, transform, new Vector3f(0,0,0));
+		
+		CollisionShape shape;
+		if(meshShapes.containsKey(entity.model[0])) {
+			shape = meshShapes.get(entity.model[0]);
+		} else {
+			System.out.println("Creating Mesh Shape " + entity.model[0].name);
+			shape = createMesh(entity.model[0]);
+			meshShapes.put(entity.model[0], shape);
+		}
+		
 		shape.setLocalScaling(entity.scale);
 		shape.calculateLocalInertia(mass, new Vector3f(0,0,0));
 		/*
@@ -210,14 +274,11 @@ public class Physics {
 		construction.restitution = .5f;
 		shape.calculateLocalInertia(5, new Vector3f(10,0,0));
 		*/
-		Transform transform = new Transform();
-		transform.setIdentity();
-		transform.origin.set(entity.pos);
-		transform.setRotation(new Quat4f(0,0,0,1));
 		
 		RigidBody body = createRigidBody(mass,rest,transform,shape);
 		body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
 		world.addRigidBody(body);
+		
 		entity.physID = body.getBroadphaseProxy().uniqueId;
 		
 		entity.body = body;
@@ -235,13 +296,10 @@ public class Physics {
 		Vector3f eaabbMin = new Vector3f(); Vector3f eaabbMax = new Vector3f();
 		e.body.getAabb(eaabbMin, eaabbMax);
 		
-		if((((aabbMin.x < eaabbMin.x && aabbMax.x > eaabbMin.x) || (aabbMin.x < eaabbMax.x && aabbMax.x > eaabbMin.x))) &&
+		return (((aabbMin.x < eaabbMin.x && aabbMax.x > eaabbMin.x) || (aabbMin.x < eaabbMax.x && aabbMax.x > eaabbMin.x))) &&
 			(((aabbMin.y < eaabbMin.y && aabbMax.y > eaabbMin.y) || (aabbMin.y < eaabbMax.y && aabbMax.y > eaabbMin.y))) &&
-			((aabbMin.z < eaabbMin.z && aabbMax.z > eaabbMin.z) || (aabbMin.z < eaabbMax.z && aabbMax.z > eaabbMin.z)))
-				return true;
-		
-		return false;
-	}
+			((aabbMin.z < eaabbMin.z && aabbMax.z > eaabbMin.z) || (aabbMin.z < eaabbMax.z && aabbMax.z > eaabbMin.z));
+		}
 	
 	public boolean collidesWith(Entity e1, Entity e2) {
 		return e1.collisions.contains(e2);
@@ -300,16 +358,53 @@ public class Physics {
 			}
 		}
 		
+		ArrayList<Entity> entitiesToRemove = new ArrayList<Entity>();
+		
 		OverlappingPairCache cache = broadphaseInterface.getOverlappingPairCache();
 		ObjectArrayList<BroadphasePair> pairs = cache.getOverlappingPairArray();
 		
 		for(BroadphasePair pair: pairs) {
-			Entity p0 = matches.get(pair.pProxy0.clientObject);
-			Entity p1 = matches.get(pair.pProxy1.clientObject);
+			RigidBody r0 = (RigidBody) pair.pProxy0.clientObject;
+			RigidBody r1 = (RigidBody) pair.pProxy1.clientObject;
+			Entity p0 = matches.get(r0);
+			Entity p1 = matches.get(r1);
 			if(p0 != null && p1 != null) {
 				p0.collisions.add(p1);
 				p1.collisions.add(p0);
+				p0.onCollide(p1);
+				p1.onCollide(p0);
+				ObjectArrayList<PersistentManifold> manifolds = new ObjectArrayList<PersistentManifold>();
+				pair.algorithm.getAllContactManifolds(manifolds);
+				for(PersistentManifold manifold: manifolds) {
+					for(int i = 0; i < manifold.getNumContacts(); i++) {
+						ManifoldPoint contactPoint = manifold.getContactPoint(i);
+						if(contactPoint.appliedImpulse > 200) {
+							Audio.playAtEntity("hit.wav", p0, 1);
+							if(p0.health > 0) {
+								p0.health-=5;
+							} else {
+								if(!p0.isAlive) {
+									p0.isAlive = false;
+									entitiesToRemove.add(p0);
+								}
+							}
+							if(p1.health > 5) {
+								p1.health-=5;
+							} else {
+								if(p1.isAlive) {
+									p1.isAlive = false;
+									entitiesToRemove.add(p1);
+								}
+							}
+						}
+					}
+				}
 			}
+		}
+		
+		for(Entity e: entitiesToRemove) {
+			world.removeRigidBody(e.body);
+			Game.entities.remove(e);
 		}
 	}
 		
