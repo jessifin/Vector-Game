@@ -5,14 +5,14 @@ import java.util.HashMap;
 public class Shader {
 	
 	public final String name;
-	public final int vertexID, fragmentID, geometryShaderID, programID;
+	public final int vertexID, fragmentID, geometryID, programID;
 	private HashMap<String,Integer> uniforms = new HashMap<String,Integer>();
 
 	Shader(String name, int vertexID, int fragmentID, int geometryShaderID, int programID) {
 		this.name = name;
 		this.vertexID = vertexID;
 		this.fragmentID = fragmentID;
-		this.geometryShaderID = geometryShaderID;
+		this.geometryID = geometryShaderID;
 		this.programID = programID;
 	}
 	

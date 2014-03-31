@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.dynamics.RigidBody;
 
 import org.jessifin.model.Bone;
@@ -20,7 +21,6 @@ public abstract class Entity implements Cloneable {
 	public float distanceFromCam;
 
 	public RigidBody body;
-	public int physID;
 	public ArrayList<Entity> collisions = new ArrayList<Entity>();
 
 	public Model[] model;
@@ -63,7 +63,7 @@ public abstract class Entity implements Cloneable {
 		}
 	}
 	
-	public abstract void onCollide(Entity e);
+	public abstract void onCollide(Entity e, ManifoldPoint[] contactPoints);
 	
 	public abstract void update();	
 }

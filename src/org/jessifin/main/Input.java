@@ -2,6 +2,7 @@ package org.jessifin.main;
 
 import static org.lwjgl.input.Keyboard.*;
 
+import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
 import org.jessifin.entity.Entity;
@@ -13,7 +14,8 @@ import org.jessifin.graphics.GUIHUD;
 import org.jessifin.graphics.GUIMenu;
 import org.jessifin.graphics.Graphics;
 import org.jessifin.model.ModelParser;
-import org.lwjgl.input.Cursor;
+import org.jessifin.physics.Physics;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.jessifin.audio.Audio;
 
@@ -46,6 +48,7 @@ public class Input {
 		x += dX; y += dY;
 		
 		if(Mouse.isButtonDown(0)) {
+			Physics.conductRaycast(Game.camPos, Game.player.pos);
 			Audio.play("pootis.wav", Game.player.pos, new Vector3f(0,0,0), 5);
 		}
 		if(Mouse.isButtonDown(1)) {
@@ -91,13 +94,13 @@ public class Input {
 					);
 			
 			forward.normalize();
-			forward.scale(30);
+			forward.scale(50);
 			Physics.applyImpulse(Game.player, forward);
 			if(Game.speed<=0) {
 				Game.reboot();
 				Game.speed = 1;
 			} else {
-				Game.speed-=.0025f;
+			//	Game.speed-=.0025f;
 			}
 			/*
 			Game.player.pos.x -= (float) (Math.cos(x) * Math.sin(y))*Game.speed;
@@ -113,13 +116,13 @@ public class Input {
 					);
 						
 			backward.normalize();
-			backward.scale(30);
+			backward.scale(50);
 			Physics.applyImpulse(Game.player, backward);
 			if(Game.speed<=0) {
 				Game.reboot();
 				Game.speed = 1;
 			} else {
-				Game.speed-=.0025f;
+			//	Game.speed-=.0025f;
 			}
 			/*
 			Game.player.pos.x += (float) (Math.cos(x) * Math.sin(y))*Game.speed;
@@ -138,10 +141,13 @@ public class Input {
 		}
 		*/
 		if(keys[KEY_Q].pressed) {
-			for(Entity e: Game.player.collisions) {
-				System.out.println(e);
-			}
-			
+			MacUtil.toggleFullscreen();
+		}
+		if(keys[KEY_Z].state) {
+			Game.speed -= .01f;
+		}
+		if(keys[KEY_C].state) {
+			Game.speed += .01f;
 		}
 		if(keys[KEY_Z].state && keys[KEY_C].state) {
 			Game.speed = 1;
@@ -181,12 +187,13 @@ public class Input {
 			forward.scale(Game.speed*60);
 			
 			EntityPizzard pizzard = new EntityPizzard();
-			pizzard.model = ModelParser.getModel("sphere.dae");
+			pizzard.model = ModelParser.getModel("bawks.dae");
 			Vector3f pizzardPos = new Vector3f(Game.player.pos.x + forward.x*5,Game.player.pos.y + forward.y*5,Game.player.pos.z + forward.z*5);
 			pizzard.pos = pizzardPos;
-			pizzard.scale = new Vector3f(5,5,5);
+			pizzard.scale = new Vector3f(10,10,10);
+			pizzard.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
 			Game.entities.add(pizzard);
-			Physics.addSphere(pizzard, 5, 1, 1, 5);
+			Physics.addBox(pizzard, 5, 2, 0.1f);
 			Physics.applyImpulse(pizzard, forward);
 		}
 		if(keys[KEY_F1].pressed) {

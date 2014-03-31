@@ -77,6 +77,10 @@ public class Util {
 	}
 	
 	public static short[] toArray(String s, int begin, int stride) {
+		if(stride == 0) {
+			System.err.println("Who do you think you are? Oh wait, I'm the only one writing this :P");
+			return null;
+		}
 		String[] splitString = s.split(" ");
 		short[] array = new short[splitString.length/stride];
 		for(int i = begin; i < splitString.length; i+=stride) {
@@ -118,15 +122,7 @@ public class Util {
 		};
 	}
 	
-	public static ByteBuffer getBuffer(String loc) {
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File(Main.resourceLoc,loc));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		
+	public static ByteBuffer getBuffer(BufferedImage image) {
 		int width = image.getWidth(); int height = image.getHeight();
 		byte[] data = new byte[width*height*4];
 		for(int x = 0; x < width; x++) {
@@ -148,6 +144,17 @@ public class Util {
 		}
 		
 		return toBuffer(data);
+	}
+	
+	public static ByteBuffer getBuffer(String loc) {
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File(Main.resourceLoc,loc));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return getBuffer(image);
 	}
 	
 	public static ByteBuffer[] getIcon(byte[] powers) {

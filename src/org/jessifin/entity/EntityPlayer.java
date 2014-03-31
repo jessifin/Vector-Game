@@ -1,7 +1,10 @@
 package org.jessifin.entity;
 
+import org.jessifin.audio.Audio;
 import org.jessifin.game.Game;
 import org.jessifin.model.ModelData;
+
+import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 public class EntityPlayer extends Entity {
 	
@@ -59,8 +62,17 @@ public class EntityPlayer extends Entity {
 		super(modelData);
 	}
 
-	public void onCollide(Entity e) {
-		
+	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {
+		boolean hitsound = false;
+		for(ManifoldPoint contactPoint: contactPoints) {
+			if(contactPoint.appliedImpulse > 500) {
+				hitsound = true;
+				break;
+			}
+		}
+		if(hitsound) {
+			Audio.playAtEntity("hit.wav", this, 1);
+		}
 	}
 	
 	public void update() {

@@ -13,9 +13,9 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.BoxShape;
 
-import org.jessifin.main.Physics;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelParser;
+import org.jessifin.physics.Physics;
 import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPlayer;
 import org.jessifin.entity.EntityVirus;

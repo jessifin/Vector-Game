@@ -9,7 +9,10 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL21;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.GL40;
 import org.jessifin.main.Main;
 
 public class ShaderParser {
@@ -104,7 +107,7 @@ public class ShaderParser {
 			System.out.println("Deleting shader " + s.name);
 			glDeleteShader(s.vertexID);
 			glDeleteShader(s.fragmentID);
-			glDeleteShader(s.geometryShaderID);
+			glDeleteShader(s.geometryID);
 			glDeleteProgram(s.programID);
 		}
 	}

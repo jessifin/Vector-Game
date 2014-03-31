@@ -1,28 +1,21 @@
 package org.jessifin.main;
 
-import org.jessifin.game.Game;
-import org.jessifin.graphics.Graphics;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Random;
 
-import org.jessifin.model.ModelParser;
-import org.jessifin.net.WebUtil;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
+import org.jessifin.game.Game;
+import org.jessifin.graphics.Graphics;
+import org.jessifin.physics.Physics;
 import org.jessifin.audio.Audio;
+import org.lwjgl.opengl.Display;
 
 public class Main {
-
-	//2596 lines of code!
 	
 	public static final OS SYSTEM_OS;
 	public final static boolean debug = true;
@@ -33,6 +26,8 @@ public class Main {
 	public static boolean RUNNING = true;
 	public static long numLoops, numTicks, millisPassed;
 	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(100000);
+	
+	public static final String GAME_TITLE = "Vector Game";
 	
 	public static Random rng = new Random();
 	
@@ -52,13 +47,13 @@ public class Main {
 		calendar = Calendar.getInstance();
 	}
 	
-	public static void run() {
+	private static void run() {
 		Graphics.init();
 		Audio.init();
 		Input.init();
 		Physics.init(false);
 		Game.init();
-
+		
 		long lastTime = System.currentTimeMillis();
 		while(RUNNING && !Display.isCloseRequested()) {
 			numLoops++;
@@ -101,10 +96,9 @@ public class Main {
 		if(Display.wasResized()) {
 			Graphics.WIDTH = Display.getWidth();
 			Graphics.HEIGHT = Display.getHeight();
-			Display.setTitle(Graphics.WIDTH + " " + Graphics.HEIGHT);
 		}
 	}
-		
+	
 	public static void main(String... args) {
 		URL nativeLoc = Main.class.getResource("/org/jessifin/res/lwjgl_natives/"+SYSTEM_OS.nativePath);
 		URI decodedURL = null;
@@ -115,6 +109,9 @@ public class Main {
 		}
 		System.setProperty("org.lwjgl.librarypath", decodedURL.getPath());
 		System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "true");
+		if(SYSTEM_OS == OS.MAC) {
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", GAME_TITLE);
+		}
 		String username = System.getProperty("user.name");
 		String refinedName = Character.toUpperCase(username.charAt(0)) + username.substring(1,username.length());
 		System.out.println("Hello, " + refinedName + ". We've been waiting for you.");
@@ -144,38 +141,5 @@ public class Main {
 				calendar.get(Calendar.SECOND) + "." +
 				calendar.get(Calendar.MILLISECOND);
 		return datetime;
-	}
-
-	public enum OS {
-		WINDOWS("windows"), MAC("macosx"), LINUX("linux"), SOLARIS("solaris"), FREE_BSD("freebsd"), NULL("");
-		
-		public final String nativePath;
-		
-		private OS(String nativePath) {
-			this.nativePath = nativePath;
-		}
-		
-		private static OS getOS() {
-			try {
-				String osName = System.getProperty("os.name");
-				if(osName.contains("Windows")) {
-					return WINDOWS;
-				} else if(osName.contains("Mac")) {
-					return MAC;
-				} else if(osName.contains("Linux")) {
-					return LINUX;
-				} else if(osName.contains("Solaris")) {
-					return SOLARIS;
-				} else if(osName.contains("FreeBSD")) {
-					return FREE_BSD;
-				} else {
-					throw new LWJGLException("Your OS is not supported. Sorry.");
-				}
-			} catch(LWJGLException exception) {
-				exception.printStackTrace();
-				RUNNING = false;
-			}
-			return NULL;
-		}
 	}
 }

@@ -1,27 +1,32 @@
 package org.jessifin.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import org.jessifin.entity.Entity;
 import org.jessifin.game.Game;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.vecmath.Color4f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
+import org.jessifin.main.MacUtil;
 import org.jessifin.main.Main;
+import org.jessifin.main.OS;
 import org.jessifin.main.Util;
 import org.jessifin.model.Bone;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
 import org.jessifin.model.ModelParser;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -44,7 +49,6 @@ import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GL42;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.PixelFormat;
-
 import org.jessifin.shader.Shader;
 import org.jessifin.shader.ShaderParser;
 
@@ -60,23 +64,26 @@ public class Graphics {
 	public static Color4f clearColor = new Color4f(0,0,0,1);
 	private static final int CLEAR_MASK = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	
-	private static Shader defaultShader;
+	private static Shader currentShader;
 	
 	private static Model boxModel;
 	private static Model[] font;
 	public static final float charWidth = 0.39341f, charHeight = 0.59507f;
 		
-	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f();
-	private static Matrix4f modelMatrix = new Matrix4f();
+	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f(), modelMatrix = new Matrix4f();
+	private static Matrix4f projectionViewModelMatrix = new Matrix4f();
+	private static Matrix4f generateMatrix = new Matrix4f();
 	private static Stack<Matrix4f> matrixStack = new Stack<Matrix4f>();
+	
+	public static float gamma = 1, brightness = 0.5f, contrast = 1;
 		
 	public static void update() {
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 		glClear(CLEAR_MASK);
 		
-		GL20.glUniform3f(defaultShader.getUniform("camPos"), Game.camPos.x, Game.camPos.y, Game.camPos.z);
-		GL20.glUniform1f(defaultShader.getUniform("time"), 0);
-		GL20.glUniform1f(defaultShader.getUniform("freq"), 1);
+		GL20.glUniform3f(currentShader.getUniform("camPos"), Game.camPos.x, Game.camPos.y, Game.camPos.z);
+		GL20.glUniform1f(currentShader.getUniform("time"), Main.numLoops/100f);
+		GL20.glUniform1f(currentShader.getUniform("freq"), 1);
 		
 		setup3D();
 		renderBatch(Game.entities);
@@ -87,12 +94,11 @@ public class Graphics {
 				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
 				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
 				"\nRandom number: "+Main.rng.nextInt(),
-				new Vector3f(-300,500,-800),
+				new Vector3f(200,0,0),
 				new Vector3f(0,0,0),
-				new Vector3f(30,30,300),
+				new Vector3f(30,30,30),
 				new Color4f(1,1,0,1),
 				false);
-				
 		setup2D();
 		Game.gui.render();
 		Display.update();
@@ -115,15 +121,17 @@ public class Graphics {
 		});
 		
 		viewMatrix.setIdentity();
-				
-		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
-		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+		
+		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
+		GL20.glUniformMatrix4(currentShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
 	}
 	
 	private static void setup3D() {
+		float cotFOV = (float) (0.5f / Math.tan(Math.toRadians(Game.FoV/2)));
+		
 		projectionMatrix.set(new float[] {
-				(float)(((1f / Math.tan(Math.toRadians(Game.FoV/2))) / 2f) / (WIDTH / HEIGHT)), 0, 0, 0,
-				0, (float)((1f / Math.tan(Math.toRadians(Game.FoV/2))) / 2f), 0, 0,
+				cotFOV * HEIGHT / WIDTH, 0, 0, 0,
+				0, cotFOV, 0, 0,
 				0, 0, (Game.Z_NEAR + Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR), (2 * Game.Z_NEAR * Game.Z_FAR) / (Game.Z_NEAR - Game.Z_FAR),
 				0, 0, -1, 0
 		});
@@ -144,92 +152,42 @@ public class Graphics {
 		up.cross(side, forward);
 		
 		viewMatrix.set(new float[] {
-				side.x, side.y, side.z, 0,
-				up.x, up.y, up.z, 0,
-				-forward.x, -forward.y, -forward.z, 0,
+				side.x, side.y, side.z, -side.x * Game.camPos.x - side.y * Game.camPos.y - side.z * Game.camPos.z,
+				up.x, up.y, up.z, -up.x * Game.camPos.x - up.y * Game.camPos.y - up.z * Game.camPos.z,
+				-forward.x, -forward.y, -forward.z, forward.x * Game.camPos.x + forward.y * Game.camPos.y + forward.z * Game.camPos.z,
 				0, 0, 0, 1
 		});
-		
-		Matrix4f shift = new Matrix4f(new float[] {
-				1, 0, 0, -Game.camPos.x,
-				0, 1, 0, -Game.camPos.y,
-				0, 0, 1, -Game.camPos.z,
-				0, 0, 0, 1
-		});
-		
-		viewMatrix.mul(shift);
-		
-		GL20.glUniformMatrix4(defaultShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
-		GL20.glUniformMatrix4(defaultShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+
+		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
+		GL20.glUniformMatrix4(currentShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
 	}
 
     private static Matrix4f generateMatrix(Entity e) {
 		return generateMatrix(e.pos, e.rot, e.scale);
 	}
 
-	private static Matrix4f generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) { 	
-		/*
-		Matrix4f transMat = new Matrix4f(new float[] {
-				1, 0, 0, pos.x,
-				0, 1, 0, pos.y,
-				0, 0, 1, pos.z,
-				0, 0, 0, 1
-		});
+	private static Matrix4f generateMatrix(Vector3f pos, Vector3f rot, Vector3f scale) {
+		float cosX = (float)Math.cos(rot.x);
+		float sinX = (float)Math.sin(rot.x);
+		float cosY = (float)Math.cos(rot.y);
+		float sinY = (float)Math.sin(rot.y);
+		float cosZ = (float)Math.cos(rot.z);
+		float sinZ = (float)Math.sin(rot.z);
 		
-		Matrix4f xRotMat = new Matrix4f(new float[] {
-				1, 0, 0, 0,
-				0, (float) Math.cos(rot.x), - (float) Math.sin(rot.x), 0,
-				0, (float) Math.sin(rot.x), (float) Math.cos(rot.x), 0,
-				0, 0, 0, 1
-		});
-		
-		Matrix4f yRotMat = new Matrix4f(new float[] {
-				(float) Math.cos(rot.y), 0, (float) Math.sin(rot.y), 0,
-				0, 1, 0, 0,
-				- (float) Math.sin(rot.y), 0, (float) Math.cos(rot.y), 0,
-				0, 0, 0, 1
-		});
-		
-		Matrix4f zRotMat = new Matrix4f(new float[] {
-				(float) Math.cos(rot.z), - (float) Math.sin(rot.z), 0, 0,
-				(float) Math.sin(rot.z), (float) Math.cos(rot.z), 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		});
-		*/
-		
-		float A = (float)Math.cos(rot.x);
-		float B = (float)Math.sin(rot.x);
-		float C = (float)Math.cos(rot.y);
-		float D = (float)Math.sin(rot.y);
-		float E = (float)Math.cos(rot.z);
-		float F = (float)Math.sin(rot.z);
-		
-		float AD = A * D;
-		float BD = B * D;
-		
-		Matrix4f rotMat = new Matrix4f(new float[] {
-			C * E, -C * F, D, pos.x,
-			BD * E + A * F, -BD * F + A * E, -B * C, pos.y,
-			-AD * E + B * F, AD * F + B * E, A * C, pos.z,
+		float cosXsinY = cosX * sinY;
+		float sinXsinY = sinX * sinY;
+
+		generateMatrix.set(new float[] {
+			cosY * cosZ * scale.x, -cosY * sinZ * scale.y, sinY * scale.z, pos.x,
+			(sinXsinY * cosZ + cosX * sinZ) * scale.x, (-sinXsinY * sinZ + cosX * cosZ) * scale.y, -sinX * cosY * scale.z, pos.y,
+			(-cosXsinY * cosZ + sinX * sinZ) * scale.x, (cosXsinY * sinZ + sinX * cosZ) * scale.y, cosX * cosY * scale.z, pos.z,
 			0, 0, 0, 1
-		});
-		
-		Matrix4f scaleMat = new Matrix4f(new float[] {
-			scale.x, 0, 0, 0,
-			0, scale.y, 0, 0,
-			0, 0, scale.z, 0,
-			0, 0, 0, 1
-			
 		});
 
-		rotMat.mul(scaleMat);
-		
-		return rotMat;
+		return generateMatrix;
 	}
 
-	private static void renderBatch(ArrayList<Entity> entities) {    	
-    	
+	private static void renderBatch(ArrayList<Entity> entities) {
     	for(int e = 0; e < entities.size(); e++) {
 			
     		modelMatrix = generateMatrix(entities.get(e));
@@ -250,27 +208,21 @@ public class Graphics {
     }
     
     private static void renderModel(Entity entity, Model model) {		
-		GL20.glUniform1i(defaultShader.getUniform("offset"), (int) (Main.numTicks * entity.flashSpeed));
+		GL20.glUniform1i(currentShader.getUniform("offset"), (int) (Main.numTicks * entity.flashSpeed));
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
-		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
+		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
+		GL20.glUniform4f(currentShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
 				model.colorFill.y * entity.colorFill.y,
 				model.colorFill.z * entity.colorFill.z,
 				model.colorFill.w * entity.colorFill.w);
 		
-		int indicesToDraw = (int)(model.indexCount * entity.maxHealth/(float)(entity.maxHealth));
-		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
-		if(model.indexCount != indicesToDraw) {
-			GL20.glUniform4f(defaultShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
-					model.colorFill.y * entity.colorFill.y,
-					model.colorFill.z * entity.colorFill.z,
-					0.4f);
-		//	glDrawElements(GL_TRIANGLES, model.indexCount - indicesToDraw, GL_UNSIGNED_SHORT, indicesToDraw);
-		}
-	
-		GL20.glUniform4f(defaultShader.getUniform("color"), model.colorLine.x * entity.colorLine.x,
+		int indicesToDraw = (int)(model.indexCount * entity.health/entity.maxHealth);
+		
+		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
+
+		GL20.glUniform4f(currentShader.getUniform("color"), model.colorLine.x * entity.colorLine.x,
 				model.colorLine.y * entity.colorLine.y,
 				model.colorLine.z * entity.colorLine.z,
 				model.colorLine.w * entity.colorLine.w);
@@ -281,12 +233,12 @@ public class Graphics {
 	}
     
     private static void renderModel(Model model, Color4f color) {
-		GL20.glUniform1i(defaultShader.getUniform("offset"), (int)(Main.numTicks * 2));
+		GL20.glUniform1i(currentShader.getUniform("offset"), (int)(Main.numTicks * 2));
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
-		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(defaultShader.getUniform("color"), color.x, color.y, color.z, color.w);
+		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
+		GL20.glUniform4f(currentShader.getUniform("color"), color.x, color.y, color.z, color.w);
 		
 		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 		
@@ -298,12 +250,12 @@ public class Graphics {
     public static void renderBox(Vector3f pos, Vector3f rot, Vector3f scale, Color4f color) {
     	modelMatrix = generateMatrix(pos,rot,scale);
     	
-		GL20.glUniform1i(defaultShader.getUniform("offset"), 0);
+		GL20.glUniform1i(currentShader.getUniform("offset"), 0);
 		GL30.glBindVertexArray(boxModel.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, boxModel.indexID);
-		GL20.glUniformMatrix4(defaultShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
-		GL20.glUniform4f(defaultShader.getUniform("color"),color.x,color.y,color.z,color.w);
+		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
+		GL20.glUniform4f(currentShader.getUniform("color"),color.x,color.y,color.z,color.w);
 		
 		glDrawElements(GL_TRIANGLES, boxModel.indexCount, GL_UNSIGNED_SHORT, 0);
 		
@@ -372,8 +324,8 @@ public class Graphics {
 			renderBox(posBox,rot,scaleBox,new Color4f(1-color.x,1-color.y,1-color.z,color.w));
 		}
 		
-		GL20.glUniform1f(defaultShader.getUniform("lineWidth"), 1);
-		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 1);
+		GL20.glUniform1f(currentShader.getUniform("lineWidth"), 1);
+		GL20.glUniform1i(currentShader.getUniform("deformColor"), 1);
 				
 		Matrix4f textPos = generateMatrix(pos,rot, new Vector3f(1,1,1));
 		matrixStack.push(textPos);
@@ -423,9 +375,16 @@ public class Graphics {
 				
 		matrixStack.pop();
 		
-		GL20.glUniform1i(defaultShader.getUniform("deformColor"), 0);
-		GL20.glUniform1f(defaultShader.getUniform("lineWidth"), 0);
-		}
+		GL20.glUniform1i(currentShader.getUniform("deformColor"), 0);
+		GL20.glUniform1f(currentShader.getUniform("lineWidth"), 0);
+	}
+	
+	private static void setProjectionViewModelMatrix() {
+		projectionViewModelMatrix.set(projectionMatrix);
+		projectionViewModelMatrix.mul(viewMatrix);
+		projectionViewModelMatrix.mul(modelMatrix);
+		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
+	}
 	
 	private static void pushMatrix(Matrix4f matrix) {
 		Matrix4f m = new Matrix4f(matrixStack.peek());
@@ -437,6 +396,7 @@ public class Graphics {
 		matrixStack.pop();
 	}
 
+	@SuppressWarnings("unused")
 	private static void renderBone(Entity entity, Bone bone) {
 		pushMatrix(bone.model.matrix);
     	renderModel(entity, entity.model[0]);
@@ -454,20 +414,27 @@ public class Graphics {
 		Util.saveScreenshot(data);
 	}
     
-    public static void setIcon() {
-    	byte[] powers;
-    	if(Main.SYSTEM_OS.equals(Main.OS.WINDOWS)) {
+    public static void setIcon(String loc) {
+    	if(Main.SYSTEM_OS == OS.WINDOWS) {
     		//Windows gets 16x16 and 32x32
-    		powers = new byte[]{4,5};
-    	} else if(Main.SYSTEM_OS.equals(Main.OS.MAC)) {
-    		//Mac gets 128x128
-    		powers = new byte[]{7};
+    		byte[] powers = new byte[]{4,5};
+        	ByteBuffer[] buffers = Util.getIcon(powers);
+        	System.out.println(Display.setIcon(buffers));
+    	} else if(Main.SYSTEM_OS == OS.MAC) {
+    		//Mac is derpy when it comes to some java stuff, so here is a workaround. It's REALLY sloppy.
+    		try {
+    			BufferedImage icon = ImageIO.read(new File(Main.resourceLoc + loc));
+    			MacUtil.setIconMac(icon);
+    			MacUtil.requestForeground(true);
+   		    } catch (IOException e) {
+		    	e.printStackTrace();
+		    }
     	} else {
     		//Everything else should get 32x32
-    		powers = new byte[]{5};
+    		byte[] powers = new byte[]{5};
+    		ByteBuffer[] buffers = Util.getIcon(powers);
+        	System.out.println(Display.setIcon(buffers));
     	}
-    	ByteBuffer[] buffers = Util.getIcon(powers);
-    	System.out.println(Display.setIcon(buffers));
     }
 
 	public static void setDisplayMode(DisplayMode dm, boolean fullscreen) {
@@ -504,7 +471,7 @@ public class Graphics {
 		return availableDisplayModes[index];
 	}
 	
-	public static void setProps(float gamma, float brightness, float contrast) {
+	public static void updateProps() {
 		try {
 			Display.setDisplayConfiguration(gamma, brightness, contrast);
 		} catch (LWJGLException e) {
@@ -523,16 +490,16 @@ public class Graphics {
 			System.out.println("MAX SAMPLES: " + maxSamples);
 			VERSION = glGetString(GL_VERSION);
 			VENDOR = glGetString(GL_VENDOR);
-			System.out.println("OPENGL VENDOR: " + VENDOR + "\nVERSION: " + VERSION);
+			System.out.println("OPENGL VENDOR: " + VENDOR + "\nOPENGL VERSION: 3.2 (" + VERSION + ")\nSHADER VERSION: " + glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
 			Display.destroy();
 			
-			Class[] classesWithTonsOfStuffInThem = {GL11.class, GL12.class, GL13.class, GL14.class,
+			Class<?>[] classesWithTonsOfStuffInThem = {GL11.class, GL12.class, GL13.class, GL14.class,
 					GL15.class, GL20.class, GL21.class, GL30.class, GL31.class, GL32.class,
 					GL33.class, GL40.class, GL41.class, GL42.class, GL43.class,Graphics.class};
 			
 			ArrayList<ArrayList<String>> code = new ArrayList<ArrayList<String>>();
 			
-			for(Class awesomeClass: classesWithTonsOfStuffInThem) {
+			for(Class<?> awesomeClass: classesWithTonsOfStuffInThem) {
 				Field[] fields = awesomeClass.getFields();
 				Method[] methods = awesomeClass.getMethods();
 				ArrayList<String> classCode = new ArrayList<String>(fields.length + methods.length);
@@ -560,7 +527,8 @@ public class Graphics {
 			Display.setResizable(true);
 			Display.setInitialBackground(1,1,1);
 			Display.setTitle("Vector Game");
-			Display.setDisplayModeAndFullscreen(getBestDisplayMode());
+			Display.setDisplayMode(getBestDisplayMode());
+			Display.setFullscreen(fullscreen);
 			Display.create(new PixelFormat().withSamples(maxSamples), new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true));
 		} catch(LWJGLException exception) {
 			Sys.alert("CRITICAL ERROR", "Something bad happened.");
@@ -570,9 +538,9 @@ public class Graphics {
 		/*
 		 * GL Initialization
 		 */
-		
-		defaultShader = ShaderParser.getShader("default");
-		GL20.glUseProgram(defaultShader.programID);
+
+		currentShader = ShaderParser.getShader("default");
+		GL20.glUseProgram(currentShader.programID);
 
 			//box init
 			float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
@@ -597,7 +565,7 @@ public class Graphics {
 		NEAR = -1;
 		FAR = 1;
 		
-		setIcon();
+		setIcon("/icns/16.png");
 	}
 	
 	public static void destroy() {

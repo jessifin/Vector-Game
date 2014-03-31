@@ -3,6 +3,10 @@ package org.jessifin.entity;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import org.jessifin.audio.Audio;
+
+import com.bulletphysics.collision.narrowphase.ManifoldPoint;
+
 public class EntityPickup extends Entity {
 	
 	public int healthBump = 1;
@@ -14,7 +18,8 @@ public class EntityPickup extends Entity {
 		this.health = 5;
 	}
 
-	public void onCollide(Entity e) {
+	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {
+		Audio.playAtEntity("hit.wav", this, 1);
 		if(e.health + healthBump < e.maxHealth && e.health > healthBump) {
 			e.health += healthBump;
 		}

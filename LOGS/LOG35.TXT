@@ -1,0 +1,31 @@
+-- listing properties --
+Hello, Jesse. We've been waiting for you.
+1/1/2014 - 21:28:4.933
+System OS: MAC
+MAX SAMPLES: 8
+OPENGL VENDOR: NVIDIA Corporation
+OPENGL VERSION: 2.1 NVIDIA-8.18.22 310.40.05f01
+SHADER VERSION: 1.20
+Loading shader: default
+Loading model: box
+Loading model: font.dae
+0
+OPENAL VENDOR: OpenAL Community
+OPENAL VERSION: 1.1 ALSOFT 1.15.1
+Creating 32 audio sources
+Loading model: poogeon.dae
+Creating new Sphere Shape: 5.0
+Loading model: bawks.dae
+Loading model: sphere.dae
+Creating new Sphere Shape: 2.5
+Creating new Box Shape: (150.0, 150.0, 150.0)
+Loading audio buffer "pootis.wav"
+Removing 32 audio sources 
+Removing audio buffer "pootis.wav"
+Deleting model font.dae
+Deleting model poogeon.dae
+Deleting model box
+Deleting model sphere.dae
+Deleting model bawks.dae
+Deleting shader default
+FPS AVG: 31.547619

@@ -8,9 +8,10 @@ import javax.vecmath.Vector3f;
 
 import org.jessifin.main.Input;
 import org.jessifin.main.Main;
-import org.jessifin.main.Physics;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelParser;
+import org.jessifin.physics.Physics;
+import org.jessifin.audio.Audio;
 import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPickup;
 import org.jessifin.entity.EntityPizzard;
@@ -39,7 +40,7 @@ public class Game {
 	//Graphics
 	public static float FoV = 60;
 	public static float camDist = 2;
-	public static float Z_NEAR = 0.3f, Z_FAR = 4000;
+	public static float Z_NEAR = 1f, Z_FAR = 4000;
 	public static Vector3f camPos = new Vector3f(10,10,10), camUp = new Vector3f(0,1,0);
 	public static GUI gui;
 		
@@ -49,16 +50,16 @@ public class Game {
 		player = new EntityPlayer();
 		player.scale = new Vector3f(20,20,20);
 		player.pos = new Vector3f(100,200,0);
-		player.flashSpeed = (int) (speed*10);
+		player.flashSpeed = 4;
 		for(Model m: player.model) {
 			m.colorFill = new Color4f(.5f,1,.5f,1);
 		}
 		entities.add(player);
 		
 		//Physics.addEntity(player, 5, 1);
-		Physics.addSphere(player, 2, 0, 3, 5);
+		Physics.addSphere(player, 10, 0, 3, 5);
 		//Physics.addBox(player, 5, 0, 2);
-
+		/*
 		for(int x = 0; x < 5; x++) {
 			for(int y = 0; y < 5; y++) {
 				for(int z = 0; z < 5; z++) {
@@ -68,19 +69,37 @@ public class Game {
 					entities.add(virus);
 					virus.scale = new Vector3f(5,5,5);
 					virus.flashSpeed = (int) (speed*10);
-					Physics.addBox(virus, 5, 0.1f, 0.5f);
+					Physics.addBox(virus, 5, 1, 0.5f);
 				}
 			}
 		}
-		
+		*/
+		for(int theta = 0; theta < 36*20; theta++) {
+			EntityVirus virus = new EntityVirus();
+			virus.model = ModelParser.getModel("sphere.dae");
+			virus.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat()*.5f+.5f);
+			virus.pos = new Vector3f((float)(50*Math.cos(Math.toRadians(theta * 10))), 250 + theta/2, (float)(50*Math.sin(Math.toRadians(theta * 10))));
+			virus.scale = new Vector3f(5,5,5);
+			//virus.flashSpeed = 3;
+			entities.add(virus);
+			//Physics.addSphere(virus, 50, 2, 1, 2.5f);
+		}
+		/*
 		Terrain terrain = new Terrain();
 		terrain.pos = new Vector3f(0,0,0);
 		terrain.scale = new Vector3f(1000,1000,1000);
 		entities.add(terrain);
 		Physics.addEntity(terrain, 0, 1);
-		
+		*/
 		Physics.addPlane(0, 10, new Vector3f(0,-500,0), new Quat4f(0,0,0,1));
 		//Physics.addPlane(0, 10, new Vector3f(0,100,0), new Quat4f(0,1,0,1));
+		
+		EntityVirus virus = new EntityVirus();
+		virus.model = ModelParser.getModel("bawks.dae");
+		virus.scale = new Vector3f(300,300,300);
+		virus.isAlive = false;
+		entities.add(virus);
+		Physics.addBox(virus, 0, 1, 1);
 		
 		//setLevel("test");
 		gui = new GUIHUD();
@@ -102,40 +121,24 @@ public class Game {
 		Physics.destroy();
 		Physics.init(true);
 		init();
+		Audio.play("death.wav", camPos, new Vector3f(0,0,0), 1);
 	}
 	
 	public static void update(int millisPassed) {
 		gui.update(millisPassed);
-		
-		//player.health = (int)((Main.numLoops%100)/100f*player.maxHealth);
-		
+				
 		camPos.x = (float) (camDist * Math.cos(Input.x) * Math.sin(Input.y) + player.pos.x);
 		camPos.y = (float) (camDist * Math.cos(Input.y) + player.pos.y);
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);
 
+		player.flashSpeed = (int)((float)player.health/player.maxHealth*5f); 
+		
 		for(Entity e: entities) {
 			e.update();
 						
 			e.distanceFromCam = (float)Math.sqrt((e.pos.x - camPos.x)*(e.pos.x - camPos.x)
 					+ (e.pos.y - camPos.y)*(e.pos.y - camPos.y))
 					+ (e.pos.z - camPos.z)*(e.pos.z - camPos.z);
-			/*
-			e.vel.x = (e.pos.x - e.lastPos.x);
-			e.vel.y = (e.pos.y - e.lastPos.y);
-			e.vel.z = (e.pos.z - e.lastPos.z);
-			e.lastPos = new Vector3f(e.pos.x,e.pos.y,e.pos.z);
-			
-			e.accel.x = (e.vel.x - e.lastVel.x);
-			e.accel.y = (e.vel.y - e.lastVel.y);
-			e.accel.z = (e.vel.z - e.lastVel.z);
-			e.lastVel = new Vector3f(e.vel.x,e.vel.y,e.vel.z);
-
-			if(e.accel.y < 5 && e.vel.y < -3) {
-				e.health-=(e.accel.y-e.lastAccel.y);
-			}
-			
-			e.lastAccel = new Vector3f(e.accel.x,e.accel.y,e.accel.z);
-			*/
 		}
 	}
 }

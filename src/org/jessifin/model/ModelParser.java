@@ -3,13 +3,16 @@ package org.jessifin.model;
 import static org.lwjgl.opengl.GL15.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
+import javax.vecmath.Color4f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,6 +31,8 @@ import org.jessifin.main.Util;
 
 public class ModelParser {
 	
+	private static Scanner scanner;
+	
 	private static HashMap<String,Model[]> loadedModels = new HashMap<String,Model[]>();
 
 	public static Model[] getModel(String loc) {
@@ -35,6 +40,54 @@ public class ModelParser {
 	}
 	
 	private static Model[] parseModel(String loc) {
+		if(loc.endsWith(".dae")) {
+			return parseCOLLADA(loc);
+		} else if(loc.endsWith(".mesh")) {
+			return parseMesh(loc);
+		} else {
+			System.err.println("Model format not supported.");
+			return null;
+		}
+	}
+	
+	private static Model[] parseMesh(String loc) {
+		try {
+			scanner = new Scanner(new File(Main.resourceLoc, "model/meshes/" + loc));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<ModelData> models = new ArrayList<ModelData>();
+		
+		while(scanner.hasNext()) {
+			String[] data = new String[7];
+			
+			for(int i = 0; i < data.length; i++) {
+				data[i] = scanner.nextLine();
+			}
+	
+			String name = data[0];
+			Vector3f pos = new Vector3f(Util.toArray(data[1]));
+			Vector3f rot = new Vector3f(Util.toArray(data[2]));
+			Vector3f scale = new Vector3f(Util.toArray(data[3]));
+			Color4f faceColor = new Color4f(Util.toArray(data[4]));
+			float[] vertices = Util.toArray(data[5]);
+			short[] indices = Util.toArray(data[6], 0, 1);
+			
+			ModelData modelData = new ModelData(name, vertices, indices, pos, rot, scale);
+			
+			models.add(modelData);
+		}
+		
+		ModelData[] modelDatae = new ModelData[models.size()];
+		for(int i = 0; i < modelDatae.length; i++) {
+			modelDatae[i] = models.get(i);
+		}
+		
+		return buildModel(loc, modelDatae);
+	}
+		
+	private static Model[] parseCOLLADA(String loc) {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		
 		DocumentBuilder builder = null;
@@ -206,7 +259,7 @@ public class ModelParser {
 		while(keys.hasNext()) {
 			System.out.println("Deleting model " + keys.next());
 			for(Model m: values.next()) {
-				System.out.println('\t' + m.name);
+				//System.out.println('\t' + m.name);
 				glDeleteBuffers(m.vertexID);
 				glDeleteBuffers(m.indexID);
 				GL30.glDeleteVertexArrays(m.vaoID);

@@ -28,8 +28,11 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 
 public class Audio {
+	
+	public static String VENDOR, VERSION;
 		
 	public static int numSources = 32;
 	
@@ -47,8 +50,14 @@ public class Audio {
 			System.err.println("Error occured in creating the OpenAL Context.");
 	        exception.printStackTrace();
 		}
+
+		VENDOR = alGetString(AL_VENDOR);
+		VERSION = alGetString(AL_VERSION);
 		
+		System.out.println("OPENAL VENDOR: " + VENDOR + "\nOPENAL VERSION: " + VERSION);
+
 		System.out.println("Creating " + sources.length + " audio sources");
+
 		for(int i = 0; i < sources.length; i++) {
 			int sourceID = alGenSources();
 			sources[i] = new Source(sourceID);
@@ -74,9 +83,7 @@ public class Audio {
 
 		float[] orientation = {Game.player.pos.x, Game.player.pos.y, Game.player.pos.z,
 				Game.player.rot.x, Game.player.rot.y, Game.player.rot.z};
-		FloatBuffer orientationBuffer = BufferUtils.createFloatBuffer(6);
-		orientationBuffer.put(orientation);
-		orientationBuffer.flip();
+		FloatBuffer orientationBuffer = Util.toBuffer(orientation);
 		
 		alListener(AL_POSITION, Util.toBuffer(Game.camPos));
 		//I can't get these to work properly, but the audio should be sufficient for now.

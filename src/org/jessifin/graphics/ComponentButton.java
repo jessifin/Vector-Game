@@ -15,15 +15,13 @@ public class ComponentButton extends Component {
 		body = new ComponentBox(x1,y1,x2,y2,0,color);
 		
 		float textLength = text.length() * Graphics.charWidth - Graphics.charWidth/2f;
-		
-		float centerX = ((x1>x2) ? x2 : x1) + Math.abs(x2-x1)/2f;
-		float centerY = ((y1>y2) ? y2 : y1) + Math.abs(y2-y1)/2f;
 				
-		float scaleX = (x2-x1)/textLength*Graphics.charWidth;
+		float scaleX = 0.8f*(x2-x1)/textLength*Graphics.charWidth;
 		float scaleY = (y2-y1)/Graphics.charHeight;
 		
+		float realX1 = x1 + ((x2-x1) - (text.length() * scaleX)) / 2;
 		
-		title = new ComponentText(text, new Vector3f(x1,y2,0), new Vector3f(0,0,0), new Vector3f(scaleX,scaleY,1), new Color4f(1-color.x,1-color.y,1-color.z,color.w),false);
+		title = new ComponentText(text, new Vector3f(realX1,y2,0), new Vector3f(0,0,0), new Vector3f(scaleX,scaleY,1), new Color4f(1-color.x,1-color.y,1-color.z,color.w),false);
 	}
 
 	public void render() {
