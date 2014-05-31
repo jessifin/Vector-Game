@@ -16,6 +16,8 @@ public class Model {
 	
 	public Color4f colorFill = new Color4f(1,1,1,1), colorLine = new Color4f(0,0,0,1);
 	
+	public Armature armature;
+	
 	public Model(String name, int vaoID, int vertexID, int indexID, int indexCount, ModelData data) {
 		this.name = name;
 		this.vaoID = vaoID;
@@ -37,43 +39,21 @@ public class Model {
 	}
 	
 	public void calculateMatrix() {
-		Matrix4f posMat = new Matrix4f(new float[] {
-				1, 0, 0, pos.x,
-				0, 1, 0, pos.y,
-				0, 0, 1, pos.z,
-				0, 0, 0, 1
-		});
-				
-		Matrix4f xRotMat = new Matrix4f(new float[] {
-				1, 0, 0, 0,
-				0, (float) Math.cos(rot.x), - (float) Math.sin(rot.x), 0,
-				0, (float) Math.sin(rot.x), (float) Math.cos(rot.x), 0,
-				0, 0, 0, 1
-		});
+		float cosX = (float)Math.cos(rot.x);
+		float sinX = (float)Math.sin(rot.x);
+		float cosY = (float)Math.cos(rot.y);
+		float sinY = (float)Math.sin(rot.y);
+		float cosZ = (float)Math.cos(rot.z);
+		float sinZ = (float)Math.sin(rot.z);
 		
-		Matrix4f yRotMat = new Matrix4f(new float[] {
-				(float) Math.cos(rot.y), 0, (float) Math.sin(rot.y), 0,
-				0, 1, 0, 0,
-				- (float) Math.sin(rot.y), 0, (float) Math.cos(rot.y), 0,
+		float cosXsinY = cosX * sinY;
+		float sinXsinY = sinX * sinY;
+		
+		matrix.set(new float[] {
+				cosY * cosZ * scale.x, -cosY * sinZ * scale.y, sinY * scale.z, pos.x,
+				(sinXsinY * cosZ + cosX * sinZ) * scale.x, (-sinXsinY * sinZ + cosX * cosZ) * scale.y, -sinX * cosY * scale.z, pos.y,
+				(-cosXsinY * cosZ + sinX * sinZ) * scale.x, (cosXsinY * sinZ + sinX * cosZ) * scale.y, cosX * cosY * scale.z, pos.z,
 				0, 0, 0, 1
-		});
-		
-		Matrix4f zRotMat = new Matrix4f(new float[] {
-				(float) Math.cos(rot.z), - (float) Math.sin(rot.z), 0, 0,
-				(float) Math.sin(rot.z), (float) Math.cos(rot.z), 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		});			
-		
-		Matrix4f scaleMat = new Matrix4f(new float[] {
-				scale.x, 0, 0, 0,
-				0, scale.y, 0, 0,
-				0, 0, scale.z, 0,
-				0, 0, 0, 1});
-		
-		matrix.setIdentity();
-		matrix.mul(posMat);
-		matrix.mul(xRotMat); matrix.mul(yRotMat); matrix.mul(zRotMat);
-		matrix.mul(scaleMat);
+			});
 	}
 }

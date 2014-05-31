@@ -70,11 +70,76 @@ public class ModelParser {
 			Vector3f pos = new Vector3f(Util.toArray(data[1]));
 			Vector3f rot = new Vector3f(Util.toArray(data[2]));
 			Vector3f scale = new Vector3f(Util.toArray(data[3]));
-			Color4f faceColor = new Color4f(Util.toArray(data[4]));
+			Color4f color = new Color4f(Util.toArray(data[4]));
 			float[] vertices = Util.toArray(data[5]);
 			short[] indices = Util.toArray(data[6], 0, 1);
 			
-			ModelData modelData = new ModelData(name, vertices, indices, pos, rot, scale);
+			Armature armature = null;
+			
+			if(name.startsWith("ARMATURE")) {
+				String[] armData = new String[4];
+				for(int i = 0; i < armData.length; i++) {
+					armData[i] = scanner.nextLine();
+				}
+				short[] groupCounts = Util.toArray(armData[0], 0, 1);
+				short[] groups = Util.toArray(armData[1], 0, 1);
+				float[] weights = Util.toArray(armData[2]);
+				int numBones = Integer.parseInt(armData[3]);
+								
+				Bone[] bones = new Bone[numBones];
+				String[] rawParents = new String[numBones];
+				String[] rawChildren = new String[numBones];
+				
+				for(int i = 0; i < numBones; i++) {
+					String[] info = new String[6];
+					for(int j = 0; j < info.length; j++) {
+						info[j] = scanner.nextLine();
+					}
+					rawParents[i] = info[1];
+					rawChildren[i] = info[2];
+			
+					Vector3f head = new Vector3f(Util.toArray(info[3]));
+					Vector3f tail = new Vector3f(Util.toArray(info[4]));
+					Matrix4f matrix = new Matrix4f(Util.toArray(info[5]));
+					bones[i] = new Bone(info[0], head, tail, matrix);
+				}
+				
+				ArrayList<Bone> rawRootBones = new ArrayList<Bone>();
+				
+				for(int i = 0; i < numBones; i++) {
+					if(!rawParents[i].equals("NULL")) {
+						for(int j = 0; j < numBones; j++) {
+							if(rawParents[i].equals(bones[j].name)) {
+								bones[i].parent = bones[j];
+								break;
+							}
+						}
+					} else {
+						rawRootBones.add(bones[i]);
+					}
+					if(!rawChildren.equals("NULL")) {
+						String[] children = rawChildren[i].split(" ");
+						bones[i].children = new Bone[children.length];
+						for(int j = 0; j < children.length; j++) {
+							for(int k = 0; k < numBones; k++) {
+								if(children[j].equals(bones[k].name)) {
+									bones[i].children[j] = bones[k];
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				Bone[] rootBones = new Bone[rawRootBones.size()];
+				for(int i = 0; i < rootBones.length; i++) {
+					rootBones[i] = rawRootBones.get(i);
+				}
+				
+				armature = new Armature(groupCounts, groups, weights, bones, rootBones);
+			}
+			
+			ModelData modelData = new ModelData(name, vertices, indices, pos, rot, scale, color, armature);
 			
 			models.add(modelData);
 		}
@@ -86,7 +151,7 @@ public class ModelParser {
 		
 		return buildModel(loc, modelDatae);
 	}
-		
+	
 	private static Model[] parseCOLLADA(String loc) {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		
@@ -99,7 +164,7 @@ public class ModelParser {
 		
 		Document document = null;
 		try {
-			document = builder.parse(new File(Main.resourceLoc,"model/daes/" + loc));
+			document = builder.parse(new File(Main.resourceLoc, "model/daes/" + loc));
 		} catch(IOException exception) {
 			exception.printStackTrace();
 		} catch(SAXException exception) {
@@ -233,16 +298,18 @@ public class ModelParser {
 				GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				GL30.glBindVertexArray(0);
-				
+								
 				int indexID = glGenBuffers();
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);	
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				
-				Model model = new Model(id+"%"+modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
+				Model model = new Model(id + "%" + modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
 				model.pos = modelData[i].pos;
 				model.rot = modelData[i].rot;
 				model.scale = modelData[i].scale;
+				model.colorFill = modelData[i].color;
+				model.armature = modelData[i].armature;
 				model.calculateMatrix();
 				models[i] = model;
 			}
@@ -253,7 +320,6 @@ public class ModelParser {
 	}
 
 	public static void clearModelMap() {
-		//Why you gotta use set and collection? Make up your mind, Oracle.
 		Iterator<String> keys = loadedModels.keySet().iterator();
 		Iterator<Model[]> values = loadedModels.values().iterator();
 		while(keys.hasNext()) {

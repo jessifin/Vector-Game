@@ -71,7 +71,7 @@ public class EntityPlayer extends Entity {
 			}
 		}
 		if(hitsound) {
-			Audio.playAtEntity("hit.wav", this, 1);
+		//	Audio.playAtEntity("hit.wav", this, 1);
 		}
 	}
 	

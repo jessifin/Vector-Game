@@ -2,15 +2,19 @@ package org.jessifin.main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Random;
 
 import org.jessifin.game.Game;
 import org.jessifin.graphics.Graphics;
+import org.jessifin.net.WebUtil;
 import org.jessifin.physics.Physics;
 import org.jessifin.audio.Audio;
 import org.lwjgl.opengl.Display;
@@ -25,6 +29,7 @@ public class Main {
 	
 	public static boolean RUNNING = true;
 	public static long numLoops, numTicks, millisPassed;
+	public static int loopTime;
 	private static Timer tickTimer = new Timer(100), performanceTimer = new Timer(100000);
 	
 	public static final String GAME_TITLE = "Vector Game";
@@ -62,16 +67,16 @@ public class Main {
 			Audio.update();
 
 			long currentTime = System.currentTimeMillis();
-			int timePassed = (int) (currentTime - lastTime);
+			loopTime = (int) (currentTime - lastTime);
 			lastTime = currentTime;
 			if(!Game.gui.pausesGame) {
-				Physics.update(timePassed);
+				Physics.update(loopTime);
 			}
-			Game.update(timePassed);
-			Input.keyboardUpdate(timePassed);
-			Input.mouseUpdate(timePassed);
-			millisPassed += timePassed;
-			Timer.updateAll(timePassed);
+			Game.update(loopTime);
+			Input.keyboardUpdate(loopTime);
+			Input.mouseUpdate(loopTime);
+			millisPassed += loopTime;
+			Timer.updateAll(loopTime);
 			
 			while(tickTimer.poll()) {
 				tick();
@@ -96,6 +101,10 @@ public class Main {
 		if(Display.wasResized()) {
 			Graphics.WIDTH = Display.getWidth();
 			Graphics.HEIGHT = Display.getHeight();
+		}
+		
+		if(numTicks % 20 == 0) {
+			Collections.sort(Game.entities);
 		}
 	}
 	

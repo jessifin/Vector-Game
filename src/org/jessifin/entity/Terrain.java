@@ -12,7 +12,7 @@ public class Terrain extends Entity {
 	}
 
 	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {
-		Audio.playAtEntity("hit.wav", this, 1);
+		//Audio.playAtEntity("hit.wav", this, 1);
 	}
 	
 	public void update() {

@@ -40,7 +40,7 @@ public class Game {
 	//Graphics
 	public static float FoV = 60;
 	public static float camDist = 2;
-	public static float Z_NEAR = 1f, Z_FAR = 4000;
+	public static float Z_NEAR = 1f, Z_FAR = 2500;
 	public static Vector3f camPos = new Vector3f(10,10,10), camUp = new Vector3f(0,1,0);
 	public static GUI gui;
 		
@@ -48,12 +48,10 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		
 		player = new EntityPlayer();
+		player.model = ModelParser.getModel("arepo/arepo.mesh");
 		player.scale = new Vector3f(20,20,20);
 		player.pos = new Vector3f(100,200,0);
-		player.flashSpeed = 4;
-		for(Model m: player.model) {
-			m.colorFill = new Color4f(.5f,1,.5f,1);
-		}
+		player.flashSpeed = 2;
 		entities.add(player);
 		
 		//Physics.addEntity(player, 5, 1);
@@ -74,15 +72,17 @@ public class Game {
 			}
 		}
 		*/
-		for(int theta = 0; theta < 36*20; theta++) {
-			EntityVirus virus = new EntityVirus();
-			virus.model = ModelParser.getModel("sphere.dae");
-			virus.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat()*.5f+.5f);
-			virus.pos = new Vector3f((float)(50*Math.cos(Math.toRadians(theta * 10))), 250 + theta/2, (float)(50*Math.sin(Math.toRadians(theta * 10))));
-			virus.scale = new Vector3f(5,5,5);
-			//virus.flashSpeed = 3;
-			entities.add(virus);
-			//Physics.addSphere(virus, 50, 2, 1, 2.5f);
+		for(int thetaX = 0; thetaX < 30; thetaX++) {
+			for(int thetaY = 0; thetaY < 30; thetaY++) {
+				EntityVirus virus = new EntityVirus();
+				virus.model = ModelParser.getModel("rock.dae");
+				virus.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
+				virus.pos = new Vector3f((float)((150*Math.cos(Math.toRadians(thetaX * 12))) * Math.sin(Math.toRadians(thetaY * 12))),(float)(500 + 150 * Math.cos(Math.toRadians(thetaY * 12))), (float)(150*Math.sin(Math.toRadians(thetaY * 12)) * Math.sin(Math.toRadians(thetaX * 12))));
+				virus.scale = new Vector3f(5,5,5);
+				//virus.flashSpeed = 3;
+				//entities.add(virus);
+				//Physics.addSphere(virus, 50, 2, 1, 2.5f);
+			}		
 		}
 		/*
 		Terrain terrain = new Terrain();
@@ -94,13 +94,20 @@ public class Game {
 		Physics.addPlane(0, 10, new Vector3f(0,-500,0), new Quat4f(0,0,0,1));
 		//Physics.addPlane(0, 10, new Vector3f(0,100,0), new Quat4f(0,1,0,1));
 		
-		EntityVirus virus = new EntityVirus();
-		virus.model = ModelParser.getModel("bawks.dae");
-		virus.scale = new Vector3f(300,300,300);
-		virus.isAlive = false;
-		entities.add(virus);
-		Physics.addBox(virus, 0, 1, 1);
-		
+		for(int x = 0; x < 10; x++) {
+			for(int y = 0; y < 10; y++) {
+				EntityVirus virus = new EntityVirus();
+				virus.pos = new Vector3f(x * 300, 0, y * 300);
+				virus.colorFill = new Color4f(1-x/10f,1-y/10f,0,1);
+				virus.model = ModelParser.getModel("plane.dae");
+				virus.scale = new Vector3f(300,300,300);
+				virus.isAlive = false;
+				virus.flashSpeed = 6.5f;
+				entities.add(virus);
+				Physics.addBox(virus, 0, 1, 1);
+			}
+		}
+
 		//setLevel("test");
 		gui = new GUIHUD();
 		
@@ -130,14 +137,12 @@ public class Game {
 		camPos.x = (float) (camDist * Math.cos(Input.x) * Math.sin(Input.y) + player.pos.x);
 		camPos.y = (float) (camDist * Math.cos(Input.y) + player.pos.y);
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);
-
-		player.flashSpeed = (int)((float)player.health/player.maxHealth*5f); 
 		
 		for(Entity e: entities) {
 			e.update();
-						
-			e.distanceFromCam = (float)Math.sqrt((e.pos.x - camPos.x)*(e.pos.x - camPos.x)
-					+ (e.pos.y - camPos.y)*(e.pos.y - camPos.y))
+			
+			e.squaredDistanceFromCam = (float)(e.pos.x - camPos.x)*(e.pos.x - camPos.x)
+					+ (e.pos.y - camPos.y)*(e.pos.y - camPos.y)
 					+ (e.pos.z - camPos.z)*(e.pos.z - camPos.z);
 		}
 	}

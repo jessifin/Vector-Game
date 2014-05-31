@@ -173,8 +173,13 @@ public class Input {
 				Game.gui = new GUIMenu();
 			}
 		}
-		if(keys[KEY_BACK].state) {
+		if(keys[KEY_BACK].pressed) {
 			Game.reboot();
+		}
+		if(keys[KEY_TAB].pressed) {
+			Sys.alert("Yo dawg", "I heard you like messages");
+			Graphics.setIcon("/icns/16.png");
+			Sys.openURL("http://www.reddit.com");
 		}
 		if(keys[KEY_RETURN].state) {
 			Vector3f forward = new Vector3f(
@@ -185,7 +190,6 @@ public class Input {
 			
 			forward.normalize();
 			forward.scale(Game.speed*60);
-			
 			EntityPizzard pizzard = new EntityPizzard();
 			pizzard.model = ModelParser.getModel("bawks.dae");
 			Vector3f pizzardPos = new Vector3f(Game.player.pos.x + forward.x*5,Game.player.pos.y + forward.y*5,Game.player.pos.z + forward.z*5);

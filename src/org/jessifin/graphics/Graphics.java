@@ -1,5 +1,6 @@
 package org.jessifin.graphics;
 
+//All unspecified OpenGL calls are for Opengl Version 1.1, thus the static import
 import static org.lwjgl.opengl.GL11.*;
 
 import org.jessifin.entity.Entity;
@@ -8,8 +9,6 @@ import org.jessifin.game.Game;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -34,20 +33,10 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL41;
-import org.lwjgl.opengl.GL42;
-import org.lwjgl.opengl.GL43;
+
 import org.lwjgl.opengl.PixelFormat;
 import org.jessifin.shader.Shader;
 import org.jessifin.shader.ShaderParser;
@@ -71,8 +60,9 @@ public class Graphics {
 	public static final float charWidth = 0.39341f, charHeight = 0.59507f;
 		
 	private static Matrix4f projectionMatrix = new Matrix4f(), viewMatrix = new Matrix4f(), modelMatrix = new Matrix4f();
-	private static Matrix4f projectionViewModelMatrix = new Matrix4f();
-	private static Matrix4f generateMatrix = new Matrix4f();
+	private static Matrix4f viewProjectionMatrix = new Matrix4f();
+	private static Matrix4f modelViewProjectionMatrix = new Matrix4f();
+	private static Matrix4f genMatrix = new Matrix4f();
 	private static Stack<Matrix4f> matrixStack = new Stack<Matrix4f>();
 	
 	public static float gamma = 1, brightness = 0.5f, contrast = 1;
@@ -83,7 +73,8 @@ public class Graphics {
 		
 		GL20.glUniform3f(currentShader.getUniform("camPos"), Game.camPos.x, Game.camPos.y, Game.camPos.z);
 		GL20.glUniform1f(currentShader.getUniform("time"), Main.numLoops/100f);
-		GL20.glUniform1f(currentShader.getUniform("freq"), 1);
+		GL20.glUniform2f(currentShader.getUniform("resolution"), WIDTH, HEIGHT);
+		GL20.glUniform1f(currentShader.getUniform("freq"), 5);
 		
 		setup3D();
 		renderBatch(Game.entities);
@@ -93,12 +84,13 @@ public class Graphics {
 				")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
 				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
 				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
-				"\nRandom number: "+Main.rng.nextInt(),
+				"\nRandom number: " + Main.rng.nextInt() + 
+				"\nFPS: " + 1000f/Main.loopTime,
 				new Vector3f(200,0,0),
 				new Vector3f(0,0,0),
 				new Vector3f(30,30,30),
-				new Color4f(1,1,0,1),
-				false);
+				new Color4f((Main.numTicks % 20) / 19f,1,0,1),
+				true);
 		setup2D();
 		Game.gui.render();
 		Display.update();
@@ -114,16 +106,13 @@ public class Graphics {
 		FAR = 1;
 		
 		projectionMatrix.set(new float[] {
-				2f/(RIGHT - LEFT), 0, 0, -(RIGHT + LEFT) / (RIGHT - LEFT),
-				0, 2f/(TOP - BOTTOM), 0, -(TOP + BOTTOM) / (TOP - BOTTOM),
-				0, 0, -2f/(FAR - NEAR), - (FAR + NEAR) / (FAR - NEAR),
+				2f / (RIGHT - LEFT), 0, 0, -(RIGHT + LEFT) / (RIGHT - LEFT),
+				0, 2f / (TOP - BOTTOM), 0, -(TOP + BOTTOM) / (TOP - BOTTOM),
+				0, 0, -2f / (FAR - NEAR), -(FAR + NEAR) / (FAR - NEAR),
 				0, 0, 0, 1
 		});
-		
-		viewMatrix.setIdentity();
-		
-		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
-		GL20.glUniformMatrix4(currentShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+				
+		viewProjectionMatrix.set(projectionMatrix);
 	}
 	
 	private static void setup3D() {
@@ -157,9 +146,9 @@ public class Graphics {
 				-forward.x, -forward.y, -forward.z, forward.x * Game.camPos.x + forward.y * Game.camPos.y + forward.z * Game.camPos.z,
 				0, 0, 0, 1
 		});
-
-		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
-		GL20.glUniformMatrix4(currentShader.getUniform("viewMat"), false, Util.toBuffer(viewMatrix));
+		
+		viewProjectionMatrix.set(projectionMatrix);
+		viewProjectionMatrix.mul(viewMatrix);
 	}
 
     private static Matrix4f generateMatrix(Entity e) {
@@ -177,56 +166,79 @@ public class Graphics {
 		float cosXsinY = cosX * sinY;
 		float sinXsinY = sinX * sinY;
 
-		generateMatrix.set(new float[] {
+		genMatrix.set(new float[] {
 			cosY * cosZ * scale.x, -cosY * sinZ * scale.y, sinY * scale.z, pos.x,
 			(sinXsinY * cosZ + cosX * sinZ) * scale.x, (-sinXsinY * sinZ + cosX * cosZ) * scale.y, -sinX * cosY * scale.z, pos.y,
 			(-cosXsinY * cosZ + sinX * sinZ) * scale.x, (cosXsinY * sinZ + sinX * cosZ) * scale.y, cosX * cosY * scale.z, pos.z,
 			0, 0, 0, 1
 		});
 
-		return generateMatrix;
+		return genMatrix;
 	}
 
 	private static void renderBatch(ArrayList<Entity> entities) {
     	for(int e = 0; e < entities.size(); e++) {
-			
     		modelMatrix = generateMatrix(entities.get(e));
 			matrixStack.push(modelMatrix);
-			
-			//if(entities.get(e).rootBone != null) {
-			//	renderBone(entities.get(e), entities.get(e).rootBone);
-			//} else {
-	    		for(int m = 0; m < entities.get(e).model.length; m++) {
-	    			pushMatrix(entities.get(e).model[m].matrix);
-	    			renderModel(entities.get(e), entities.get(e).model[m]);
-	    			popMatrix();
-	       		}
-			//}
-			
+
+    		for(int m = 0; m < entities.get(e).model.length; m++) {
+    			if(entities.get(e).model[m].armature != null) {
+    				for(Bone rootBone: entities.get(e).model[m].armature.rootBones) {
+    					rootBone.tempMatrix = new Matrix4f(rootBone.matrix);
+    					updateBones(rootBone);
+    				}
+    				
+    				GL20.glUniform1i(currentShader.getUniform("num_bones"), entities.get(e).model[m].armature.bones.length);
+    				for(int b = 0; b < entities.get(e).model[m].armature.bones.length; b++) {
+    					GL20.glUniformMatrix4(currentShader.getUniform("bones["+b+"]"), false, Util.toBuffer(entities.get(e).model[m].armature.bones[b].matrix));
+    				}
+    			}
+				pushMatrix(entities.get(e).model[m].matrix);
+				renderModel(entities.get(e), entities.get(e).model[m]);
+				popMatrix();
+				GL20.glUniform1i(currentShader.getUniform("num_bones"), 0);
+       		}
+		
 			popMatrix();
     	}
     }
+	
+	private static void updateBones(Bone parent) {
+		for(Bone child: parent.children) {
+			if(child != null) {
+				System.out.println(parent.name + " " + child.name);
+				child.tempMatrix.mul(parent.tempMatrix, child.matrix);
+				System.out.println(parent.matrix);
+				updateBones(child);
+			}
+		}
+	}
     
-    private static void renderModel(Entity entity, Model model) {		
+    private static void renderModel(Entity entity, Model model) {
 		GL20.glUniform1i(currentShader.getUniform("offset"), (int) (Main.numTicks * entity.flashSpeed));
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
-		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(currentShader.getUniform("color"), model.colorFill.x * entity.colorFill.x,
+		modelViewProjectionMatrix.set(viewProjectionMatrix);
+		modelViewProjectionMatrix.mul(matrixStack.peek());
+		GL20.glUniformMatrix4(currentShader.getUniform("modelViewProjectionMatrix"), false, Util.toBuffer(modelViewProjectionMatrix));
+		GL20.glUniform4f(currentShader.getUniform("color[0]"), model.colorFill.x * entity.colorFill.x,
 				model.colorFill.y * entity.colorFill.y,
 				model.colorFill.z * entity.colorFill.z,
 				model.colorFill.w * entity.colorFill.w);
+		GL20.glUniform4f(currentShader.getUniform("color[1]"), 1,0,0,1);
 		
-		int indicesToDraw = (int)(model.indexCount * entity.health/entity.maxHealth);
+		int indicesToDraw = (int)(model.indexCount * entity.health / entity.maxHealth);
 		
-		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, indicesToDraw, GL_UNSIGNED_SHORT, 0);
 
+		/*
 		GL20.glUniform4f(currentShader.getUniform("color"), model.colorLine.x * entity.colorLine.x,
 				model.colorLine.y * entity.colorLine.y,
 				model.colorLine.z * entity.colorLine.z,
 				model.colorLine.w * entity.colorLine.w);
-		
+		*/
+
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
@@ -237,9 +249,12 @@ public class Graphics {
 		GL30.glBindVertexArray(model.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, model.indexID);
-		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(matrixStack.peek()));
-		GL20.glUniform4f(currentShader.getUniform("color"), color.x, color.y, color.z, color.w);
-		
+		modelViewProjectionMatrix.set(viewProjectionMatrix);
+		modelViewProjectionMatrix.mul(matrixStack.peek());
+		GL20.glUniformMatrix4(currentShader.getUniform("modelViewProjectionMatrix"), false, Util.toBuffer(modelViewProjectionMatrix));
+		GL20.glUniform4f(currentShader.getUniform("color[0]"), color.x, color.y, color.z, color.w);
+		GL20.glUniform4f(currentShader.getUniform("color[1]"), color.x, color.y, color.z, color.w);
+
 		glDrawElements(GL_TRIANGLES, model.indexCount, GL_UNSIGNED_SHORT, 0);
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -254,8 +269,10 @@ public class Graphics {
 		GL30.glBindVertexArray(boxModel.vaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, boxModel.indexID);
-		GL20.glUniformMatrix4(currentShader.getUniform("modelMat"), false, Util.toBuffer(modelMatrix));
-		GL20.glUniform4f(currentShader.getUniform("color"),color.x,color.y,color.z,color.w);
+		modelViewProjectionMatrix.set(viewProjectionMatrix);
+		modelViewProjectionMatrix.mul(modelMatrix);
+		GL20.glUniformMatrix4(currentShader.getUniform("modelViewProjectionMatrix"), false, Util.toBuffer(modelViewProjectionMatrix));
+		GL20.glUniform4f(currentShader.getUniform("color[0]"),color.x,color.y,color.z,color.w);
 		
 		glDrawElements(GL_TRIANGLES, boxModel.indexCount, GL_UNSIGNED_SHORT, 0);
 		
@@ -312,16 +329,18 @@ public class Graphics {
 	
 	public static void renderText(String text, Vector3f pos, Vector3f rot, Vector3f scale, Color4f color, boolean renderBox) {
 		String[] lines = text.split("\n");
-		int longestLine = 0;
-		for(String line: lines) {
-			if(line.length() > longestLine) {
-				longestLine = line.length();
-			}
-		}
+		
 		if(renderBox) {
+			int longestLine = 0;
+			for(String line: lines) {
+				if(line.length() > longestLine) {
+					longestLine = line.length();
+				}
+			}
+			
 			Vector3f posBox = new Vector3f(pos.x,pos.y,pos.z-2);
 			Vector3f scaleBox = new Vector3f(scale.x*longestLine,-scale.y*lines.length,1);
-			renderBox(posBox,rot,scaleBox,new Color4f(1-color.x,1-color.y,1-color.z,color.w));
+			renderBox(posBox,rot,scaleBox,new Color4f(1,1,1,1));
 		}
 		
 		GL20.glUniform1f(currentShader.getUniform("lineWidth"), 1);
@@ -379,13 +398,6 @@ public class Graphics {
 		GL20.glUniform1f(currentShader.getUniform("lineWidth"), 0);
 	}
 	
-	private static void setProjectionViewModelMatrix() {
-		projectionViewModelMatrix.set(projectionMatrix);
-		projectionViewModelMatrix.mul(viewMatrix);
-		projectionViewModelMatrix.mul(modelMatrix);
-		GL20.glUniformMatrix4(currentShader.getUniform("projectMat"), false, Util.toBuffer(projectionMatrix));
-	}
-	
 	private static void pushMatrix(Matrix4f matrix) {
 		Matrix4f m = new Matrix4f(matrixStack.peek());
 		m.mul(matrix);
@@ -395,18 +407,6 @@ public class Graphics {
 	private static void popMatrix() {
 		matrixStack.pop();
 	}
-
-	@SuppressWarnings("unused")
-	private static void renderBone(Entity entity, Bone bone) {
-		pushMatrix(bone.model.matrix);
-    	renderModel(entity, entity.model[0]);
-    	if(bone.children != null) {
-    		for(Bone b: bone.children) {
-    			renderBone(entity,b);
-    		}
-    	}
-    	popMatrix();
-    }
     
     public static void takeScreenShot() {
 		ByteBuffer data = BufferUtils.createByteBuffer((int)(WIDTH * HEIGHT * 3));
@@ -492,7 +492,7 @@ public class Graphics {
 			VENDOR = glGetString(GL_VENDOR);
 			System.out.println("OPENGL VENDOR: " + VENDOR + "\nOPENGL VERSION: 3.2 (" + VERSION + ")\nSHADER VERSION: " + glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
 			Display.destroy();
-			
+			/*
 			Class<?>[] classesWithTonsOfStuffInThem = {GL11.class, GL12.class, GL13.class, GL14.class,
 					GL15.class, GL20.class, GL21.class, GL30.class, GL31.class, GL32.class,
 					GL33.class, GL40.class, GL41.class, GL42.class, GL43.class,Graphics.class};
@@ -519,7 +519,7 @@ public class Graphics {
 				}
 				code.add(classCode);
 			}
-			
+			*/
 			availableDisplayModes = Display.getAvailableDisplayModes();
 	
 			//Creating the actual context that will be used by the game.
@@ -542,14 +542,14 @@ public class Graphics {
 		currentShader = ShaderParser.getShader("default");
 		GL20.glUseProgram(currentShader.programID);
 
-			//box init
-			float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
-			short[] inds = {0,1,2,1,3,2};
-			ModelData square = new ModelData("box",verts,inds);
-			boxModel = ModelParser.buildModel("box", new ModelData[] {square})[0];
-			
-			//font init
-			font = ModelParser.getModel("font.dae");
+		//box init
+		float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
+		short[] inds = {0,1,2,1,3,2};
+		ModelData square = new ModelData("box",verts,inds);
+		boxModel = ModelParser.buildModel("box", new ModelData[] {square})[0];
+		
+		//font init
+		font = ModelParser.getModel("font.dae");
 			
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -565,7 +565,7 @@ public class Graphics {
 		NEAR = -1;
 		FAR = 1;
 		
-		setIcon("/icns/16.png");
+		setIcon("/icns/32.png");
 	}
 	
 	public static void destroy() {

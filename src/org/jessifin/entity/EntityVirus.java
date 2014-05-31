@@ -1,20 +1,13 @@
 package org.jessifin.entity;
 
-import javax.vecmath.Color4f;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
-
 import org.jessifin.audio.Audio;
-import org.jessifin.main.Util;
-import org.jessifin.model.Bone;
-import org.jessifin.model.Model;
 
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 public class EntityVirus extends Entity {
 
 	public EntityVirus() {
-		super("bawks.dae");
+		super("virus.dae");
 		/*
 		rootBone = new Bone();
 		rootBone.model = 															model[0];
@@ -38,7 +31,12 @@ public class EntityVirus extends Entity {
 	}
 
 	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {
-		Audio.playAtEntity("hit.wav", this, 1);
+		//Audio.playAtEntity("hit.wav", this, 1);
+		if(health > 0) {
+			health--;
+		} else {
+			this.isAlive = false;
+		}
 	}
 	
 	public void update() {

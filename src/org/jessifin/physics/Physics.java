@@ -12,6 +12,7 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
+import org.jessifin.main.Util;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
 import org.jessifin.model.ModelParser;
@@ -300,24 +301,7 @@ public class Physics {
 				e.pos = e.body.getWorldTransform(transform).origin;
 				e.body.getInterpolationLinearVelocity(e.vel);
 				Matrix3f rotMat = transform.basis;
-				Vector3f rot = new Vector3f();
-				rot.y = (float)Math.asin(rotMat.getElement(2,0));
-				float c = (float) Math.cos(rot.y);
-				if(Math.abs(c) > .005f) {
-					float TRX = rotMat.getElement(2,2)/c;
-					float TRY = rotMat.getElement(2,1)/c;
-					rot.x = (float)Math.atan2(TRY,TRX);
-					
-					TRX = rotMat.getElement(0,0)/c;
-					TRY = rotMat.getElement(1,0)/c;
-					rot.z = (float)Math.atan2(TRY,TRX);
-				} else {
-					rot.x = 0;
-					float TRX = rotMat.getElement(1,1);
-					float TRY = rotMat.getElement(1,0);
-					rot.z = (float)Math.atan2(TRY,TRX);
-				}
-				e.rot = rot;
+				e.rot = Util.getRotation(rotMat);
 				//printMatrix(rotMat);
 				/*
 				Matrix3f xRotMat = new Matrix3f(new float[] {
@@ -382,8 +366,8 @@ public class Physics {
 							}
 						}
 					}
-					p0.onCollide(p1, contactPoints);
-					p1.onCollide(p0, contactPoints);
+					p0.onCollide(p1,contactPoints);
+					p1.onCollide(p0,contactPoints);
 				}
 			}
 		}

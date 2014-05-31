@@ -8,11 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL40;
 import org.jessifin.main.Main;
 
 public class ShaderParser {

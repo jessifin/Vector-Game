@@ -15,6 +15,7 @@ import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Tuple3f;
 import javax.vecmath.Tuple4f;
@@ -89,7 +90,28 @@ public class Util {
 		return array;
 	}
 	
-	public static ArrayList ensureSize(ArrayList list, int size) {
+	public static Vector3f getRotation(Matrix3f mat) {
+		Vector3f rot = new Vector3f();
+		rot.y = (float)Math.asin(mat.getElement(2,0));
+		float c = (float) Math.cos(rot.y);
+		if(Math.abs(c) > .005f) {
+			float TRX = mat.getElement(2,2)/c;
+			float TRY = mat.getElement(2,1)/c;
+			rot.x = (float)Math.atan2(TRY,TRX);
+			
+			TRX = mat.getElement(0,0)/c;
+			TRY = mat.getElement(1,0)/c;
+			rot.z = (float)Math.atan2(TRY,TRX);
+		} else {
+			rot.x = 0;
+			float TRX = mat.getElement(1,1);
+			float TRY = mat.getElement(1,0);
+			rot.z = (float)Math.atan2(TRY,TRX);
+		}
+		return rot;
+	}
+	
+	public static ArrayList<?> ensureSize(ArrayList<?> list, int size) {
 		while(list.size() < size) {
 			list.add(null);
 		}
