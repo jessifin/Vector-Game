@@ -13,7 +13,7 @@ import org.jessifin.game.LevelIO;
 import org.jessifin.graphics.GUIHUD;
 import org.jessifin.graphics.GUIMenu;
 import org.jessifin.graphics.Graphics;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 import org.jessifin.physics.Physics;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -191,7 +191,7 @@ public class Input {
 			forward.normalize();
 			forward.scale(Game.speed*60);
 			EntityPizzard pizzard = new EntityPizzard();
-			pizzard.model = ModelParser.getModel("bawks.dae");
+			pizzard.mesh = MeshParser.getModel("bawks.mesh");
 			Vector3f pizzardPos = new Vector3f(Game.player.pos.x + forward.x*5,Game.player.pos.y + forward.y*5,Game.player.pos.z + forward.z*5);
 			pizzard.pos = pizzardPos;
 			pizzard.scale = new Vector3f(10,10,10);

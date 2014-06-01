@@ -9,7 +9,7 @@ import javax.vecmath.Vector3f;
 import org.jessifin.main.Input;
 import org.jessifin.main.Main;
 import org.jessifin.model.Model;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 import org.jessifin.physics.Physics;
 import org.jessifin.audio.Audio;
 import org.jessifin.entity.Entity;
@@ -48,7 +48,7 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		
 		player = new EntityPlayer();
-		player.model = ModelParser.getModel("arepo/arepo.mesh");
+		player.mesh = MeshParser.getModel("arepo/arepo.mesh");
 		player.scale = new Vector3f(20,20,20);
 		player.pos = new Vector3f(100,200,0);
 		player.flashSpeed = 2;
@@ -75,7 +75,7 @@ public class Game {
 		for(int thetaX = 0; thetaX < 30; thetaX++) {
 			for(int thetaY = 0; thetaY < 30; thetaY++) {
 				EntityVirus virus = new EntityVirus();
-				virus.model = ModelParser.getModel("rock.dae");
+				virus.mesh = MeshParser.getModel("rock.mesh");
 				virus.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
 				virus.pos = new Vector3f((float)((150*Math.cos(Math.toRadians(thetaX * 12))) * Math.sin(Math.toRadians(thetaY * 12))),(float)(500 + 150 * Math.cos(Math.toRadians(thetaY * 12))), (float)(150*Math.sin(Math.toRadians(thetaY * 12)) * Math.sin(Math.toRadians(thetaX * 12))));
 				virus.scale = new Vector3f(5,5,5);
@@ -99,7 +99,7 @@ public class Game {
 				EntityVirus virus = new EntityVirus();
 				virus.pos = new Vector3f(x * 300, 0, y * 300);
 				virus.colorFill = new Color4f(1-x/10f,1-y/10f,0,1);
-				virus.model = ModelParser.getModel("plane.dae");
+				virus.mesh = MeshParser.getModel("bawks.mesh");
 				virus.scale = new Vector3f(300,300,300);
 				virus.isAlive = false;
 				virus.flashSpeed = 6.5f;

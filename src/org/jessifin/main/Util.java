@@ -25,6 +25,25 @@ import org.lwjgl.BufferUtils;
 
 public class Util {
 	
+	public static void calculateMatrix(Matrix4f matrix, Vector3f pos, Vector3f rot, Vector3f scale) {
+		float cosX = (float)Math.cos(rot.x);
+		float sinX = (float)Math.sin(rot.x);
+		float cosY = (float)Math.cos(rot.y);
+		float sinY = (float)Math.sin(rot.y);
+		float cosZ = (float)Math.cos(rot.z);
+		float sinZ = (float)Math.sin(rot.z);
+		
+		float cosXsinY = cosX * sinY;
+		float sinXsinY = sinX * sinY;
+		
+		matrix.set(new float[] {
+			cosY * cosZ * scale.x, -cosY * sinZ * scale.y, sinY * scale.z, pos.x,
+			(sinXsinY * cosZ + cosX * sinZ) * scale.x, (-sinXsinY * sinZ + cosX * cosZ) * scale.y, -sinX * cosY * scale.z, pos.y,
+			(-cosXsinY * cosZ + sinX * sinZ) * scale.x, (cosXsinY * sinZ + sinX * cosZ) * scale.y, cosX * cosY * scale.z, pos.z,
+			0, 0, 0, 1
+		});
+	}
+	
 	public static FloatBuffer toBuffer(Tuple3f vec) {
 		float[] data = new float[3];
 		vec.get(data);

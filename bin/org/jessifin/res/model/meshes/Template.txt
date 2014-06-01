@@ -1,7 +1,0 @@
-Model name
-Position
-Rotation
-Scaling
-Face Color
-Vertices
-Indices

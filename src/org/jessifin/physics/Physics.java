@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
@@ -15,7 +16,7 @@ import org.lwjgl.BufferUtils;
 import org.jessifin.main.Util;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
@@ -34,8 +35,12 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
+import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.CompoundShape;
+import com.bulletphysics.collision.shapes.ConeShape;
+import com.bulletphysics.collision.shapes.ConvexHullShape;
+import com.bulletphysics.collision.shapes.CylinderShape;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
@@ -114,14 +119,54 @@ public class Physics {
 		return shape;
 	}
 
-	public static CompoundShape combineShapes(Vector3f[] trans, CollisionShape[] shapes) {
+	public static CompoundShape combineShapes(Transform[] transforms, CollisionShape[] shapes) {
 		CompoundShape compoundShape = new CompoundShape();
-		Transform t = new Transform();
 		for(int i = 0; i < shapes.length; i++) {
-			t.origin.set(trans[i].x, trans[i].y, trans[i].z);
-			compoundShape.addChildShape(t, shapes[i]);
+			compoundShape.addChildShape(transforms[i], shapes[i]);
 		}
 		return compoundShape;
+	}
+	
+	public static CollisionShape createShape(Model[] model) {
+		ArrayList<CollisionShape> shapes = new ArrayList<CollisionShape>();
+		ArrayList<Transform> trans = new ArrayList<Transform>();
+		for(int m = 0; m < model.length; m++) {
+			CollisionShape shape = null;
+			if(model[m].data.rigidBodyData.collisionShape.equals("MESH")) {
+				shape = createMesh(model[m]);
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("CONE")) {
+				shape = new ConeShape(Math.max(model[m].data.dimensions.x, model[m].data.dimensions.z), model[m].data.dimensions.y);
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("CYLINDER")) {
+				shape = new CylinderShape(new Vector3f(model[m].data.dimensions.x/2f,model[m].data.dimensions.y/2f,model[m].data.dimensions.z/2f));
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("CAPSULE")) {
+				shape = new CapsuleShape(Math.max(model[m].data.dimensions.x, model[m].data.dimensions.z), model[m].data.dimensions.y);
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("SPHERE")) {
+				shape = new SphereShape(Math.max(Math.max(model[m].data.dimensions.x, model[m].data.dimensions.y), model[m].data.dimensions.z));
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("BOX")) {
+				shape = new BoxShape(new Vector3f(model[m].data.dimensions.x/2f,model[m].data.dimensions.y/2f,model[m].data.dimensions.z/2f));
+			} else if(model[m].data.rigidBodyData.collisionShape.equals("CONVEX_HULL")) {
+				shape = new ConvexHullShape(null);
+			}
+			
+			if(shape != null) {
+				shapes.add(shape);
+				Transform transform = new Transform();
+				Matrix4f mat = new Matrix4f();
+				Util.calculateMatrix(mat, model[m].pos, model[m].rot, new Vector3f(1,1,1));
+				trans.add(transform);
+			}
+		}
+		
+		if(shapes.size() == 0) {
+			return null;
+		} else if(shapes.size() == 1) {
+			return shapes.get(0);
+		} else {
+			CollisionShape[] shapesArray = (CollisionShape[]) shapes.toArray();
+			Transform[] transArray = (Transform[]) trans.toArray();
+			return combineShapes(transArray, shapesArray);
+		}
+		
 	}
 	
 	public static RigidBody createRigidBody(float mass, float restitution, Transform transform, CollisionShape shape) {		
@@ -242,12 +287,14 @@ public class Physics {
 		transform.origin.set(entity.pos.x,entity.pos.y,entity.pos.z);
 		transform.setRotation(new Quat4f(0,0,0,1));
 		
-		CollisionShape[] shapes = new CollisionShape[entity.model.length];
-		Vector3f[] positions = new Vector3f[entity.model.length];
-		float[] masses = new float[entity.model.length];
+		CollisionShape[] shapes = new CollisionShape[entity.mesh.model.length];
+		Transform[] positions = new Transform[entity.mesh.model.length];
+		float[] masses = new float[entity.mesh.model.length];
 		for(int i = 0; i < shapes.length; i++) {
-			shapes[i] = createMesh(entity.model[i]);
-			positions[i] = entity.model[i].pos;
+			shapes[i] = createMesh(entity.mesh.model[i]);
+			Transform tempTransform = new Transform();
+			tempTransform.origin.set(entity.mesh.model[i].pos);
+			positions[i] = new Transform();
 			masses[i] = 5;
 		}
 		
@@ -256,12 +303,12 @@ public class Physics {
 		pootis.calculatePrincipalAxisTransform(masses, transform, new Vector3f(0,0,0));
 		
 		CollisionShape shape;
-		if(meshShapes.containsKey(entity.model[0])) {
-			shape = meshShapes.get(entity.model[0]);
+		if(meshShapes.containsKey(entity.mesh.model[0])) {
+			shape = meshShapes.get(entity.mesh.model[0]);
 		} else {
-			System.out.println("Creating Mesh Shape " + entity.model[0].name);
-			shape = createMesh(entity.model[0]);
-			meshShapes.put(entity.model[0], shape);
+			System.out.println("Creating Mesh Shape " + entity.mesh.model[0].name);
+			shape = createMesh(entity.mesh.model[0]);
+			meshShapes.put(entity.mesh.model[0], shape);
 		}
 		
 		shape.setLocalScaling(entity.scale);

@@ -1,13 +1,11 @@
 package org.jessifin.entity;
 
-import org.jessifin.audio.Audio;
-
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 public class EntityPizzard extends Entity {
 
 	public EntityPizzard() {
-		super("pizzard.dae");
+		super("pizzard.mesh");
 	}
 
 	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {

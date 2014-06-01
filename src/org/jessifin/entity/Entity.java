@@ -9,9 +9,10 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.dynamics.RigidBody;
 
 import org.jessifin.model.Bone;
+import org.jessifin.model.Mesh;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 
 public abstract class Entity implements Comparable<Entity> {
 	
@@ -23,8 +24,7 @@ public abstract class Entity implements Comparable<Entity> {
 	public RigidBody body;
 	public ArrayList<Entity> collisions = new ArrayList<Entity>();
 
-	public Model[] model;
-	public Bone rootBone;
+	public Mesh mesh;
 	
 	public int maxHealth = 100;
 	public int health = maxHealth;
@@ -32,14 +32,14 @@ public abstract class Entity implements Comparable<Entity> {
 	public boolean isAlive;
 	
 	public Entity(String model) {
-		if(!model.equals("null") && model.endsWith(".dae")) {
-			this.model = ModelParser.getModel(model);
+		if(!model.equals("null") && model.endsWith(".mesh")) {
+			this.mesh = MeshParser.getModel(model);
 		}
 		flashSpeed = 10;
 	}
 
 	public Entity(ModelData[] modelData) {
-		this.model = ModelParser.buildModel("MODEL DATA", modelData);
+		this.mesh = MeshParser.buildModel("MODEL DATA", modelData);
 		flashSpeed = 10;
 	}
 	

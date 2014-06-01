@@ -14,7 +14,7 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 import org.jessifin.model.Model;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 import org.jessifin.physics.Physics;
 import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPlayer;
@@ -41,35 +41,35 @@ public class LevelIO {
 			outputStream.println("scale = " + e.scale.x + " " + e.scale.y + " " + e.scale.z);
 			outputStream.println("colorf = " + e.colorFill.x + " " + e.colorFill.y + " " + e.colorFill.z + " " + e.colorFill.w);
 			outputStream.println("colorl = " + e.colorLine.x + " " + e.colorLine.y + " " + e.colorLine.z + " " + e.colorLine.w);
-			if(e.body != null) {
-				String collisionShape =  e.body.getCollisionShape().getName();
-				float mass = 1f/e.body.getInvMass();
+			if(e.mesh.body != null) {
+				String collisionShape =  e.mesh.body.getCollisionShape().getName();
+				float mass = 1f/e.mesh.body.getInvMass();
 				if(mass==Float.POSITIVE_INFINITY) {
 					mass = 0;
 				}
-				float restitution = e.body.getRestitution();
-				float friction = e.body.getFriction();
+				float restitution = e.mesh.body.getRestitution();
+				float friction = e.mesh.body.getFriction();
 				String phys = "phys = " + collisionShape + " " + mass + " " + restitution + " " + friction + " ";
 				if(collisionShape.equals("SPHERE")) {
-					float radius = ((SphereShape)(e.body.getCollisionShape())).getRadius();
+					float radius = ((SphereShape)(e.mesh.body.getCollisionShape())).getRadius();
 					outputStream.println(phys + radius);
 				} else if(collisionShape.equals("BOX")) {
 					Vector3f lengths = new Vector3f();
-					((BoxShape)(e.body.getCollisionShape())).getHalfExtentsWithMargin(lengths);
+					((BoxShape)(e.mesh.body.getCollisionShape())).getHalfExtentsWithMargin(lengths);
 					outputStream.println(phys + lengths.x + " " + lengths.y + " " + lengths.z);
 				} else if(collisionShape.equals("BVHTRIANGLEMESH")) {
 					outputStream.println(phys);
 				}
 			}
-			outputStream.println("Model Count: " + e.model.length);
-			for(int i = 0; i < e.model.length; i++) {
+			outputStream.println("Model Count: " + e.mesh.model.length);
+			for(int i = 0; i < e.mesh.model.length; i++) {
 				String model = "model%" + i;
-				outputStream.println(model +" = " + e.model[i].name);
-				outputStream.println(model + ".pos = " + e.model[i].pos.x + " " + e.model[i].pos.y + " " + e.model[i].pos.z);
-				outputStream.println(model + ".rot = " + e.model[i].rot.x + " " + e.model[i].rot.y + " " + e.model[i].rot.z);
-				outputStream.println(model + ".scale = " + e.model[i].scale.x + " " + e.model[i].scale.y + " " + e.model[i].scale.z);
-				outputStream.println(model + ".colorf = " + e.model[i].colorFill.x + " " + e.model[i].colorFill.y + " " + e.model[i].colorFill.z + " " + e.model[i].colorFill.w);
-				outputStream.println(model + ".colorl = " + e.model[i].colorLine.x + " " + e.model[i].colorLine.y + " " + e.model[i].colorLine.z + " " + e.model[i].colorLine.w);
+				outputStream.println(model +" = " + e.mesh.model[i].name);
+				outputStream.println(model + ".pos = " + e.mesh.model[i].pos.x + " " + e.mesh.model[i].pos.y + " " + e.mesh.model[i].pos.z);
+				outputStream.println(model + ".rot = " + e.mesh.model[i].rot.x + " " + e.mesh.model[i].rot.y + " " + e.mesh.model[i].rot.z);
+				outputStream.println(model + ".scale = " + e.mesh.model[i].scale.x + " " + e.mesh.model[i].scale.y + " " + e.mesh.model[i].scale.z);
+				outputStream.println(model + ".colorf = " + e.mesh.model[i].colorFill.x + " " + e.mesh.model[i].colorFill.y + " " + e.mesh.model[i].colorFill.z + " " + e.mesh.model[i].colorFill.w);
+				outputStream.println(model + ".colorl = " + e.mesh.model[i].colorLine.x + " " + e.mesh.model[i].colorLine.y + " " + e.mesh.model[i].colorLine.z + " " + e.mesh.model[i].colorLine.w);
 			}
 			outputStream.println("end\n");
 		}
@@ -126,7 +126,7 @@ public class LevelIO {
 					continue;
 				}
 				if(line.equals("end")) {
-					currentEntity.model = currentModels.clone();
+					currentEntity.mesh.model = currentModels.clone();
 					if(createTriangleMesh) {
 						Physics.addEntity(currentEntity, meshMass, meshRest);
 						createTriangleMesh = false;
@@ -152,7 +152,7 @@ public class LevelIO {
 							String fileName = parts[1].split("%")[0];
 							String modelName = parts[1].split("%")[1];
 							fileName = fileName.replace(" ", "");
-							Model[] model = ModelParser.getModel(fileName);
+							Model[] model = MeshParser.getModel(fileName).model;
 							currentModels[index] = model[0];
 							for(Model tempModel: model) {
 								if(tempModel.name.equals(fileName + "%" + modelName)) {
@@ -235,7 +235,7 @@ public class LevelIO {
 							}
 						}
 					} else {
-						currentEntity.model = ModelParser.getModel(parts[parts.length-1].replaceAll(" ",""));
+						currentEntity.mesh = MeshParser.getModel(parts[parts.length-1].replaceAll(" ",""));
 						continue;
 					}
 				}

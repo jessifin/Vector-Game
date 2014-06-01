@@ -9,7 +9,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 public class EntityPlayer extends Entity {
 	
 	public EntityPlayer() {
-		super("poogeon.dae");
+		super("poogeon.mesh");
 		/*
 		Matrix4f[] matrices = ModelParser.getArmature("characterWithMesh.dae");
 		

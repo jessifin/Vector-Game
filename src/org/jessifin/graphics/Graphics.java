@@ -25,7 +25,7 @@ import org.jessifin.main.Util;
 import org.jessifin.model.Bone;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
-import org.jessifin.model.ModelParser;
+import org.jessifin.model.MeshParser;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -181,20 +181,20 @@ public class Graphics {
     		modelMatrix = generateMatrix(entities.get(e));
 			matrixStack.push(modelMatrix);
 
-    		for(int m = 0; m < entities.get(e).model.length; m++) {
-    			if(entities.get(e).model[m].armature != null) {
-    				for(Bone rootBone: entities.get(e).model[m].armature.rootBones) {
+    		for(int m = 0; m < entities.get(e).mesh.model.length; m++) {
+    			if(entities.get(e).mesh.model[m].armature != null) {
+    				for(Bone rootBone: entities.get(e).mesh.model[m].armature.rootBones) {
     					rootBone.tempMatrix = new Matrix4f(rootBone.matrix);
     					updateBones(rootBone);
     				}
     				
-    				GL20.glUniform1i(currentShader.getUniform("num_bones"), entities.get(e).model[m].armature.bones.length);
-    				for(int b = 0; b < entities.get(e).model[m].armature.bones.length; b++) {
-    					GL20.glUniformMatrix4(currentShader.getUniform("bones["+b+"]"), false, Util.toBuffer(entities.get(e).model[m].armature.bones[b].matrix));
+    				GL20.glUniform1i(currentShader.getUniform("num_bones"), entities.get(e).mesh.model[m].armature.bones.length);
+    				for(int b = 0; b < entities.get(e).mesh.model[m].armature.bones.length; b++) {
+    					GL20.glUniformMatrix4(currentShader.getUniform("bones["+b+"]"), false, Util.toBuffer(entities.get(e).mesh.model[m].armature.bones[b].matrix));
     				}
     			}
-				pushMatrix(entities.get(e).model[m].matrix);
-				renderModel(entities.get(e), entities.get(e).model[m]);
+				pushMatrix(entities.get(e).mesh.model[m].matrix);
+				renderModel(entities.get(e), entities.get(e).mesh.model[m]);
 				popMatrix();
 				GL20.glUniform1i(currentShader.getUniform("num_bones"), 0);
        		}
@@ -208,7 +208,6 @@ public class Graphics {
 			if(child != null) {
 				System.out.println(parent.name + " " + child.name);
 				child.tempMatrix.mul(parent.tempMatrix, child.matrix);
-				System.out.println(parent.matrix);
 				updateBones(child);
 			}
 		}
@@ -492,34 +491,7 @@ public class Graphics {
 			VENDOR = glGetString(GL_VENDOR);
 			System.out.println("OPENGL VENDOR: " + VENDOR + "\nOPENGL VERSION: 3.2 (" + VERSION + ")\nSHADER VERSION: " + glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
 			Display.destroy();
-			/*
-			Class<?>[] classesWithTonsOfStuffInThem = {GL11.class, GL12.class, GL13.class, GL14.class,
-					GL15.class, GL20.class, GL21.class, GL30.class, GL31.class, GL32.class,
-					GL33.class, GL40.class, GL41.class, GL42.class, GL43.class,Graphics.class};
-			
-			ArrayList<ArrayList<String>> code = new ArrayList<ArrayList<String>>();
-			
-			for(Class<?> awesomeClass: classesWithTonsOfStuffInThem) {
-				Field[] fields = awesomeClass.getFields();
-				Method[] methods = awesomeClass.getMethods();
-				ArrayList<String> classCode = new ArrayList<String>(fields.length + methods.length);
-				for(Field field: fields) {
-					classCode.add(field.getName());
-				}
-				for(Method method: methods) {
-					String methodString = method.getName() + "(";
-					for(int parameter = 0; parameter < method.getParameterTypes().length; parameter++) {
-						methodString += method.getParameterTypes()[parameter].getSimpleName();
-						if(parameter != method.getParameterTypes().length - 1) {
-							methodString += ',';
-						}
-					}
-					methodString += ')';
-					classCode.add(methodString);
-				}
-				code.add(classCode);
-			}
-			*/
+
 			availableDisplayModes = Display.getAvailableDisplayModes();
 	
 			//Creating the actual context that will be used by the game.
@@ -546,10 +518,10 @@ public class Graphics {
 		float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
 		short[] inds = {0,1,2,1,3,2};
 		ModelData square = new ModelData("box",verts,inds);
-		boxModel = ModelParser.buildModel("box", new ModelData[] {square})[0];
+		boxModel = MeshParser.buildModel("box", new ModelData[] {square}).model[0];
 		
 		//font init
-		font = ModelParser.getModel("font.dae");
+		font = MeshParser.getModel("font.mesh").model;
 			
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -569,7 +541,7 @@ public class Graphics {
 	}
 	
 	public static void destroy() {
-		ModelParser.clearModelMap();
+		MeshParser.clearModelMap();
 		ShaderParser.clearShaderMap();
 		Display.destroy();
 	}

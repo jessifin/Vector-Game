@@ -7,7 +7,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 public class EntityVirus extends Entity {
 
 	public EntityVirus() {
-		super("virus.dae");
+		super("virus.mesh");
 		/*
 		rootBone = new Bone();
 		rootBone.model = 															model[0];
