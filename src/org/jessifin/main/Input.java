@@ -6,14 +6,14 @@ import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
 import org.jessifin.entity.Entity;
-import org.jessifin.entity.EntityPizzard;
+import org.jessifin.entity.EntityBox;
 import org.jessifin.game.Game;
 import org.jessifin.game.Level;
 import org.jessifin.game.LevelIO;
 import org.jessifin.graphics.GUIHUD;
 import org.jessifin.graphics.GUIMenu;
 import org.jessifin.graphics.Graphics;
-import org.jessifin.model.MeshParser;
+import org.jessifin.model.ModelParser;
 import org.jessifin.physics.Physics;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -88,13 +88,13 @@ public class Input {
 		
 		if(keys[KEY_W].state) {
 			Vector3f forward = new Vector3f(
-					Game.player.pos.x - Game.camPos.x,
-					Game.player.pos.y - Game.camPos.y,
-					Game.player.pos.z - Game.camPos.z
-					);
+				Game.player.pos.x - Game.camPos.x,
+				Game.player.pos.y - Game.camPos.y,
+				Game.player.pos.z - Game.camPos.z
+			);
 			
 			forward.normalize();
-			forward.scale(50);
+			forward.scale(5);
 			Physics.applyImpulse(Game.player, forward);
 			if(Game.speed<=0) {
 				Game.reboot();
@@ -110,13 +110,13 @@ public class Input {
 		}
 		if(keys[KEY_S].state) {
 			Vector3f backward = new Vector3f(
-					Game.camPos.x - Game.player.pos.x,
-					Game.camPos.y - Game.player.pos.y,
-					Game.camPos.z - Game.player.pos.z
-					);
+				Game.camPos.x - Game.player.pos.x,
+				Game.camPos.y - Game.player.pos.y,
+				Game.camPos.z - Game.player.pos.z
+			);
 						
 			backward.normalize();
-			backward.scale(50);
+			backward.scale(5);
 			Physics.applyImpulse(Game.player, backward);
 			if(Game.speed<=0) {
 				Game.reboot();
@@ -181,24 +181,22 @@ public class Input {
 			Graphics.setIcon("/icns/16.png");
 			Sys.openURL("http://www.reddit.com");
 		}
-		if(keys[KEY_RETURN].state) {
+		if(keys[KEY_RETURN].pressed) {
 			Vector3f forward = new Vector3f(
-					Game.player.pos.x - Game.camPos.x,
-					Game.player.pos.y - Game.camPos.y,
-					Game.player.pos.z - Game.camPos.z
-					);
+				Game.player.pos.x - Game.camPos.x,
+				Game.player.pos.y - Game.camPos.y,
+				Game.player.pos.z - Game.camPos.z
+			);
 			
 			forward.normalize();
 			forward.scale(Game.speed*60);
-			EntityPizzard pizzard = new EntityPizzard();
-			pizzard.mesh = MeshParser.getModel("bawks.mesh");
+			EntityBox box = new EntityBox(new Vector3f(50,50,50));
 			Vector3f pizzardPos = new Vector3f(Game.player.pos.x + forward.x*5,Game.player.pos.y + forward.y*5,Game.player.pos.z + forward.z*5);
-			pizzard.pos = pizzardPos;
-			pizzard.scale = new Vector3f(10,10,10);
-			pizzard.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
-			Game.entities.add(pizzard);
-			Physics.addBox(pizzard, 5, 2, 0.1f);
-			Physics.applyImpulse(pizzard, forward);
+			box.pos = pizzardPos;
+			box.updatePos();
+			box.colorFill = new Color4f(Main.rng.nextFloat(),Main.rng.nextFloat(),Main.rng.nextFloat(),1);
+			Game.entities.add(box);
+			Physics.applyImpulse(box, forward);
 		}
 		if(keys[KEY_F1].pressed) {
 			Graphics.setDisplayMode(Graphics.getDefaultDisplayMode(), !Graphics.fullscreen);

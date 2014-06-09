@@ -33,16 +33,21 @@ public class Armature {
 	}
 
 	public class RiggedVertex {
+		
 		SkinningInfo[] skinningInfo;
+		
 		public RiggedVertex(short[] vertexGroups, float[] vertexWeights) {
 			skinningInfo = new SkinningInfo[vertexGroups.length];
 			for(int i = 0; i < vertexGroups.length; i++) {
 				skinningInfo[i] = new SkinningInfo(vertexGroups[i], vertexWeights[i]);
 			}
 		}
+		
 		public class SkinningInfo {
+			
 			short vertexGroup;
 			float vertexWeight;
+			
 			public SkinningInfo(short vertexGroup, float vertexWeight) {
 				this.vertexGroup = vertexGroup;
 				this.vertexWeight = vertexWeight;

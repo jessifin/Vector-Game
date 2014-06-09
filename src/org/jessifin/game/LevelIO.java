@@ -14,18 +14,18 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 import org.jessifin.model.Model;
-import org.jessifin.model.MeshParser;
+import org.jessifin.model.ModelParser;
 import org.jessifin.physics.Physics;
 import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPlayer;
-import org.jessifin.entity.EntityVirus;
-import org.jessifin.entity.Terrain;
+import org.jessifin.entity.EntityBox;
 
 public class LevelIO {
 	
 	private static HashMap<String,Level> levels = new HashMap<String,Level>();
 	
 	public static void writeLevel(String loc, Level level) {
+		/*
 		System.out.println("Saving level " + loc);
 		PrintStream outputStream = null;
 		try {
@@ -74,9 +74,12 @@ public class LevelIO {
 			outputStream.println("end\n");
 		}
 		outputStream.close();
+		*/
 	}
 
 	public static Level getLevel(String loc) {
+		return null;
+		/*
 		if(levels.containsKey(loc)) {
 			return levels.get(loc);
 		} else {
@@ -369,5 +372,6 @@ public class LevelIO {
 			
 			return getLevel(loc);
 		}
+		*/
 	}
 }

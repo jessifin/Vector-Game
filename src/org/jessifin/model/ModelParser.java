@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL15.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
@@ -15,45 +14,30 @@ import java.util.Scanner;
 import javax.vecmath.Color4f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
 import org.jessifin.main.Main;
 import org.jessifin.main.Util;
 import org.jessifin.physics.RigidBodyData;
 
-public class MeshParser {
+public class ModelParser {
 	
 	private static Scanner scanner;
 	
-	private static HashMap<String,Mesh> loadedModels = new HashMap<String,Mesh>();
+	private static HashMap<String,Model[]> parsedModels = new HashMap<String,Model[]>();
 
-	public static Mesh getModel(String loc) {
-		return (loadedModels.containsKey(loc)) ? loadedModels.get(loc) : parseModel(loc);
+	public static Model[] getModel(String loc) {
+		return parsedModels.containsKey(loc) ? parsedModels.get(loc) : parseModel(loc);
 	}
 	
-	private static Mesh parseModel(String loc) {
-		if(loc.endsWith(".mesh")) {
-			return parseMesh(loc);
-		} else {
-			System.err.println("Model format not supported.");
-			return null;
-		}
-	}
-	
-	private static Mesh parseMesh(String loc) {
+	private static Model[] parseModel(String loc) {
 		try {
-			scanner = new Scanner(new File(Main.resourceLoc, "model/" + loc));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			scanner = new Scanner(new File(Main.resourceLoc, "model/" + loc + ".mesh"));
+		} catch (FileNotFoundException exception) {
+			exception.printStackTrace();
 		}
 		
 		ArrayList<ModelData> models = new ArrayList<ModelData>();
@@ -166,9 +150,9 @@ public class MeshParser {
 		return buildModel(loc, modelDatae);
 	}
 	
-	public static Mesh buildModel(String id, ModelData[] modelData) {
-		if(loadedModels.containsKey(id)) {
-			return loadedModels.get(id);
+	public static Model[] buildModel(String id, ModelData... modelData) {
+		if(parsedModels.containsKey(id)) {
+			return parsedModels.get(id);
 		} else {
 			System.out.println("Loading model: " + id);
 						
@@ -202,21 +186,18 @@ public class MeshParser {
 				Util.calculateMatrix(model.matrix, model.pos, model.rot, model.scale);
 				models[i] = model;
 			}
-			
-			Mesh mesh = new Mesh(models, null);
-			
-			loadedModels.put(id, mesh);
-			return mesh;
+									
+			parsedModels.put(id, models);
+			return models;
 		}
 	}
 
 	public static void clearModelMap() {
-		Iterator<String> keys = loadedModels.keySet().iterator();
-		Iterator<Mesh> values = loadedModels.values().iterator();
+		Iterator<String> keys = parsedModels.keySet().iterator();
+		Iterator<Model[]> values = parsedModels.values().iterator();
 		while(keys.hasNext()) {
 			System.out.println("Deleting model " + keys.next());
-			for(Model m: values.next().model) {
-				//System.out.println('\t' + m.name);
+			for(Model m: values.next()) {
 				glDeleteBuffers(m.vertexID);
 				glDeleteBuffers(m.indexID);
 				GL30.glDeleteVertexArrays(m.vaoID);

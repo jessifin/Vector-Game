@@ -12,7 +12,7 @@ public class EntityPickup extends Entity {
 	public int healthBump = 1;
 
 	public EntityPickup() {
-		super("sphere.dae");
+		super("sphere", new Vector3f(1,1,1));
 		this.scale = new Vector3f(10,10,10);
 		this.colorFill = new Color4f(1,0,0,1);
 		this.health = 5;

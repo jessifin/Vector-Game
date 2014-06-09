@@ -25,7 +25,7 @@ import org.jessifin.main.Util;
 import org.jessifin.model.Bone;
 import org.jessifin.model.Model;
 import org.jessifin.model.ModelData;
-import org.jessifin.model.MeshParser;
+import org.jessifin.model.ModelParser;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -79,18 +79,18 @@ public class Graphics {
 		setup3D();
 		renderBatch(Game.entities);
 		renderText(Main.getTime() + 
-				"\nCamera Position: (" + (int)Game.camPos.x + "," + (int)Game.camPos.y + "," + (int)Game.camPos.z + 
-				")\nCamera Orientation: (" + Game.camUp.x + "," + Game.camUp.y + "," + Game.camUp.z + 
-				")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
-				")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
-				"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
-				"\nRandom number: " + Main.rng.nextInt() + 
-				"\nFPS: " + 1000f/Main.loopTime,
-				new Vector3f(200,0,0),
-				new Vector3f(0,0,0),
-				new Vector3f(30,30,30),
-				new Color4f((Main.numTicks % 20) / 19f,1,0,1),
-				true);
+			"\nCamera Position: (" + (int)Game.camPos.x + "," + (int)Game.camPos.y + "," + (int)Game.camPos.z + 
+			")\nCamera Orientation: (" + Game.camUp.x + "," + Game.camUp.y + "," + Game.camUp.z + 
+			")\nPlayer Position: (" + (int)Game.player.pos.x + "," + (int)Game.player.pos.y + "," + (int)Game.player.pos.z + 
+			")\nFoV: " + Game.FoV + "  Player speed: " + Game.speed + "\nGame ticks: " + Main.numTicks + 
+			"\nGame loops: " + Main.numLoops + "\nNumber of Entities: "  + Game.entities.size() + 
+			"\nRandom number: " + Main.rng.nextInt() + 
+			"\nFPS: " + 1000f/Main.loopTime,
+			new Vector3f(200,0,0),
+			new Vector3f(0,0,0),
+			new Vector3f(30,30,30),
+			new Color4f((Main.numTicks % 20) / 19f,1,0,1),
+			true);
 		setup2D();
 		Game.gui.render();
 		Display.update();
@@ -181,23 +181,21 @@ public class Graphics {
     		modelMatrix = generateMatrix(entities.get(e));
 			matrixStack.push(modelMatrix);
 
-    		for(int m = 0; m < entities.get(e).mesh.model.length; m++) {
-    			if(entities.get(e).mesh.model[m].armature != null) {
-    				for(Bone rootBone: entities.get(e).mesh.model[m].armature.rootBones) {
+    			if(entities.get(e).model.armature != null) {
+    				for(Bone rootBone: entities.get(e).model.armature.rootBones) {
     					rootBone.tempMatrix = new Matrix4f(rootBone.matrix);
     					updateBones(rootBone);
     				}
     				
-    				GL20.glUniform1i(currentShader.getUniform("num_bones"), entities.get(e).mesh.model[m].armature.bones.length);
-    				for(int b = 0; b < entities.get(e).mesh.model[m].armature.bones.length; b++) {
-    					GL20.glUniformMatrix4(currentShader.getUniform("bones["+b+"]"), false, Util.toBuffer(entities.get(e).mesh.model[m].armature.bones[b].matrix));
+    				GL20.glUniform1i(currentShader.getUniform("num_bones"), entities.get(e).model.armature.bones.length);
+    				for(int b = 0; b < entities.get(e).model.armature.bones.length; b++) {
+    					GL20.glUniformMatrix4(currentShader.getUniform("bones["+b+"]"), false, Util.toBuffer(entities.get(e).model.armature.bones[b].matrix));
     				}
     			}
-				pushMatrix(entities.get(e).mesh.model[m].matrix);
-				renderModel(entities.get(e), entities.get(e).mesh.model[m]);
+				pushMatrix(entities.get(e).model.matrix);
+				renderModel(entities.get(e), entities.get(e).model);
 				popMatrix();
 				GL20.glUniform1i(currentShader.getUniform("num_bones"), 0);
-       		}
 		
 			popMatrix();
     	}
@@ -515,13 +513,10 @@ public class Graphics {
 		GL20.glUseProgram(currentShader.programID);
 
 		//box init
-		float[] verts = {0,0,0,0,1,0,1,0,0,1,1,0};
-		short[] inds = {0,1,2,1,3,2};
-		ModelData square = new ModelData("box",verts,inds);
-		boxModel = MeshParser.buildModel("box", new ModelData[] {square}).model[0];
+		boxModel = ModelParser.buildModel("box", new ModelData("box", new float[] {0,0,0,0,1,0,1,0,0,1,1,0}, new short[] {0,1,2,1,3,2}))[0];
 		
 		//font init
-		font = MeshParser.getModel("font.mesh").model;
+		font = ModelParser.getModel("font");
 			
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -541,7 +536,7 @@ public class Graphics {
 	}
 	
 	public static void destroy() {
-		MeshParser.clearModelMap();
+		ModelParser.clearModelMap();
 		ShaderParser.clearShaderMap();
 		Display.destroy();
 	}
