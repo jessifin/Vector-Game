@@ -11,7 +11,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 public class EntityPlayer extends Entity {
 	
 	public EntityPlayer() {
-		super("arepo", new Vector3f(1,1,1));
+		super("arepo", new Vector3f(10,10,10));
 	}
 
 	public void onCollide(Entity e, ManifoldPoint[] contactPoints) {

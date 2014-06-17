@@ -16,9 +16,9 @@ import org.jessifin.entity.Entity;
 import org.jessifin.entity.EntityPickup;
 import org.jessifin.entity.EntityPlayer;
 import org.jessifin.entity.EntityBox;
-import org.jessifin.graphics.GUI;
-import org.jessifin.graphics.GUIHUD;
 import org.jessifin.graphics.Graphics;
+import org.jessifin.graphics.gui.GUI;
+import org.jessifin.graphics.gui.GUIHUD;
 
 public class Game {
 
@@ -31,6 +31,7 @@ public class Game {
 	
 	//Entities
 	public static ArrayList<Entity> entities = new ArrayList<Entity>();
+	public static ArrayList<Entity> entitiesToAdd = new ArrayList<Entity>();
 	
 	//Audio related vars
 	public static float musicVolume = 1, fxVolume = 1;
@@ -55,8 +56,8 @@ public class Game {
 		EntityBox box = new EntityBox(new Vector3f(100,10,100));
 		box.pos = new Vector3f(0,0,0);
 		box.updatePos();
-		box.colorFill = new Color4f(1,0,1,1);
-		box.flashSpeed = 6.5f;
+		box.colorFill = new Color4f(1,1,1,1);
+		box.flashSpeed = 1;
 		entities.add(box);
 
 		//setLevel("test");
@@ -65,7 +66,7 @@ public class Game {
 		//I like this color: 0.2f,0.5f,1,1
 
 		
-		//Audio.play("elephante_mono.wav", new Vector3f(0,0,0), new Vector3f(0,0,0), 5);
+		Audio.playMusic("keeping_busy.wav");
 	}
 	
 	public static void setLevel(String loc) {
@@ -88,6 +89,13 @@ public class Game {
 		camPos.x = (float) (camDist * Math.cos(Input.x) * Math.sin(Input.y) + player.pos.x);
 		camPos.y = (float) (camDist * Math.cos(Input.y) + player.pos.y);
 		camPos.z = (float) (camDist * Math.sin(Input.x) * Math.sin(Input.y) + player.pos.z);
+		
+		if(entitiesToAdd.size() > 0) {
+			for(Entity e: entitiesToAdd) {
+				entities.add(e);
+			}
+			entitiesToAdd.clear();
+		}
 		
 		for(Entity e: entities) {
 			e.update();

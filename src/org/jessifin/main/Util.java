@@ -26,7 +26,7 @@ import org.lwjgl.BufferUtils;
 public class Util {
 	
 	/**
-	 * Although I hate methods like these, it's more efficient because no extra matrix needs to be created. It just alters the given reference.
+	 * Although I hate methods like these, it's more efficient because no extra matrix needs to be created. It just alters the given matrix reference.
 	 */
 	public static void calculateMatrix(Matrix4f matrix, Vector3f pos, Vector3f rot, Vector3f scale) {
 		float cosX = (float)Math.cos(rot.x);

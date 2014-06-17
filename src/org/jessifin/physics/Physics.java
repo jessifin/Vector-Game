@@ -62,7 +62,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import org.jessifin.audio.Audio;
 import org.jessifin.entity.Entity;
 import org.jessifin.game.Game;
-import org.jessifin.graphics.GUIHUD;
+import org.jessifin.graphics.gui.GUIHUD;
 
 public class Physics {
 	
@@ -149,20 +149,17 @@ public class Physics {
 		return shape;
 	}
 	
-	public static CollisionShape getShape(Model model, Vector3f scale) {
+	private static CollisionShape getShape(Model model, Vector3f scale) {
 		if(collisionShapes.containsKey(model)) {
 			if(collisionShapes.get(model).containsKey(new SimpleVector(scale.x,scale.y,scale.z))) {
-				System.out.println("CollisionShape located for " + model.name + " with scaling " + scale);
 				return collisionShapes.get(model).get(new SimpleVector(scale.x,scale.y,scale.z));
 			} else {
-				System.out.println("CollisionShape located for " + model.name + " without scaling " + scale);
 				CollisionShape shape = createShape(model);
 				shape.setLocalScaling(scale);
 				collisionShapes.get(model).put(new SimpleVector(scale.x,scale.y,scale.z), shape);
 				return shape;
 			}
 		} else {
-			System.out.println("CollisionShape not located for " + model.name + " with scaling" + scale);
 			CollisionShape shape = createShape(model);
 			shape.setLocalScaling(scale);
 			HashMap<SimpleVector,CollisionShape> hash = new HashMap<SimpleVector,CollisionShape>();
@@ -189,8 +186,8 @@ public class Physics {
 				shape = new BoxShape(new Vector3f(model.data.dimensions.x/2f,model.data.dimensions.y/2f,model.data.dimensions.z/2f));
 			} else if(model.data.rigidBodyData.collisionShape.equals("CONVEX_HULL")) {
 				ObjectArrayList<Vector3f> points = new ObjectArrayList<Vector3f>();
-				for(short s = 0; s < model.data.indices.length; s += 3) {
-					Vector3f point = new Vector3f(model.data.vertices[s], model.data.vertices[s+1], model.data.vertices[s+2]);
+				for(int i = 0; i < model.data.vertices.length / 3; i++) {
+					Vector3f point = new Vector3f(model.data.vertices[3 * i], model.data.vertices[3 * i + 1], model.data.vertices[3 * i + 2]);
 					points.add(point);
 				}
 				shape = new ConvexHullShape(points);
@@ -217,7 +214,7 @@ public class Physics {
 	}
 
 	public static void update(int timePassed) {
-		world.stepSimulation((Game.speed<=0)?0:timePassed*10);
+		world.stepSimulation((Game.speed<=0)?0:timePassed);
 
 		for(Entity e: Game.entities) {
 			if(e.body != null ) {
@@ -250,6 +247,7 @@ public class Physics {
 					for(int i = 0; i < contactPoints.length; i++) {
 						contactPoints[i] = manifold.getContactPoint(i);
 						ManifoldPoint contactPoint = manifold.getContactPoint(i);
+						//This is temporary
 						if(contactPoint.appliedImpulse > 100) {
 							Audio.playAtEntity("hit.wav", p0, 1);
 							if(p0.health > 0) {

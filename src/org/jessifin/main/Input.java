@@ -10,9 +10,9 @@ import org.jessifin.entity.EntityBox;
 import org.jessifin.game.Game;
 import org.jessifin.game.Level;
 import org.jessifin.game.LevelIO;
-import org.jessifin.graphics.GUIHUD;
-import org.jessifin.graphics.GUIMenu;
 import org.jessifin.graphics.Graphics;
+import org.jessifin.graphics.gui.GUIHUD;
+import org.jessifin.graphics.gui.GUIMenu;
 import org.jessifin.model.ModelParser;
 import org.jessifin.physics.Physics;
 import org.lwjgl.Sys;
@@ -94,7 +94,7 @@ public class Input {
 			);
 			
 			forward.normalize();
-			forward.scale(5);
+			forward.scale(20);
 			Physics.applyImpulse(Game.player, forward);
 			if(Game.speed<=0) {
 				Game.reboot();
@@ -116,7 +116,7 @@ public class Input {
 			);
 						
 			backward.normalize();
-			backward.scale(5);
+			backward.scale(20);
 			Physics.applyImpulse(Game.player, backward);
 			if(Game.speed<=0) {
 				Game.reboot();

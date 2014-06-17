@@ -8,6 +8,7 @@ public class Model {
 
 	public final String name;
 	public final int vaoID, vertexID, indexID, indexCount;
+	public final Texture color, normal;
 	
 	public final ModelData data;
 	
@@ -18,7 +19,7 @@ public class Model {
 	
 	public Armature armature;
 	
-	public Model(String name, int vaoID, int vertexID, int indexID, int indexCount, ModelData data) {
+	public Model(String name, int vaoID, int vertexID, int indexID, int indexCount, ModelData data, Texture color, Texture normal) {
 		this.name = name;
 		this.vaoID = vaoID;
 		this.vertexID = vertexID;
@@ -26,6 +27,8 @@ public class Model {
 		this.indexCount = indexCount;
 		this.data = data;
 		this.matrix = new Matrix4f();
+		this.color = color;
+		this.normal = normal;
 	}
 	
 	public Model(Model model) {
@@ -36,5 +39,7 @@ public class Model {
 		this.indexCount = new Integer(model.indexCount);
 		this.data = model.data;
 		this.matrix = new Matrix4f(model.matrix);
+		this.color = model.color;
+		this.normal = model.normal;
 	}
 }

@@ -16,9 +16,9 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-
 import org.jessifin.main.Main;
 import org.jessifin.main.Util;
 import org.jessifin.physics.RigidBodyData;
@@ -41,7 +41,7 @@ public class ModelParser {
 		}
 		
 		ArrayList<ModelData> models = new ArrayList<ModelData>();
-		
+				
 		while(scanner.hasNext()) {
 			String[] data = new String[8];
 			
@@ -176,9 +176,14 @@ public class ModelParser {
 				int indexID = glGenBuffers();
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);	
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);				
 				
-				Model model = new Model(id + "%" + modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i]);
+				GL30.glBindVertexArray(0);
+				
+				Texture color = TextureParser.getTexture((id + "%" + modelData[i].name).replace("RIGIDBODY%", "").replace("ARMATURE%", "") + "%color");
+				Texture normal = TextureParser.getTexture((id + "%" + modelData[i].name).replace("RIGIDBODY%", "").replace("ARMATURE%", "") + "%normal");
+				
+				Model model = new Model(id + "%" + modelData[i].name, vaoID, vertexID, indexID, modelData[i].indices.length, modelData[i], color, normal);
 				model.pos = modelData[i].pos;
 				model.rot = modelData[i].rot;
 				model.scale = modelData[i].scale;

@@ -108,8 +108,8 @@ public class Main {
 		}
 	}
 	
-	public static void main(String... args) {
-		URL nativeLoc = Main.class.getResource("/org/jessifin/res/lwjgl_natives/"+SYSTEM_OS.nativePath);
+	public static void main(final String... args) {
+		URL nativeLoc = Main.class.getResource("/org/jessifin/res/lwjgl_natives/" + SYSTEM_OS.nativePath);
 		URI decodedURL = null;
 		try {
 			decodedURL = nativeLoc.toURI();
@@ -130,7 +130,7 @@ public class Main {
 		if(args.length == 2) {
 			System.out.println("User Name: " + args[0] + "\nScreen Name: " + args[1]);
 		}
-		
+
 		run();
 	}
 	
